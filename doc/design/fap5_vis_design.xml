@@ -1,0 +1,122 @@
+<?xml version="1.0" ?>
+
+<!DOCTYPE article SYSTEM "/usr/share/sgml/docbook/dtd/xml/4.5/docbookx.dtd">
+
+
+<article status="draft" class="specification"> <title>Enhanced Discrete Events System visualization module ver 5. Design.</title>
+
+    <articleinfo>
+	<author><personname><firstname>Yuri</firstname><surname>Borisov</surname></personname>
+	    <email>yuri.borisov.v@gmail.com</email></author> 
+
+	<releaseinfo>Ver.0.01 at 14-May-2025</releaseinfo>
+
+	<abstract>
+	    <simpara>This document collects software desing for Discrete Events System visualization module ver 5.</simpara>
+	</abstract>
+
+	<revhistory>
+	    <revision> <revnumber>0.01</revnumber> <date>11-Dec-2021</date> <authorinitials>Yuri Borisov</authorinitials>
+		<revremark>Initial version</revremark> </revision>
+	</revhistory>
+    </articleinfo>
+
+    <bibliolist><title>References</title>
+	<biblioentry id="ref_glfw3_dcm"> <abbrev>GLFW3_DCM</abbrev>
+	    <productname><ulink url="https://www.glfw.org/docs/3.3/index.html"/></productname>
+	    <title>GLFW documentation</title> </biblioentry>
+	<biblioentry id="ref_ftgl_dcm"> <abbrev>FTGL_DCM</abbrev>
+	    <productname><ulink url="http://ftgl.sourceforge.net/docs/html/index.html"/></productname>
+	    <title><xref linkend="gls_ftgl"/> documentation</title> </biblioentry>
+    </bibliolist>
+
+    <glossary> <title>Glossary</title> 
+	<glossentry id="gls_avr"><glossterm>AVR</glossterm>
+	    <glossdef>
+		<para>Agents Visual Representation, feature of representing some system agents in visual terms,
+		    It can be used for applications visualizing the systems, Models studios etc. Ref <xref linkend="ds_avr"/> for details.</para>
+	    </glossdef>
+	</glossentry>
+	<glossentry id="gls_drp"><glossterm>DRP</glossterm>
+	    <glossdef>
+		<para>Detailing Representation, visual model representing some agent in details.
+		    Part of <xref linkend="gls_avr"/> architecture</para>
+	    </glossdef>
+	</glossentry>
+	<glossentry id="gls_crp"><glossterm>CRP</glossterm>
+	    <glossdef>
+		<para>Compact Representation, visual model representing some agent in compact manner.
+		    Usially is applied witin <xref linkend="gls_drp"/>. Part of <xref linkend="gls_avr"/> architecture</para>
+	    </glossdef>
+	</glossentry>
+	<glossentry id="gls_ftgl"><glossterm>FTGL</glossterm> <acronym>FTGL</acronym>
+	    <glossdef> The library of fonts support in GL based solutions. <para>
+		    <xref linkend="ref_ftgl_dcm"/> for docs.
+	</para></glossdef> </glossentry>
+	<glossentry id="gls_glfw"><glossterm>GLFW</glossterm> <acronym>GLFW</acronym>
+	    <glossdef> <para>
+		Free, Open Source, multi-platform library for OpenGL, OpenGL ES and Vulkan application development.
+		It provides a simple, platform-independent API for creating windows, contexts and surfaces, reading input, handling events, etc.
+		    <xref linkend="ref_glfw3_dcm"/> for docs.
+	</para></glossdef> </glossentry>
+	<glossentry id="gls_irm"><glossterm>IRM</glossterm>
+	    <glossdef> <para>Interface resolution mechanism, ref <ulink url="../../../grayb/doc/design/index.html"/>
+	</para></glossdef> </glossentry>
+	<glossentry id="gls_sew"><glossterm>SEW</glossterm> <acronym>SEW</acronym>
+	    <glossdef> <para>
+		Slot Embeds Widget = approach of assosiating widget to slot in container when
+		slots simply embeds widget. Ref
+		<xref linkend="ds_wdgs_cnt_wsa"/>.
+	    </para> </glossdef>
+	</glossentry>
+	<glossentry id="gls_slw"><glossterm>SLW</glossterm> <acronym>SLW</acronym>
+	    <glossdef> <para>
+		Slot Links to Widget = approach of assosiating widget to slot in container when
+		slots is connected to widget. Ref
+		    <xref linkend="ds_wdgs_cnt_wsa"/>.
+	    </para> </glossdef>
+	</glossentry>
+	<glossentry id="gls_vrc"><glossterm>VRC</glossterm> <acronym>VRC</acronym>
+	    <glossdef>
+		<para>Visual Representation Controller - agent that managed model representing in visual form.
+		    One of key part of <xref linkend="gls_avr"/> architecture.</para> </glossdef>
+	</glossentry>
+    </glossary>
+
+    <sect1 id="ds_intro"><title>Intro</title>
+	<itemizedlist>
+	    <listitem>
+		FAP2-VIS projects focuses on visualization means based on Discrete Events System (DES) framework FAP3
+		<para>Ref <ulink url="../../../fap3/doc/design/index.html"/> for FAP3 design.</para>
+	</listitem>
+	</itemizedlist>
+    </sect1>
+
+    <sect1 id="ds_wdgs"><title>Widget system</title>
+        <sect2><title>Widget - agents or?</title>
+            <sect3><title>Intro</title>
+                <simpara>
+                    Ref
+                    <ulink url="../../../fap5/doc/design/index.html#ds_samn"/>
+                        for consideration regarding using system agents mechanism.
+                </simpara>
+            </sect3>
+        </sect2>
+    </sect1>
+
+    <sect1 id="ds_tth"><title>Traceability: To handle</title>
+    </sect1>
+
+    <sect1 id="uc"><title>Use-cases</title>
+	<sect2 id="uc_01"><title>[UC_01] Edges displaying on Vertex DRP</title>
+	    <sect3><title>Description</title>
+		<simpara>
+		    Vertex DRP view is diaplayed, Vertex DRP represents some vertex model with number of vertexes and edges,
+		    DRP represents vertex as Vertex CRP, DRP composes CRPs in columns, DRP displays edge as multi-ssction line that
+		    doesn't cross vertex CPRs but places between Vertex CRPs in vertical tunnels between the columns and hodisontal tunnel
+			between CRPs in columns.</simpara>
+		</sect3>
+	    </sect2>
+	</sect1>
+
+    </article>
