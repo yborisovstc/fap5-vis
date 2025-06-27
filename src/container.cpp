@@ -37,7 +37,7 @@ MSceneElem* ACnt::getSceneElem()
 //// AVDContainer
 
 AVDContainer::AVDContainer(const string& aType, const string& aName, MEnv* aEnv): AVWidget(aType, aName, aEnv),
-    mSelemOwnerCp(this)
+    mSelemOwnerCp(this), mObrCp(this)
 {
 }
 
@@ -114,4 +114,30 @@ void AVDContainer::GetFbSize(int* aW, int* aH) const
     GetScelOwner()->GetFbSize(aW, aH);
 }
 
+void AVDContainer::onOwnerAttached()
+{
+    MNode* ahostn = ahostNode(); 
+    MObservable* ahostobl = ahostn ? ahostn->lIf(ahostobl) : nullptr;
+    if (ahostobl) {
+        bool res = ahostobl->addObserver(this, TNodeEventOwnedAttached::idHash);
+        if (!res) {
+            LOGN(EErr, "onOwnerAttached failed");
+        }
+    }
+}
 
+void AVDContainer::onObsEvent(MObservable* aObl, const MEvent* aEvent)
+{
+    if (aEvent->mId == TNodeEventOwnedAttached::idHash) {
+	auto* event = reinterpret_cast<TNodeEventOwnedAttached*>(const_cast<MEvent*>(aEvent));
+        assert(event);
+	MOwned* owned = const_cast<MOwned*>(event->mOwned);
+        assert(owned);
+	//LOGN(EDbg, "EventOwnedAttached, owned: " + owned->Uid());
+        MSceneElem* owdSce = owned->lIft<MSceneElem>();
+        if (owdSce) {
+            LOGN(EDbg, "EventOwnedAttached, scene elem owned: " + owdSce->Uid());
+            mSelemOwnerCp.connect(owdSce->getCp());
+        }
+    }
+}

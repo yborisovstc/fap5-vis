@@ -17,7 +17,7 @@ class AVLabel : public AVWidget
 	virtual void Render() override;
     protected:
 	// Internal transitions
-	virtual void updateRqsW() override;
+	void updateRqs() override;
 };
 
 #endif

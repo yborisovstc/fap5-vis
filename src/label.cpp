@@ -28,8 +28,9 @@ void AVLabel::Render()
     CheckGlErrors();
 }
 
-void AVLabel::updateRqsW()
+void AVLabel::updateRqs()
 {
+    /*
     const string& text = getText()->mData;
     int adv = (int) mFont->Advance(text.c_str());
     int tfh = (int) mFont->LineHeight();
@@ -39,6 +40,7 @@ void AVLabel::updateRqsW()
     mOstRqsW->VDtSet(Sdata<int>(minRw));
     int minRh = (int) ury + 2 * K_Padding;
     mOstRqsH->VDtSet(Sdata<int>(minRh));
+    */
 }
 
 

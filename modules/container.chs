@@ -165,6 +165,7 @@ ContainerMod : Elem {
     }
     DContainer : FvWidgets.FWidgetBase {
         CntAgent : AVDContainer
+        CntAgent < LogLevel = "Dbg"
         # " Internal connections"
         CntAgent.InpFont ~ Font
         CntAgent.InpText ~ SText

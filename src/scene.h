@@ -46,6 +46,7 @@ class GtScene: public Des, public MScene, public MSceneElemOwner
 	// From MOwned
 	MIface* MOwned_getLif(TIdHash aId) override;
     protected:
+	bool mDrawOnComplete = true;
         TSceneCp mSceneCp;
 	TSelemOwnerCp mSelemOwnerCp;  /*!< Scene elements owner connpoint */
 	MScene* mMScene = nullptr;

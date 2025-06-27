@@ -25,7 +25,7 @@
 class Ut_cntr : public Ut_fixture
 {
     CPPUNIT_TEST_SUITE(Ut_cntr);
-    CPPUNIT_TEST(testVlayout1);
+    //CPPUNIT_TEST(testVlayout1);
     //CPPUNIT_TEST(testVlayoutCmb);
     //CPPUNIT_TEST(testVlayoutCmb2);
     //CPPUNIT_TEST(testHlayout1);
@@ -35,6 +35,8 @@ class Ut_cntr : public Ut_fixture
     //CPPUNIT_TEST(testDCntr2);
     //CPPUNIT_TEST(testDCntr3);
     //CPPUNIT_TEST(testDCntr4);
+    //CPPUNIT_TEST(testDCntr5);
+    CPPUNIT_TEST(testDCntr6);
     //CPPUNIT_TEST(testColumnsLayout);
     //CPPUNIT_TEST(testColumnsLayout2);
     //CPPUNIT_TEST(testColumnsLayout3);
@@ -54,6 +56,8 @@ class Ut_cntr : public Ut_fixture
     void testDCntr2();
     void testDCntr3();
     void testDCntr4();
+    void testDCntr5();
+    void testDCntr6();
     void testColumnsLayout();
     void testColumnsLayout2();
     void testColumnsLayout3();
@@ -89,18 +93,12 @@ void Ut_cntr::testVlayout1()
 
 void Ut_cntr::testVlayoutCmb()
 {
-    printf("\n === Combined Vertical layout (SLW approach) test 1\n");
-    const string specn("ut_vlayout_2");
-    string ext = "chs";
-    string spec = specn + string(".") + ext;
-    string log = specn + "_" + ext + ".log";
-    mEnv = new Env(spec, log);
-    CPPUNIT_ASSERT_MESSAGE("Fail to create Env", mEnv != 0);
-    mEnv->ImpsMgr()->AddImportsPaths("../modules");
-    VisProv* visprov = new VisProv("VisProv", mEnv);
-    mEnv->addProvider(visprov);
-    mEnv->constructSystem();
-    bool run = mEnv->RunSystem(100, 20);
+    cout << endl << "=== Combined vertical layout test" << endl;
+
+    MNode* root = constructSystem("ut_vlayout_2");
+    CPPUNIT_ASSERT_MESSAGE("Failed creating system", root);
+
+    bool run = mEnv->RunSystem(200, 10);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
 
     delete mEnv;
@@ -108,37 +106,26 @@ void Ut_cntr::testVlayoutCmb()
 
 void Ut_cntr::testVlayoutCmb2()
 {
-    printf("\n === Combined Vertical layout (SLW approach) test 1\n");
-    const string specn("ut_vlayout_3");
-    string ext = "chs";
-    string spec = specn + string(".") + ext;
-    string log = specn + "_" + ext + ".log";
-    mEnv = new Env(spec, log);
-    CPPUNIT_ASSERT_MESSAGE("Fail to create Env", mEnv != 0);
-    mEnv->ImpsMgr()->AddImportsPaths("../modules");
-    VisProv* visprov = new VisProv("VisProv", mEnv);
-    mEnv->addProvider(visprov);
-    mEnv->constructSystem();
-    bool run = mEnv->RunSystem(100, 20);
+    cout << endl << "=== Combined vertical layout test 2" << endl;
+
+    MNode* root = constructSystem("ut_vlayout_3");
+    CPPUNIT_ASSERT_MESSAGE("Failed creating system", root);
+
+    bool run = mEnv->RunSystem(200, 10);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
 
     delete mEnv;
+
 }
 
 void Ut_cntr::testHlayout1()
 {
-    printf("\n === Single horisontal layout (SLW approach) test 1\n");
-    const string specn("ut_hlayout_1");
-    string ext = "chs";
-    string spec = specn + string(".") + ext;
-    string log = specn + "_" + ext + ".log";
-    mEnv = new Env(spec, log);
-    CPPUNIT_ASSERT_MESSAGE("Fail to create Env", mEnv != 0);
-    mEnv->ImpsMgr()->AddImportsPaths("../modules");
-    VisProv* visprov = new VisProv("VisProv", mEnv);
-    mEnv->addProvider(visprov);
-    mEnv->constructSystem();
-    bool run = mEnv->RunSystem(100, 20);
+    printf("\n === Horizontal layout test 1\n");
+
+    MNode* root = constructSystem("ut_hlayout_1");
+    CPPUNIT_ASSERT_MESSAGE("Failed creating system", root);
+
+    bool run = mEnv->RunSystem(200, 10);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
 
     delete mEnv;
@@ -146,18 +133,12 @@ void Ut_cntr::testHlayout1()
 
 void Ut_cntr::testHlayout2()
 {
-    printf("\n === Combined horisontal layout (SLW approach) test 1\n");
-    const string specn("ut_hlayout_2");
-    string ext = "chs";
-    string spec = specn + string(".") + ext;
-    string log = specn + "_" + ext + ".log";
-    mEnv = new Env(spec, log);
-    CPPUNIT_ASSERT_MESSAGE("Fail to create Env", mEnv != 0);
-    mEnv->ImpsMgr()->AddImportsPaths("../modules");
-    VisProv* visprov = new VisProv("VisProv", mEnv);
-    mEnv->addProvider(visprov);
-    mEnv->constructSystem();
-    bool run = mEnv->RunSystem(200, 20);
+    cout << endl << "=== Horizontal layout test 2" << endl;
+
+    MNode* root = constructSystem("ut_hlayout_2");
+    CPPUNIT_ASSERT_MESSAGE("Failed creating system", root);
+
+    bool run = mEnv->RunSystem(200, 10);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
 
     delete mEnv;
@@ -169,31 +150,24 @@ void Ut_cntr::testHlayout2()
  * */
 void Ut_cntr::testHlayout_RmWidget1()
 {
-    printf("\n === Combined horisontal layout, removing widget 1\n");
-    const string specn("ut_hlayout_rmwidget_1");
-    string ext = "chs";
-    string spec = specn + string(".") + ext;
-    string log = specn + "_" + ext + ".log";
-    mEnv = new Env(spec, log);
-    CPPUNIT_ASSERT_MESSAGE("Fail to create Env", mEnv != 0);
-    mEnv->ImpsMgr()->AddImportsPaths("../modules");
-    VisProv* visprov = new VisProv("VisProv", mEnv);
-    mEnv->addProvider(visprov);
-    mEnv->constructSystem();
-    MNode* root = mEnv->Root();
-    CPPUNIT_ASSERT_MESSAGE("Fail to get root", root != 0);
+    cout << endl << "=== Combined horisontal layout, removing widget 1" << endl;
+
+    MNode* root = constructSystem("ut_hlayout_rmwidget_1");
+    CPPUNIT_ASSERT_MESSAGE("Failed creating system", root);
+
     // Checking the widget/slot exists
     MNode* slot = root->getNode("Test.Window.Scene.HBox.Slot_2");
     CPPUNIT_ASSERT_MESSAGE("Failed creating widget/slot", slot);
 
-    bool run = mEnv->RunSystem(40, 20);
+    bool run = mEnv->RunSystem(200, 10);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
 
     // Checking the widget removed
     slot = root->getNode("Test.Window.Scene.HBox.Slot_2");
-    CPPUNIT_ASSERT_MESSAGE("Fail to remove widget", slot == NULL);
+    CPPUNIT_ASSERT_MESSAGE("Fail to remove widget", slot == nullptr);
 
     delete mEnv;
+
 }
 
 /** @brief DES controlled container, vert layout
@@ -201,14 +175,14 @@ void Ut_cntr::testHlayout_RmWidget1()
  * */
 void Ut_cntr::testDCntr1()
 {
-    printf("\n === DES controlled container, base.\n");
+    cout << endl << "=== DES controlled container, base." << endl;
     MNode* root = constructSystem("ut_dcntr_1");
     bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
 
-    printf("\n === DES controlled container, base. LSC MSO approach.\n");
+    cout << endl << "=== DES controlled container, base. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_1l");
     run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
@@ -222,17 +196,14 @@ void Ut_cntr::testDCntr1()
  * */
 void Ut_cntr::testDCntr2()
 {
-    MNode* root = nullptr;
-    bool run = false;
-
-    printf("\n === DES controlled container, hrz layout\n");
-    root = constructSystem("ut_dcntr_2");
-    run = mEnv->RunSystem(40, 20);
+    cout << endl << "=== DES controlled container, hrz layout" << endl;
+    MNode* root = constructSystem("ut_dcntr_2");
+    bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     delete mEnv;
 
     /*
-    printf("\n === DES controlled container, hrz layout. LSC MSO approach.\n");
+    cout << endl << "=== DES controlled container, hrz layout. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_2_mso");
     run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
@@ -245,16 +216,13 @@ void Ut_cntr::testDCntr2()
  * */
 void Ut_cntr::testDCntr3()
 {
-    MNode* root = nullptr;
-    bool run = false;
-
-    printf("\n === DES controlled container, vert/hrz combined layout\n");
-    root = constructSystem("ut_dcntr_3");
-    run = mEnv->RunSystem(40, 20);
+    cout << endl << "=== DES controlled container, vert/hrz combined layout" << endl;
+    MNode* root = constructSystem("ut_dcntr_3");
+    bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     delete mEnv;
 
-    printf("\n === DES controlled container, vert/hrz combined layout. LSC MSO approach.\n");
+    cout << endl << "=== DES controlled container, vert/hrz combined layout. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_3_mso");
     run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
@@ -266,23 +234,47 @@ void Ut_cntr::testDCntr3()
  * */
 void Ut_cntr::testDCntr4()
 {
-    MNode* root = nullptr;
-    bool run = false;
-
-    printf("\n === DES controlled container, vert layout, massive insertion\n");
-    root = constructSystem("ut_dcntr_4");
-    run = mEnv->RunSystem(400, 50);
+    cout << endl << "=== DES controlled container, vert layout, massive insertion" << endl;
+    MNode* root = constructSystem("ut_dcntr_4");
+    bool run = mEnv->RunSystem(400, 50);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
 
     printf("\n === DES controlled container, vert layout, massive insertion. LSC MSO approach.\n");
+    cout << endl << "=== DES controlled container, vert layout, massive insertion. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_4_mso");
     run = mEnv->RunSystem(200, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
 }
+
+/** @brief DES controlled container, vert layout, massive insertion
+ * */
+void Ut_cntr::testDCntr5()
+{
+    cout << endl << "=== DES controlled container, vert layout, massive insertion" << endl;
+    MNode* root = constructSystem("ut_dcntr_5");
+    bool run = mEnv->RunSystem(400, 1);
+    CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
+    mEnv->profiler()->saveMetrics();
+    delete mEnv;
+}
+
+/** @brief DES controlled container, continous insertion/removal
+ * */
+void Ut_cntr::testDCntr6()
+{
+    cout << endl << "=== DES controlled container, continous insertion/removal" << endl;
+    MNode* root = constructSystem("ut_dcntr_6");
+    bool run = mEnv->RunSystem(400, 1);
+    CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
+    mEnv->profiler()->saveMetrics();
+    delete mEnv;
+}
+
+
 
 
 

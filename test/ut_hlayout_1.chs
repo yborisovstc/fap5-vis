@@ -1,5 +1,5 @@
 testroot : Elem {
-    # "Unit test of vertical layout container"
+    # "Unit test of horizontal layout container"
     + GVisComps
     + ContainerMod
     Test : DesLauncher {
@@ -12,9 +12,8 @@ testroot : Elem {
             Height < = "SI 800"
             Scene : GVisComps.Scene {
                 # "Visualisation scene"
-                VBox : ContainerMod.DVLayout {
-                    XPadding < = "SI 20"
-                    YPadding < = "SI 20"
+                HBox : ContainerMod.DHLayout {
+                    Padding < = "SI 20"
                     AlcW < = "SI 220"
                     AlcH < = "SI 330"
                     Start.Prev !~ End.Next
@@ -23,14 +22,14 @@ testroot : Elem {
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
                     }
-                    Slot_1 : ContainerMod.FVLayoutSlot
+                    Slot_1 : ContainerMod.FHLayoutSlot
                     Slot_1.SCp ~ Btn1.Cp
                     Btn2 : FvWidgets.FButton {
                         SText < = "SS Button_2"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
                     }
-                    Slot_2 : ContainerMod.FVLayoutSlot
+                    Slot_2 : ContainerMod.FHLayoutSlot
                     Slot_2.SCp ~ Btn2.Cp
                     Slot_2.Next ~ Slot_1.Prev
                     Slot_1.Next ~ Start.Prev

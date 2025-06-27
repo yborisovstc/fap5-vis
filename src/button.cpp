@@ -6,10 +6,102 @@
 #include "mwindow.h"
 
 const string KStateContVal = "";
+const string AButton::KUri_TrRqsW = "TrRqsW";
+const string AButton::KUri_TrRqsH = "TrRqsH";
+
+
+AButton::TrRqs::TrRqs(const string& aType, const string& aName, MEnv* aEnv, AVWidget* aHost, bool aRqsH):
+    TrBase(aType, aName, aEnv), mHost(aHost), mRqsH(aRqsH)
+{}
+
+void AButton::TrRqs::Construct()
+{
+    mInpFont = addInput(KUri_InpFont);
+    mInpFont->bind(MNode::lIft<MNode>());
+    mInpFontSize = addInput(KUri_InpFontSize);
+    mInpFontSize->bind(MNode::lIft<MNode>());
+    mInpText = addInput(KUri_InpText);
+    mInpText->bind(MNode::lIft<MNode>());
+}
+
+CpStateInp* AButton::TrRqs::addInput(const string& aName)
+{
+    auto* inp = new CpStateInp(string(CpStateInp::idStr()), aName, mEnv);
+    assert(inp);
+    bool res = attachOwned(inp);
+    assert(res);
+    return inp;
+}
+
+string AButton::TrRqs::VarGetIfid() const
+{
+    return Sdata<int>::TypeSig();
+}
+
+const DtBase* AButton::TrRqs::doVDtGet(const string& aType)
+{
+    const DtBase* res = nullptr;
+    /*
+    auto* fontPath = AVWidget::getInpSdata<string>(mInpFont);
+    if (fontPath && fontPath->IsValid() && fontPath->mData != mHost->mFontPath) {
+        if (mHost->mFont) {
+            delete mHost->mFont; mHost->mFont = nullptr;
+        }
+        mHost->mFont = new FTPixmapFont(fontPath->mData.c_str());
+        mHost->mFontPath = fontPath->mData;
+    }
+    auto* fontSizeD = getInpSdata<int>(mInpFontSize);
+    if (fontSizeD && fontSizeD->IsValid() && fontSizeD->mData != mHost->mFontSize) {
+        mHost->mFont->FaceSize(fontSizeD->mData);
+        mHost->mFontSize = fontSizeD->mData;
+    }
+    */
+    auto* fontPathD = AVWidget::getInpSdata<string>(mInpFont);
+    auto* fontSizeD = getInpSdata<int>(mInpFontSize);
+    mHost->updateFont(fontPathD, fontSizeD);
+    if (mHost->mFont) {
+        mHost->updateRqs();
+        res = mRqsH ? &mHost->mRqsH : &mHost->mRqsW;
+    }
+    return res;
+}
+
 
 
 AButton::AButton(const string& aType, const string& aName, MEnv* aEnv): AVWidget(aType, aName, aEnv)
 { }
+
+void AButton::Construct()
+{
+    /*
+    mInpFontPath = addInput(KUri_InpFont);
+    mInpFontSize = addInput(KUri_InpFontSize);
+    mInpText = addInput(KUri_InpText);
+    mOutpRqsW = addOutput(KUri_OstRqsW);
+    mOutpRqsH = addOutput(KUri_OstRqsH);
+    mOstLbpUri = addState(KUri_OstLbpUri);
+    */
+    AVWidget::Construct();
+    mTrRqsH = new TrRqs(string(TrRqs::idStr()), KUri_TrRqsH, mEnv, this, true);
+    assert(mTrRqsH);
+    mTrRqsH->Construct();
+    bool res = attachOwned(mTrRqsH);
+    assert(res);
+    mTrRqsW = new TrRqs(string(TrRqs::idStr()), KUri_TrRqsW, mEnv, this, false);
+    assert(mTrRqsW);
+    mTrRqsW->Construct();
+    res = attachOwned(mTrRqsW);
+    assert(res);
+    res = MVert::connect(mTrRqsW->mInpFont, mInpFontPath->mInt);
+    res = res && MVert::connect(mTrRqsW->mInpFontSize, mInpFontSize->mInt);
+    res = res && MVert::connect(mTrRqsW->mInpText, mInpText->mInt);
+    res = res && MVert::connect(mOutpRqsW->mInt, mTrRqsW);
+    res = res && MVert::connect(mTrRqsH->mInpFont, mInpFontPath->mInt);
+    res = res && MVert::connect(mTrRqsH->mInpFontSize, mInpFontSize->mInt);
+    res = res && MVert::connect(mTrRqsH->mInpText, mInpText->mInt);
+    res = res && MVert::connect(mOutpRqsH->mInt, mTrRqsH);
+    assert(res);
+}
 
 MNode* AButton::GetStatePressed()
 {
@@ -58,7 +150,7 @@ void AButton::Render()
     CheckGlErrors();
 }
 
-void AButton::updateRqsW()
+void AButton::updateRqs()
 {
     const string& text = getText()->mData;
     int adv = (int) mFont->Advance(text.c_str());
@@ -66,9 +158,8 @@ void AButton::updateRqsW()
     float llx, lly, llz, urx, ury, urz;
     mFont->BBox(text.c_str(), llx, lly, llz, urx, ury, urz);
     int minRw = (int) urx + 2 * K_Padding;
-    mOstRqsW->VDtSet(Sdata<int>(minRw));
+    mRqsW = minRw;
     int minRh = (int) ury + 2 * K_Padding;
-    mOstRqsH->VDtSet(Sdata<int>(minRh));
+    mRqsH = minRh;
 }
-
 
