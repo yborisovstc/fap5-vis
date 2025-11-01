@@ -93,6 +93,7 @@ class GWindow: public Des, public MWindow
 	static vector<GWindow*> mInstances; //!< Register of instances
 	int mCnt = 0;
 	GLuint mProgram;
+	bool mDrawOnComplete = true;
 	GLint mMvpLocation;
 	TSceneCp mSceneCp;  /*!< Scene connpoint */
 	MWindow* mMWindowPtr = nullptr;

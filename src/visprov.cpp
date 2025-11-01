@@ -9,7 +9,7 @@
 #include "label.h"
 #include "button.h"
 #include "container.h"
-//#include "agentvr.h"
+#include "agentvr.h"
 //#include "vissdo.h"
 
 // TODO [YB] To import from build variable
@@ -22,9 +22,9 @@ const string KChromRarg_Chs = "chs";
 const VisProv::TFReg VisProv::mReg ( {
 	Item<VisEnv>(), Item<GWindow>(), Item<GtScene>(), Item<AVWidget>(), Item<AVLabel>(), Item<AButton>(),
 	Item<AVDContainer>(), Item<ACnt>(),
+	Item<AEdgeCrp>(),
         /*
 	Item<AVrpView>(),
-	Item<AEdgeCrp>(),
 	Item<VDesLauncher>(),
 	Item<SdoCoordOwr>()
         */

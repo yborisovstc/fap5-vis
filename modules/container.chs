@@ -38,7 +38,7 @@ ContainerMod : Elem {
         YPadding : CpStateInpPin
         LbpComp : CpStateInpPin
     }
-    FSlot : Syst {
+    FSlot : Des {
         SCp : SlotCp
     }
     LinStart : Syst {
@@ -166,6 +166,7 @@ ContainerMod : Elem {
     DContainer : FvWidgets.FWidgetBase {
         CntAgent : AVDContainer
         CntAgent < LogLevel = "Dbg"
+        CpExplorable : CpSystExplorable
         # " Internal connections"
         CntAgent.InpFont ~ Font
         CntAgent.InpText ~ SText
@@ -664,7 +665,7 @@ ContainerMod : Elem {
         }
         ColToInsertWdg : DesUtils.ListItemByPos (
             InpPos ~ IoAddWidg.Pos
-            InpMagLink ~ _$
+            Subsys.CpExploring ~ CpExplorable
         )
         _ <  {
             ColToInsertWdgEnd : SdoCompComp (

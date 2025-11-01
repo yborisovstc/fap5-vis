@@ -14,6 +14,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "des.h"
+
 /*
  * To run particular test suite: ./ut-fap2vis-lib [test_suite_name] for instance ./ut-fap2vis-lib Ut_ExecMagt
  */
@@ -36,15 +38,16 @@ class Ut_cntr : public Ut_fixture
     //CPPUNIT_TEST(testDCntr3);
     //CPPUNIT_TEST(testDCntr4);
     //CPPUNIT_TEST(testDCntr5);
-    CPPUNIT_TEST(testDCntr6);
+    //CPPUNIT_TEST(testDCntr6);
     //CPPUNIT_TEST(testColumnsLayout);
     //CPPUNIT_TEST(testColumnsLayout2);
     //CPPUNIT_TEST(testColumnsLayout3);
-    //CPPUNIT_TEST(testColumnsLayout4);
+    CPPUNIT_TEST(testColumnsLayout4);
     CPPUNIT_TEST_SUITE_END();
     public:
     virtual void setUp();
     virtual void tearDown();
+    string getStateDstr(const string& aUri);
     private:
     void testVlayout1();
     void testVlayoutCmb();
@@ -63,6 +66,15 @@ class Ut_cntr : public Ut_fixture
     void testColumnsLayout3();
     void testColumnsLayout4();
 };
+
+string Ut_cntr::getStateDstr(const string& aUri)
+{
+    MNode* st = mEnv->Root()->getNode(aUri);
+    MDVarGet* stg = st ? st->lIf(stg) : nullptr;
+    const DtBase* data = stg ? stg->VDtGet(string()) : nullptr;
+    return data ? data->ToString(true) : string();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Ut_cntr );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Ut_cntr, "Ut_cntr");
@@ -286,7 +298,7 @@ void Ut_cntr::testColumnsLayout()
     MNode* root = nullptr;
     bool res = false;
 
-    printf("\n === Columns layout. Direct creation.\n");
+    cout << endl << "=== Columns layout. Direct creation." << endl;
     root = constructSystem("ut_columns_layout");
     res = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", res);
@@ -307,19 +319,24 @@ void Ut_cntr::testColumnsLayout2()
     MNode* root = nullptr;
     bool res = false;
 
-    printf("\n === Columns layout. Controlling creation.\n");
+    cout << endl << "=== Columns layout. Controlled creation." << endl;
     root = constructSystem("ut_columns_layout_2");
     res = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", res);
     mEnv->profiler()->saveMetrics();
+    CPPUNIT_ASSERT_MESSAGE("New button name is wrong", getStateDstr("Test.Wnd.Scene.ColumnsView.BtnNew_2.SText") == "SS 'Button_New'");
+    MNode* colSlot = mEnv->Root()->getNode("Test.Wnd.Scene.ColumnsView.New_column");
+    CPPUNIT_ASSERT_MESSAGE("New column not created", colSlot != nullptr);
     delete mEnv;
 
+    /*
     printf("\n === Columns layout. Controlling creation. LSC MSO approach.\n");
     root = constructSystem("ut_columns_layout_2_mso");
     res = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", res);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
+    */
 }
 
 /** @brief DES controlled container, columns layout. Controlling creation. Requisition
@@ -333,6 +350,8 @@ void Ut_cntr::testColumnsLayout3()
 
     bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
+    MNode* colSlot = mEnv->Root()->getNode("Test.Wnd.Scene.HBox.ColView1.Column2");
+    CPPUNIT_ASSERT_MESSAGE("New column not created", colSlot != nullptr);
 
     delete mEnv;
 }
@@ -348,6 +367,8 @@ void Ut_cntr::testColumnsLayout4()
 
     bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
+    MNode* colSlot = mEnv->Root()->getNode("Test.Wnd.Scene.HBox.ColView3.Column2");
+    CPPUNIT_ASSERT_MESSAGE("New column not created", colSlot != nullptr);
 
     delete mEnv;
 }

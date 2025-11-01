@@ -4,7 +4,9 @@ AM_CPPFLAGS = -D_PLAT_LINUX_ -g -O0
 
 ut_fap5vis_lib_SOURCES = \
 		       ut_main.cpp \
+		       ut_avr.cpp \
 		       ut_container.cpp \
+		       ut_base.cpp \
 		       ut_wdg.cpp
 
 ut_fap5vis_lib_LDFLAGS=-L../src/.libs/ -lfap5vis -lfap5  -lcppunit -lrt

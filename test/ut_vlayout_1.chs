@@ -18,7 +18,10 @@ testroot : Elem {
                     AlcW < = "SI 220"
                     AlcH < = "SI 330"
                     Start.Prev !~ End.Next
+                    Start.Prev.AlcY ~ : SI_0
+                    Start.Prev.AlcH ~ : SI_0
                     Btn1 : FvWidgets.FButton {
+                        WdgAgent < LogLevel = "Dbg"
                         SText < = "SS Button_1"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
@@ -26,6 +29,7 @@ testroot : Elem {
                     Slot_1 : ContainerMod.FVLayoutSlot
                     Slot_1.SCp ~ Btn1.Cp
                     Btn2 : FvWidgets.FButton {
+                        WdgAgent < LogLevel = "Dbg"
                         SText < = "SS Button_2"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"

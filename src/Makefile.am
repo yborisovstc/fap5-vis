@@ -20,6 +20,8 @@ libfap5vis_la_SOURCES = \
 		       scene.cpp \
 		       container.h \
 		       container.cpp \
+		       agentvr.h \
+		       agentvr.cpp \
 		       button.h \
 		       button.cpp \
 		       label.h \

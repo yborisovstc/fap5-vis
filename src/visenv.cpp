@@ -352,15 +352,12 @@ void GWindow::confirm()
 	mWndInit = true;
     }
     Des::confirm();
-    if (mCnt++ == 0) {
-	mCnt = 0;
-	if (mWndInit) {
-	    Render();
-	    glfwSwapBuffers(mWindow);
-	}
+    if (mWndInit && !(mDrawOnComplete && isActive())) {
+        Render();
+        glfwSwapBuffers(mWindow);
     }
     if (mWndInit) {
-    glfwPollEvents();
+        glfwPollEvents();
     }
     PFL_DUR_STAT_REC(PVisEvents::EDurStat_Confirm);
 }

@@ -488,11 +488,9 @@ void AVWidget::Render()
     if (mDrawOnComplete && isActive()) return;
 
     // Debugging
-    /*
     float xc, yc, wc, hc;
     GetAlc(xc, yc, wc, hc);
     LOGN(EDbg, "Render: " + to_string(xc) + ", "  + to_string(yc) + ", " + to_string(wc) + ", " + to_string(hc));
-    */
 
     //LOGN(EDbg, "Render");
     // Get viewport parameters

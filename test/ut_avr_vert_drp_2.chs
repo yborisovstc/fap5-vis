@@ -1,0 +1,120 @@
+testroot : Elem {
+    # "UT of Vertex DRP. Edges"
+    + GVisComps
+    + FvWidgets
+    + AvrMdl2
+    Comps : Elem
+    Test : DesLauncher {
+        LogLevel = "Dbg"
+        # "Visualisation environment"
+        Env : VisEnv
+        Window : GVisComps.Window {
+            Width < = "SI 2400"
+            Height < = "SI 800"
+            Scene : GVisComps.Scene {
+                # "Visualisation scene"
+                # "- Model"
+                ModelMnt : Syst {
+                    CpExplb : CpSystExplorable
+                    Model : Syst {
+                        _ <  {
+                            Model_vert1 : Vert
+                            Model_vert2 : Vert
+                            Model_vert1 ~ Model_vert2
+                        }
+                        # "3 cycle. OK"
+                        Model_vert1 : Vert
+                        Model_vert2 : Vert
+                        Model_vert3 : Vert
+                        Model_vert1 ~ Model_vert2
+                        Model_vert1 ~ Model_vert3
+                        Model_vert2 ~ Model_vert3
+                        _ <  {
+                            # "4 cycle. OK"
+                            Model_vert1 : Vert
+                            Model_vert2 : Vert
+                            Model_vert3 : Vert
+                            Model_vert4 : Vert
+                            Model_vert1 ~ Model_vert2
+                            Model_vert2 ~ Model_vert3
+                            Model_vert3 ~ Model_vert4
+                            Model_vert4 ~ Model_vert1
+                        }
+                        # "4 all. OK"
+                        _ <  {
+                            Model_vert1 : Vert
+                            Model_vert2 : Vert
+                            Model_vert3 : Vert
+                            Model_vert4 : Vert
+                            Model_vert1 ~ Model_vert2
+                            Model_vert2 ~ Model_vert3
+                            Model_vert3 ~ Model_vert4
+                            Model_vert4 ~ Model_vert1
+                            Model_vert1 ~ Model_vert3
+                            Model_vert2 ~ Model_vert4
+                        }
+                        _ <  {
+                            # "5 cycle. OK"
+                            Model_vert1 : Vert
+                            Model_vert2 : Vert
+                            Model_vert3 : Vert
+                            Model_vert4 : Vert
+                            Model_vert5 : Vert
+                            Model_vert1 ~ Model_vert2
+                            Model_vert2 ~ Model_vert3
+                            Model_vert3 ~ Model_vert4
+                            Model_vert4 ~ Model_vert5
+                            Model_vert5 ~ Model_vert1
+                        }
+                        _ <  {
+                            # "5 cycle all. "
+                            Model_vert1 : Vert
+                            Model_vert2 : Vert
+                            Model_vert3 : Vert
+                            Model_vert4 : Vert
+                            Model_vert5 : Vert
+                            Model_vert1 ~ Model_vert2
+                            Model_vert2 ~ Model_vert3
+                            Model_vert3 ~ Model_vert4
+                            Model_vert4 ~ Model_vert5
+                            Model_vert5 ~ Model_vert1
+                            Model_vert1 ~ Model_vert3
+                            Model_vert1 ~ Model_vert4
+                            Model_vert2 ~ Model_vert4
+                            Model_vert2 ~ Model_vert5
+                            Model_vert3 ~ Model_vert5
+                        }
+                    }
+                }
+                MdlUri : State {
+                    = "URI Model"
+                }
+                # "DRP context"
+                DrpCtx : DesCtxSpl (
+                    _@ <  {
+                        ModelMntp : ExtdSystExploring
+                        DrpMagUri : ExtdStateInp
+                    }
+                    ModelMntp ~ ModelMnt.CpExplb
+                    DrpMagUri ~ MdlUri
+                )
+                # "DRP"
+                Drp : AvrMdl2.VertDrp {
+                    XPadding < = "SI 20"
+                    YPadding < = "SI 20"
+                    AlcW < = "SI 220"
+                    AlcH < = "SI 330"
+                }
+            }
+        }
+        EnvWidth : State
+        EnvHeight : State
+        Title : State
+        EnvWidth ~ Window.Inp_W
+        EnvHeight ~ Window.Inp_H
+        Title ~ Window.Inp_Title
+        EnvWidth < = "SI 640"
+        EnvHeight < = "SI 480"
+        Title < = "SS Title"
+    }
+}

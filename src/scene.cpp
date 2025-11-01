@@ -36,7 +36,6 @@ MIface* GtScene::MOwned_getLif(TIdHash aId)
 
 void GtScene::RenderScene(void)
 {
-    if (mDrawOnComplete && isActive()) return;
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 

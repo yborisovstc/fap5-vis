@@ -34,19 +34,21 @@ testroot : Elem {
                         SText < = "SS 'Button 2'"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
-                        Sdo : SdoCoordOwr (
-                            # "SDO coordinates in owner coord system"
-                            Level ~ : SI_1
-                            InpX ~ AlcX
-                            InpY ~ AlcY
-                        )
-                        Sdo_Dbg : State (
-                            _@ <  {
-                                LogLevel = "Dbg"
-                                = "PSI"
-                            }
-                            Inp ~ Sdo
-                        )
+                        _ <  {
+                            Sdo : SdoCoordOwr (
+                                # "SDO coordinates in owner coord system"
+                                Level ~ : SI_1
+                                InpX ~ AlcX
+                                InpY ~ AlcY
+                            )
+                            Sdo_Dbg : State (
+                                _@ <  {
+                                    LogLevel = "Dbg"
+                                    = "PSI"
+                                }
+                                Inp ~ Sdo
+                            )
+                        }
                     }
                     Slot_Btn2 : ContainerMod.FVLayoutSlot
                     Slot_Btn2.SCp ~ Btn2.Cp

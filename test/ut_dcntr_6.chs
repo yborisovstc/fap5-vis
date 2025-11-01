@@ -8,6 +8,7 @@ testroot : Elem {
         VEnv : VisEnv
         # "Window"
         Wnd : GVisComps.Window {
+            LogLevel = "Dbg"
             Width < = "SI 1200"
             Height < = "SI 800"
             Scene : GVisComps.Scene {
@@ -59,50 +60,95 @@ testroot : Elem {
                     Slot_Btn2.Prev ~ End.Next
                 }
             }
+            # " Adding new button"
+            VBox_AddWdg : ContainerMod.DcAddWdgSc (
+                Name ~ : State {
+                    = "SS Btn3"
+                }
+                Parent ~ : State {
+                    = "SS FvWidgets.FButton"
+                }
+                Pos ~ : SI_0
+                Mut ~ : State {
+                    = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
+                }
+            )
+            VBox_AddWdg ~ Scene.VBox.IoAddWidg
+            AddedWdg_Dbg : State (
+                _@ <  {
+                    LogLevel = "Dbg"
+                    = "SB false"
+                }
+                Inp ~ VBox_AddWdg.Added
+            )
+            # "We need to use trigger that keeps WdgAdded indication. This is because Add/Rm internal ops breaks the indication."
+            WdgAdded_Tg : DesUtils.RSTg
+            WdgAdded_Tg.InpS ~ VBox_AddWdg.Added
+            # " Removing button 1"
+            VBox_RmWdg : ContainerMod.DcRmWdgSc (
+                Enable ~ WdgAdded_Tg.Value
+                Name ~ : State {
+                    = "SS Btn3"
+                }
+            )
+            VBox_RmWdg ~ Scene.VBox.IoRmWidg
+            RmWdg_Dbg : State (
+                _@ <  {
+                    LogLevel = "Dbg"
+                    = "SB"
+                }
+                Inp ~ VBox_RmWdg.Done
+            )
+            WdgAdded_Tg.InpR ~ VBox_RmWdg.Done
+            VBox_AddWdg.Enable ~ : TrNegVar (
+                Inp ~ WdgAdded_Tg.Value
+            )
         }
-        # " Adding new button"
-        VBox_AddWdg : ContainerMod.DcAddWdgSc (
-            Name ~ : State {
-                = "SS Btn3"
-            }
-            Parent ~ : State {
-                = "SS FvWidgets.FButton"
-            }
-            Pos ~ : SI_0
-            Mut ~ : State {
-                = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
-            }
-        )
-        VBox_AddWdg ~ Wnd.Scene.VBox.IoAddWidg
-        AddedWdg_Dbg : State (
-            _@ <  {
-                LogLevel = "Dbg"
-                = "SB false"
-            }
-            Inp ~ VBox_AddWdg.Added
-        )
-        # "We need to use trigger that keeps WdgAdded indication. This is because Add/Rm internal ops breaks the indication."
-        WdgAdded_Tg : DesUtils.RSTg
-        WdgAdded_Tg.InpS ~ VBox_AddWdg.Added
-        # " Removing button 1"
-        VBox_RmWdg : ContainerMod.DcRmWdgSc (
-            Enable ~ WdgAdded_Tg.Value
-            Name ~ : State {
-                = "SS Btn3"
-            }
-        )
-        VBox_RmWdg ~ Wnd.Scene.VBox.IoRmWidg
-        RmWdg_Dbg : State (
-            _@ <  {
-                LogLevel = "Dbg"
-                = "SB"
-            }
-            Inp ~ VBox_RmWdg.Done
-        )
-        WdgAdded_Tg.InpR ~ VBox_RmWdg.Done
-        VBox_AddWdg.Enable ~ : TrNegVar (
-            Inp ~ WdgAdded_Tg.Value
-        )
+        _ <  {
+            # " Adding new button"
+            VBox_AddWdg : ContainerMod.DcAddWdgSc (
+                Name ~ : State {
+                    = "SS Btn3"
+                }
+                Parent ~ : State {
+                    = "SS FvWidgets.FButton"
+                }
+                Pos ~ : SI_0
+                Mut ~ : State {
+                    = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
+                }
+            )
+            VBox_AddWdg ~ Wnd.Scene.VBox.IoAddWidg
+            AddedWdg_Dbg : State (
+                _@ <  {
+                    LogLevel = "Dbg"
+                    = "SB false"
+                }
+                Inp ~ VBox_AddWdg.Added
+            )
+            # "We need to use trigger that keeps WdgAdded indication. This is because Add/Rm internal ops breaks the indication."
+            WdgAdded_Tg : DesUtils.RSTg
+            WdgAdded_Tg.InpS ~ VBox_AddWdg.Added
+            # " Removing button 1"
+            VBox_RmWdg : ContainerMod.DcRmWdgSc (
+                Enable ~ WdgAdded_Tg.Value
+                Name ~ : State {
+                    = "SS Btn3"
+                }
+            )
+            VBox_RmWdg ~ Wnd.Scene.VBox.IoRmWidg
+            RmWdg_Dbg : State (
+                _@ <  {
+                    LogLevel = "Dbg"
+                    = "SB"
+                }
+                Inp ~ VBox_RmWdg.Done
+            )
+            WdgAdded_Tg.InpR ~ VBox_RmWdg.Done
+            VBox_AddWdg.Enable ~ : TrNegVar (
+                Inp ~ WdgAdded_Tg.Value
+            )
+        }
         # " Misc env"
         EnvWidth : State
         EnvHeight : State
