@@ -4,39 +4,39 @@ ContainerMod : Elem {
     + FvWidgets
     + DesUtils
     SlotCp : Socket {
-        InpAlcX : CpStateInpPin
-        InpAlcY : CpStateInpPin
-        InpAlcW : CpStateInpPin
-        InpAlcH : CpStateInpPin
-        OutAlcX : CpStateOutpPin
-        OutAlcY : CpStateOutpPin
-        OutAlcW : CpStateOutpPin
-        OutAlcH : CpStateOutpPin
-        RqsW : CpStateOutpPin
-        RqsH : CpStateOutpPin
-        LbpUri : CpStateOutpPin
+        InpAlcX : CpStateInp
+        InpAlcY : CpStateInp
+        InpAlcW : CpStateInp
+        InpAlcH : CpStateInp
+        OutAlcX : CpStateOutp
+        OutAlcY : CpStateOutp
+        OutAlcW : CpStateOutp
+        OutAlcH : CpStateOutp
+        RqsW : CpStateOutp
+        RqsH : CpStateOutp
+        LbpUri : CpStateOutp
     }
     SlotLinNextCp : Socket {
-        AlcX : CpStateOutpPin
-        AlcY : CpStateOutpPin
-        AlcW : CpStateOutpPin
-        AlcH : CpStateOutpPin
-        CntRqsW : CpStateOutpPin
-        CntRqsH : CpStateOutpPin
-        XPadding : CpStateOutpPin
-        YPadding : CpStateOutpPin
-        LbpComp : CpStateOutpPin
+        AlcX : CpStateOutp
+        AlcY : CpStateOutp
+        AlcW : CpStateOutp
+        AlcH : CpStateOutp
+        CntRqsW : CpStateOutp
+        CntRqsH : CpStateOutp
+        XPadding : CpStateOutp
+        YPadding : CpStateOutp
+        LbpComp : CpStateOutp
     }
     SlotLinPrevCp : Socket {
-        AlcX : CpStateInpPin
-        AlcY : CpStateInpPin
-        AlcW : CpStateInpPin
-        AlcH : CpStateInpPin
-        CntRqsW : CpStateInpPin
-        CntRqsH : CpStateInpPin
-        XPadding : CpStateInpPin
-        YPadding : CpStateInpPin
-        LbpComp : CpStateInpPin
+        AlcX : CpStateInp
+        AlcY : CpStateInp
+        AlcW : CpStateInp
+        AlcH : CpStateInp
+        CntRqsW : CpStateInp
+        CntRqsH : CpStateInp
+        XPadding : CpStateInp
+        YPadding : CpStateInp
+        LbpComp : CpStateInp
     }
     FSlot : Des {
         SCp : SlotCp
@@ -135,33 +135,33 @@ ContainerMod : Elem {
     }
     # " DES controlled container"
     DcAddWdgS : Socket {
-        Enable : CpStateOutpPin
-        Name : CpStateOutpPin
-        Parent : CpStateOutpPin
-        Mut : CpStateOutpPin
-        Pos : CpStateOutpPin
-        Added : CpStateInpPin
+        Enable : CpStateOutp
+        Name : CpStateOutp
+        Parent : CpStateOutp
+        Mut : CpStateOutp
+        Pos : CpStateOutp
+        Added : CpStateInp
         # "TODO not used, remove"
-        AddedName : CpStateInpPin
+        AddedName : CpStateInp
     }
     DcAddWdgSc : Socket {
-        Enable : CpStateInpPin
-        Name : CpStateInpPin
-        Parent : CpStateInpPin
-        Mut : CpStateInpPin
-        Pos : CpStateInpPin
-        Added : CpStateOutpPin
-        AddedName : CpStateOutpPin
+        Enable : CpStateInp
+        Name : CpStateInp
+        Parent : CpStateInp
+        Mut : CpStateInp
+        Pos : CpStateInp
+        Added : CpStateOutp
+        AddedName : CpStateOutp
     }
     DcRmWdgS : Socket {
-        Enable : CpStateOutpPin
-        Name : CpStateOutpPin
-        Done : CpStateInpPin
+        Enable : CpStateOutp
+        Name : CpStateOutp
+        Done : CpStateInp
     }
     DcRmWdgSc : Socket {
-        Enable : CpStateInpPin
-        Name : CpStateInpPin
-        Done : CpStateOutpPin
+        Enable : CpStateInp
+        Name : CpStateInp
+        Done : CpStateOutp
     }
     DContainer : FvWidgets.FWidgetBase {
         CntAgent : AVDContainer
@@ -352,10 +352,10 @@ ContainerMod : Elem {
     }
     # ">>> Column layout. Set of the colums of the widgets."
     ColumnsSlotPrevCp : SlotLinPrevCp {
-        Pos : CpStateInpPin
+        Pos : CpStateInp
     }
     ColumnsSlotNextCp : SlotLinNextCp {
-        Pos : CpStateOutpPin
+        Pos : CpStateOutp
     }
     ColumnsStart : Syst {
         # "Column layout columns start slot"
@@ -369,15 +369,15 @@ ContainerMod : Elem {
     ColumnStart : Syst {
         # "Column layout column slots list start"
         Prev : SlotLinPrevCp {
-            ItemPos : CpStateInpPin
-            ColumnPos : CpStateInpPin
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
         }
     }
     ColumnEnd : Syst {
         # "Column layout column slots list end"
         Next : SlotLinNextCp {
-            ItemPos : CpStateOutpPin
-            ColumnPos : CpStateOutpPin
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
         }
     }
     ColumnLayoutSlot : Des {
@@ -468,12 +468,12 @@ ContainerMod : Elem {
         # "Column item slot"
         # "Extend chain CPs for positions io"
         Prev <  {
-            ItemPos : CpStateInpPin
-            ColumnPos : CpStateInpPin
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
         }
         Next <  {
-            ItemPos : CpStateOutpPin
-            ColumnPos : CpStateOutpPin
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
         }
         Prev.ItemPos ~ : TrAddVar (
             Inp ~ Next.ItemPos
@@ -482,31 +482,31 @@ ContainerMod : Elem {
         Prev.ColumnPos ~ Next.ColumnPos
     }
     ClAddColumnS : Socket {
-        Enable : CpStateOutpPin
-        Name : CpStateOutpPin
+        Enable : CpStateOutp
+        Name : CpStateOutp
         # " Position: bool, false - start, true - end. Not used ATM"
         # "Pos : CpStateOutp"
-        Done : CpStateInpPin
+        Done : CpStateInp
     }
     ClAddColumnSm : Socket {
-        Enable : CpStateInpPin
-        Name : CpStateInpPin
+        Enable : CpStateInp
+        Name : CpStateInp
         # "Pos : CpStateInp"
-        Done : CpStateOutpPin
+        Done : CpStateOutp
     }
     ClReposWdgS : Socket {
-        Enable : CpStateOutpPin
-        Name : CpStateOutpPin
+        Enable : CpStateOutp
+        Name : CpStateOutp
         # "New column pos"
-        ColPos : CpStateOutpPin
-        Done : CpStateInpPin
+        ColPos : CpStateOutp
+        Done : CpStateInp
     }
     ClReposWdgSm : Socket {
-        Enable : CpStateInpPin
-        Name : CpStateInpPin
+        Enable : CpStateInp
+        Name : CpStateInp
         # "New column pos"
-        ColPos : CpStateInpPin
-        Done : CpStateOutpPin
+        ColPos : CpStateInp
+        Done : CpStateOutp
     }
     ColumnsLayout : DContainer {
         # ">>> Columns layout"

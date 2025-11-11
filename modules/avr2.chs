@@ -109,13 +109,13 @@ AvrMdl2 : Elem {
     }
     NDrpCp : Socket {
         # "Node DRP output socket"
-        InpModelUri : CpStateInpPin
-        InpModelMntp : PinSystExploring
+        InpModelUri : CpStateInp
+        InpModelMntp : CpSystExploring
     }
     NDrpCpp : Socket {
         # "Node DRP output socket"
-        InpModelUri : CpStateOutpPin
-        InpModelMntp : PinSystExplorable
+        InpModelUri : CpStateOutp
+        InpModelMntp : CpSystExplorable
     }
     _ <  {
         NodeDrp : ContainerMod.DHLayout {
@@ -226,24 +226,24 @@ AvrMdl2 : Elem {
     VtStartSlot : Syst {
         # "VertDRP vertical tunnel slot. Start Comp slot."
         Prev : ContainerMod.SlotLinPrevCp {
-            ItemPos : CpStateInpPin
-            ColumnPos : CpStateInpPin
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
         }
     }
     VtEndSlot : Syst {
         # "VertDRP vertical tunnel slot. End Comp slot."
         Next : ContainerMod.SlotLinNextCp {
-            ItemPos : CpStateOutpPin
-            ColumnPos : CpStateOutpPin
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
         }
     }
     VertDrpVtSlot : Syst {
         # "VertDRP vertical tunnel slot"
         Prev : ContainerMod.SlotLinPrevCp {
-            Pos : CpStateInpPin
+            Pos : CpStateInp
         }
         Next : ContainerMod.SlotLinNextCp {
-            Pos : CpStateOutpPin
+            Pos : CpStateOutp
         }
         # "Break long IRM chain, ds_irm_wprc"
         Prev.XPadding ~ : ExtdStateOutp (
@@ -302,40 +302,40 @@ AvrMdl2 : Elem {
     }
     VertCrpEdgeCp : Socket {
         # "VertCrp CP to Edge"
-        ColumnPos : CpStateInpPin
+        ColumnPos : CpStateInp
         # "TODO unused?"
-        PairColumnPos : CpStateOutpPin
-        Pos : CpStateInpPin
-        PairPos : CpStateOutpPin
-        LeftCpAlloc : CpStateInpPin
-        RightCpAlloc : CpStateInpPin
+        PairColumnPos : CpStateOutp
+        Pos : CpStateInp
+        PairPos : CpStateOutp
+        LeftCpAlloc : CpStateInp
+        RightCpAlloc : CpStateInp
     }
     VertCrpEdgeCpm : Socket {
         # "VertCrp CP to Edge. Mate."
-        ColumnPos : CpStateOutpPin
-        PairColumnPos : CpStateInpPin
-        Pos : CpStateOutpPin
-        PairPos : CpStateInpPin
-        LeftCpAlloc : CpStateOutpPin
-        RightCpAlloc : CpStateOutpPin
+        ColumnPos : CpStateOutp
+        PairColumnPos : CpStateInp
+        Pos : CpStateOutp
+        PairPos : CpStateInp
+        LeftCpAlloc : CpStateOutp
+        RightCpAlloc : CpStateOutp
     }
     VertCrpEdgeCpExtd : SocketExtd {
         # "VertCrp CP to Edge"
-        ColumnPos : CpStateInpPin
+        ColumnPos : CpStateInp
         # "TODO unused?"
-        PairColumnPos : CpStateOutpPin
-        Pos : CpStateInpPin
-        PairPos : CpStateOutpPin
-        LeftCpAlloc : CpStateInpPin
-        RightCpAlloc : CpStateInpPin
+        PairColumnPos : CpStateOutp
+        Pos : CpStateInp
+        PairPos : CpStateOutp
+        LeftCpAlloc : CpStateInp
+        RightCpAlloc : CpStateInp
         Int : VertCrpEdgeCpm
     }
     VertCrp : NodeCrp3 {
         # ">>> Vertex compact representation"
         # "Extend widget CP to for positions io"
         Cp <  {
-            ItemPos : CpStateOutpPin
-            ColumnPos : CpStateOutpPin
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
         }
         # "Edge CRP connpoint"
         EdgeCrpCp : VertCrpEdgeCp (
@@ -493,78 +493,78 @@ AvrMdl2 : Elem {
         # ">>> Edge CRP segments"
         EhsSlCp : Socket {
             # "Edges horizontal segment slot CP. Provides Y and requires X"
-            X : CpStateOutpPin
-            Y : CpStateInpPin
+            X : CpStateOutp
+            Y : CpStateInp
         }
         EhsSlCpNext : EhsSlCp {
             # "Edges horizontal segment slot Next Cp. Left (ColIdx) and right (ColRIdx) col idxs"
-            Hash : CpStateOutpPin
-            ColIdx : CpStateOutpPin
-            ColRIdx : CpStateInpPin
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
         }
         EhsSlCpPrev : EhsSlCp {
             # "Edges horizontal segment slot Prev Cp."
-            Hash : CpStateInpPin
-            ColIdx : CpStateInpPin
-            ColRIdx : CpStateOutpPin
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
         }
         EhtsSlCp : Socket {
             # "Edges horizontal terminal segment slot terminal CP. Requires X, Y"
-            X : CpStateOutpPin
-            Y : CpStateOutpPin
+            X : CpStateOutp
+            Y : CpStateOutp
         }
         EhtsSlCpNext : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Next CP."
-            Hash : CpStateOutpPin
-            ColIdx : CpStateOutpPin
-            ColRIdx : CpStateInpPin
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
         }
         EhtsSlCpPrev : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Prev CP."
-            Hash : CpStateInpPin
-            ColIdx : CpStateInpPin
-            ColRIdx : CpStateOutpPin
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
         }
         EhsSlCpm : Socket {
             # "Edges horizontal segment slot CP mate. Provides X and requires Y"
-            X : CpStateInpPin
-            Y : CpStateOutpPin
+            X : CpStateInp
+            Y : CpStateOutp
         }
         EhsSlCpmNext : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Next."
-            Hash : CpStateOutpPin
-            ColIdx : CpStateOutpPin
-            ColRIdx : CpStateInpPin
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
         }
         EhsSlCpmPrev : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Prev."
-            Hash : CpStateInpPin
-            ColIdx : CpStateInpPin
-            ColRIdx : CpStateOutpPin
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
         }
         EhtsSlCpm : Socket {
             # "Edges horizontal terminal segment slot terminal CP mate. Provides X, Y"
-            X : CpStateInpPin
-            Y : CpStateInpPin
+            X : CpStateInp
+            Y : CpStateInp
         }
         EhtsSlCpmNext : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Next."
-            Hash : CpStateOutpPin
-            ColIdx : CpStateOutpPin
-            ColRIdx : CpStateInpPin
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
         }
         EhtsSlCpmPrev : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Prev."
-            Hash : CpStateInpPin
-            ColIdx : CpStateInpPin
-            ColRIdx : CpStateOutpPin
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
         }
         EdgeSSlotCoordCp : Socket {
             # "Edge segments slot coords CP."
-            LeftX : CpStateInpPin
-            LeftY : CpStateInpPin
-            RightX : CpStateInpPin
-            RightY : CpStateInpPin
+            LeftX : CpStateInp
+            LeftY : CpStateInp
+            RightX : CpStateInp
+            RightY : CpStateInp
         }
         EdgeCrpHsSlot : ContainerMod.ColumnItemSlot {
             # ">>> Edge CRP Horizontal segment slot"
@@ -721,12 +721,12 @@ AvrMdl2 : Elem {
             # ">>> Edge CRP Vertical segment slot"
             # "Extend chain CPs for positions io"
             Prev <  {
-                ItemPos : CpStateInpPin
-                ColumnPos : CpStateInpPin
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
             }
             Next <  {
-                ItemPos : CpStateOutpPin
-                ColumnPos : CpStateOutpPin
+                ItemPos : CpStateOutp
+                ColumnPos : CpStateOutp
             }
             Prev.ItemPos ~ : TrAddVar (
                 Inp ~ Next.ItemPos
@@ -916,16 +916,16 @@ AvrMdl2 : Elem {
             # "Edge CRP regular slot. The slot is combined from vertical and horisontal slots."
             EsNext : SocketExtd {
                 Int : EhsSlCpm {
-                    Hash : CpStateInpPin
-                    ColIdx : CpStateInpPin
-                    ColRIdx : CpStateOutpPin
+                    Hash : CpStateInp
+                    ColIdx : CpStateInp
+                    ColRIdx : CpStateOutp
                 }
             }
             EsPrev : SocketExtd {
                 Int : EhsSlCp {
-                    Hash : CpStateOutpPin
-                    ColIdx : CpStateOutpPin
-                    ColRIdx : CpStateInpPin
+                    Hash : CpStateOutp
+                    ColIdx : CpStateOutp
+                    ColRIdx : CpStateInp
                 }
             }
             Hs : EdgeCrpHsSlot

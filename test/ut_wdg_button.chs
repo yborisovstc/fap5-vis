@@ -46,14 +46,43 @@ testroot : Elem {
             IncrData : Const {
                 = "SI 1"
             }
-            WdgWidth.Inp ~ IncrW : TrAddVar (
-                Inp ~ IncrData
-                Inp ~ WdgWidth
+            WdgWidth.Inp ~ : TrSwitchBool (
+                Sel ~ Cpm_Lt : TrCmpVar (
+                    Inp ~ WdgWidth
+                    Inp2 ~ : Const {
+                        = "SI 200"
+                    }
+                )
+                Inp1 ~ WdgWidth
+                Inp2 ~ IncrW : TrAddVar (
+                    Inp ~ IncrData
+                    Inp ~ WdgWidth
+                )
             )
+            WdgHeight.Inp ~ : TrSwitchBool (
+                Sel ~ Cpm2_Lt : TrCmpVar (
+                    Inp ~ WdgHeight
+                    Inp2 ~ : Const {
+                        = "SI 200"
+                    }
+                )
+                Inp1 ~ WdgHeight
+                Inp2 ~ IncrW : TrAddVar (
+                    Inp ~ IncrData
+                    Inp ~ WdgHeight
+                )
+            )
+
+            _ <  {
+                WdgWidth.Inp ~ IncrW : TrAddVar (
+                    Inp ~ IncrData
+                    Inp ~ WdgWidth
+                )
             WdgHeight.Inp ~ IncrH : TrAddVar (
                 Inp ~ IncrData
                 Inp ~ WdgHeight
             )
+            }
             WdgWidth ~ Wnd.Scene.Wdg1Cp.InpAlcW
             WdgHeight ~ Wnd.Scene.Wdg1Cp.InpAlcH
             SLbpUri_Dbg : State (

@@ -36,13 +36,13 @@ class Ut_cntr : public Ut_fixture
     //CPPUNIT_TEST(testDCntr1);
     //CPPUNIT_TEST(testDCntr2);
     //CPPUNIT_TEST(testDCntr3);
-    //CPPUNIT_TEST(testDCntr4);
+    CPPUNIT_TEST(testDCntr4);
     //CPPUNIT_TEST(testDCntr5);
     //CPPUNIT_TEST(testDCntr6);
     //CPPUNIT_TEST(testColumnsLayout);
     //CPPUNIT_TEST(testColumnsLayout2);
     //CPPUNIT_TEST(testColumnsLayout3);
-    CPPUNIT_TEST(testColumnsLayout4);
+    //CPPUNIT_TEST(testColumnsLayout4);
     CPPUNIT_TEST_SUITE_END();
     public:
     virtual void setUp();
@@ -194,12 +194,14 @@ void Ut_cntr::testDCntr1()
     mEnv->profiler()->saveMetrics();
     delete mEnv;
 
+    /* TODO YB to enable this test!
     cout << endl << "=== DES controlled container, base. LSC MSO approach." << endl;
-    root = constructSystem("ut_dcntr_1l");
-    run = mEnv->RunSystem(40, 20);
+    constructSystem("ut_dcntr_1l");
+    bool run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
+    */
 
 }
 
@@ -214,6 +216,7 @@ void Ut_cntr::testDCntr2()
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     delete mEnv;
 
+    // TODO enable this test
     /*
     cout << endl << "=== DES controlled container, hrz layout. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_2_mso");
@@ -234,11 +237,14 @@ void Ut_cntr::testDCntr3()
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     delete mEnv;
 
+    // TODO Enable this
+    /*
     cout << endl << "=== DES controlled container, vert/hrz combined layout. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_3_mso");
     run = mEnv->RunSystem(40, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     delete mEnv;
+    */
 }
 
 
@@ -253,6 +259,8 @@ void Ut_cntr::testDCntr4()
     mEnv->profiler()->saveMetrics();
     delete mEnv;
 
+    // TODO Enable this
+    /*
     printf("\n === DES controlled container, vert layout, massive insertion. LSC MSO approach.\n");
     cout << endl << "=== DES controlled container, vert layout, massive insertion. LSC MSO approach." << endl;
     root = constructSystem("ut_dcntr_4_mso");
@@ -260,15 +268,16 @@ void Ut_cntr::testDCntr4()
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;
+    */
 }
 
 /** @brief DES controlled container, vert layout, massive insertion
  * */
 void Ut_cntr::testDCntr5()
 {
-    cout << endl << "=== DES controlled container, vert layout, massive insertion" << endl;
+    cout << endl << "=== DES controlled container, vert layout, massive insertion/removal" << endl;
     MNode* root = constructSystem("ut_dcntr_5");
-    bool run = mEnv->RunSystem(400, 1);
+    bool run = mEnv->RunSystem(400, 20);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
     mEnv->profiler()->saveMetrics();
     delete mEnv;

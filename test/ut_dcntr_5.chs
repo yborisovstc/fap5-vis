@@ -1,5 +1,5 @@
 testroot : Elem {
-    # "DES controlled Vert layout. Massive insertion"
+    # "DES controlled Vert layout. Massive insertion and removal"
     + GVisComps
     + ContainerMod
     Test : DesLauncher {

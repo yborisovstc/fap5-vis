@@ -16,11 +16,11 @@ AVLabel::TrRqs::TrRqs(const string& aType, const string& aName, MEnv* aEnv, AVWi
 void AVLabel::TrRqs::Construct()
 {
     mInpFont = addInput(KUri_InpFont);
-    mInpFont->bind(MNode::lIft<MNode>());
+    mInpFont->bind(&mInpsBp);
     mInpFontSize = addInput(KUri_InpFontSize);
-    mInpFontSize->bind(MNode::lIft<MNode>());
+    mInpFontSize->bind(&mInpsBp);
     mInpText = addInput(KUri_InpText);
-    mInpText->bind(MNode::lIft<MNode>());
+    mInpText->bind(&mInpsBp);
 }
 
 CpStateInp* AVLabel::TrRqs::addInput(const string& aName)
