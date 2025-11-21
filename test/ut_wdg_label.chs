@@ -15,11 +15,10 @@ testroot : Elem {
                     # "Visualisation scene"
                     Wdg1 : FvWidgets.FLabel {
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
-                        SText < = "SS Test"
+                        FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
+                        SText < = "SS Test_label"
                         AlcX < = "SI 200"
                         AlcY < = "SI 100"
-                        AlcW < = "SI 200"
-                        AlcH < = "SI 20"
                     }
                     Wdg1Cp : FvWidgets.WidgetCpc
                     Wdg1Cp ~ Wdg1.Cp
@@ -46,13 +45,31 @@ testroot : Elem {
             IncrData : Const {
                 = "SI 1"
             }
-            WdgWidth.Inp ~ IncrW : TrAddVar (
-                Inp ~ IncrData
-                Inp ~ WdgWidth
+            WdgWidth.Inp ~ : TrSwitchBool (
+                Sel ~ Cpm_Lt : TrCmpVar (
+                    Inp ~ WdgWidth
+                    Inp2 ~ : Const {
+                        = "SI 200"
+                    }
+                )
+                Inp1 ~ WdgWidth
+                Inp2 ~ IncrW : TrAddVar (
+                    Inp ~ IncrData
+                    Inp ~ WdgWidth
+                )
             )
-            WdgHeight.Inp ~ IncrH : TrAddVar (
-                Inp ~ IncrData
-                Inp ~ WdgHeight
+            WdgHeight.Inp ~ : TrSwitchBool (
+                Sel ~ Cpm2_Lt : TrCmpVar (
+                    Inp ~ WdgHeight
+                    Inp2 ~ : Const {
+                        = "SI 200"
+                    }
+                )
+                Inp1 ~ WdgHeight
+                Inp2 ~ IncrW : TrAddVar (
+                    Inp ~ IncrData
+                    Inp ~ WdgHeight
+                )
             )
             WdgWidth ~ Wnd.Scene.Wdg1Cp.InpAlcW
             WdgHeight ~ Wnd.Scene.Wdg1Cp.InpAlcH

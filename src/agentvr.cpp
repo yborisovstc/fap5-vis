@@ -14,6 +14,7 @@ const string K_QRightCpUri = "VertQApAlc";
 const string K_StartSeg = "LeftVertAlcCp";
 const string K_RightBridge = "RightVertAlcCp";
 const string K_DrpAdpUri = "DrpAdp";
+const string K_DrpAdpExplbUri = "DrpAdp.CpExpbl";
 const string K_SegCountUri = "DrpAdp.EdgeColRank";
 
 const string AEdgeCrp::KUri_TrRqsW = "TrRqsW";
@@ -110,8 +111,9 @@ bool AEdgeCrp::DrawSegment(const string& aSegName)
     int lX, lY, rX, rY;
     int lwX, lwY, rwX, rwY;
     bool valid = true;
-    auto* drpAdpn = ahostNode()->getNode(K_DrpAdpUri);
-    MSystExplorable* drpAdp = drpAdpn ? drpAdpn->lIf(drpAdp) : nullptr;
+    auto* drpAdpn = ahostNode()->getNode(K_DrpAdpExplbUri);
+    auto* drpAdpv = drpAdpn ? drpAdpn->lIft<MVert>() : nullptr;
+    MSystExplorable* drpAdp = drpAdpv ? drpAdpv->lIf(drpAdp) : nullptr;
     auto* drp = drpAdp ? drpAdp->getMag() : nullptr;
     if (drp) {
 	string segName = ahostNode()->name() + "_" + aSegName;
@@ -152,7 +154,8 @@ bool AEdgeCrp::GetSegCoord(MNode* aWdgCp, const GUri& aCpUri, int& aData)
     aData = -1;
     auto* ccp = aWdgCp->getNode(aCpUri);
     if (ccp) {
-	MVert* ccpv = ccp->lIf(ccpv);
+	MVert* ccpe = ccp->lIf(ccpe); // Coords (socket) elems are extenders
+        MVert* ccpv = ccpe ? ccpe->getExtd() : nullptr;
 	MDVarGet* ccpg = ccpv->lIf(ccpg);
 	if (ccpg) {
 	    const Sdata<int>* data = reinterpret_cast<const Sdata<int>*>(ccpg->VDtGet(data->TypeSig()));

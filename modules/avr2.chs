@@ -109,13 +109,13 @@ AvrMdl2 : Elem {
     }
     NDrpCp : Socket {
         # "Node DRP output socket"
-        InpModelUri : CpStateInp
-        InpModelMntp : CpSystExploring
+        InpModelUri : ExtdStateInp
+        InpModelMntp : ExtdSystExploring
     }
     NDrpCpp : Socket {
         # "Node DRP output socket"
-        InpModelUri : CpStateOutp
-        InpModelMntp : CpSystExplorable
+        InpModelUri : ExtdStateOutp
+        InpModelMntp : ExtdSystExplorable
     }
     _ <  {
         NodeDrp : ContainerMod.DHLayout {
@@ -226,24 +226,24 @@ AvrMdl2 : Elem {
     VtStartSlot : Syst {
         # "VertDRP vertical tunnel slot. Start Comp slot."
         Prev : ContainerMod.SlotLinPrevCp {
-            ItemPos : CpStateInp
-            ColumnPos : CpStateInp
+            ItemPos : ExtdStateInp
+            ColumnPos : ExtdStateInp
         }
     }
     VtEndSlot : Syst {
         # "VertDRP vertical tunnel slot. End Comp slot."
         Next : ContainerMod.SlotLinNextCp {
-            ItemPos : CpStateOutp
-            ColumnPos : CpStateOutp
+            ItemPos : ExtdStateOutp
+            ColumnPos : ExtdStateOutp
         }
     }
     VertDrpVtSlot : Syst {
         # "VertDRP vertical tunnel slot"
         Prev : ContainerMod.SlotLinPrevCp {
-            Pos : CpStateInp
+            Pos : ExtdStateInp
         }
         Next : ContainerMod.SlotLinNextCp {
-            Pos : CpStateOutp
+            Pos : ExtdStateOutp
         }
         # "Break long IRM chain, ds_irm_wprc"
         Prev.XPadding ~ : ExtdStateOutp (
@@ -302,16 +302,25 @@ AvrMdl2 : Elem {
     }
     VertCrpEdgeCp : Socket {
         # "VertCrp CP to Edge"
-        ColumnPos : CpStateInp
+        ColumnPos : ExtdStateInp
         # "TODO unused?"
-        PairColumnPos : CpStateOutp
-        Pos : CpStateInp
-        PairPos : CpStateOutp
-        LeftCpAlloc : CpStateInp
-        RightCpAlloc : CpStateInp
+        PairColumnPos : ExtdStateOutp
+        Pos : ExtdStateInp
+        PairPos : ExtdStateOutp
+        LeftCpAlloc : ExtdStateInp
+        RightCpAlloc : ExtdStateInp
     }
     VertCrpEdgeCpm : Socket {
         # "VertCrp CP to Edge. Mate."
+        ColumnPos : ExtdStateOutp
+        PairColumnPos : ExtdStateInp
+        Pos : ExtdStateOutp
+        PairPos : ExtdStateInp
+        LeftCpAlloc : ExtdStateOutp
+        RightCpAlloc : ExtdStateOutp
+    }
+    VertCrpEdgeCpExtdInt : SocketExtdInt {
+        # "VertCrpEdgeCpExtd int CP"
         ColumnPos : CpStateOutp
         PairColumnPos : CpStateInp
         Pos : CpStateOutp
@@ -328,14 +337,14 @@ AvrMdl2 : Elem {
         PairPos : CpStateOutp
         LeftCpAlloc : CpStateInp
         RightCpAlloc : CpStateInp
-        Int : VertCrpEdgeCpm
+        Int : VertCrpEdgeCpExtdInt
     }
     VertCrp : NodeCrp3 {
         # ">>> Vertex compact representation"
         # "Extend widget CP to for positions io"
         Cp <  {
-            ItemPos : CpStateOutp
-            ColumnPos : CpStateOutp
+            ItemPos : ExtdStateOutp
+            ColumnPos : ExtdStateOutp
         }
         # "Edge CRP connpoint"
         EdgeCrpCp : VertCrpEdgeCp (
@@ -493,78 +502,78 @@ AvrMdl2 : Elem {
         # ">>> Edge CRP segments"
         EhsSlCp : Socket {
             # "Edges horizontal segment slot CP. Provides Y and requires X"
-            X : CpStateOutp
-            Y : CpStateInp
+            X : ExtdStateOutp
+            Y : ExtdStateInp
         }
         EhsSlCpNext : EhsSlCp {
             # "Edges horizontal segment slot Next Cp. Left (ColIdx) and right (ColRIdx) col idxs"
-            Hash : CpStateOutp
-            ColIdx : CpStateOutp
-            ColRIdx : CpStateInp
+            Hash : ExtdStateOutp
+            ColIdx : ExtdStateOutp
+            ColRIdx : ExtdStateInp
         }
         EhsSlCpPrev : EhsSlCp {
             # "Edges horizontal segment slot Prev Cp."
-            Hash : CpStateInp
-            ColIdx : CpStateInp
-            ColRIdx : CpStateOutp
+            Hash : ExtdStateInp
+            ColIdx : ExtdStateInp
+            ColRIdx : ExtdStateOutp
         }
         EhtsSlCp : Socket {
             # "Edges horizontal terminal segment slot terminal CP. Requires X, Y"
-            X : CpStateOutp
-            Y : CpStateOutp
+            X : ExtdStateOutp
+            Y : ExtdStateOutp
         }
         EhtsSlCpNext : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Next CP."
-            Hash : CpStateOutp
-            ColIdx : CpStateOutp
-            ColRIdx : CpStateInp
+            Hash : ExtdStateOutp
+            ColIdx : ExtdStateOutp
+            ColRIdx : ExtdStateInp
         }
         EhtsSlCpPrev : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Prev CP."
-            Hash : CpStateInp
-            ColIdx : CpStateInp
-            ColRIdx : CpStateOutp
+            Hash : ExtdStateInp
+            ColIdx : ExtdStateInp
+            ColRIdx : ExtdStateOutp
         }
         EhsSlCpm : Socket {
             # "Edges horizontal segment slot CP mate. Provides X and requires Y"
-            X : CpStateInp
-            Y : CpStateOutp
+            X : ExtdStateInp
+            Y : ExtdStateOutp
         }
         EhsSlCpmNext : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Next."
-            Hash : CpStateOutp
-            ColIdx : CpStateOutp
-            ColRIdx : CpStateInp
+            Hash : ExtdStateOutp
+            ColIdx : ExtdStateOutp
+            ColRIdx : ExtdStateInp
         }
         EhsSlCpmPrev : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Prev."
-            Hash : CpStateInp
-            ColIdx : CpStateInp
-            ColRIdx : CpStateOutp
+            Hash : ExtdStateInp
+            ColIdx : ExtdStateInp
+            ColRIdx : ExtdStateOutp
         }
         EhtsSlCpm : Socket {
             # "Edges horizontal terminal segment slot terminal CP mate. Provides X, Y"
-            X : CpStateInp
-            Y : CpStateInp
+            X : ExtdStateInp
+            Y : ExtdStateInp
         }
         EhtsSlCpmNext : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Next."
-            Hash : CpStateOutp
-            ColIdx : CpStateOutp
-            ColRIdx : CpStateInp
+            Hash : ExtdStateOutp
+            ColIdx : ExtdStateOutp
+            ColRIdx : ExtdStateInp
         }
         EhtsSlCpmPrev : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Prev."
-            Hash : CpStateInp
-            ColIdx : CpStateInp
-            ColRIdx : CpStateOutp
+            Hash : ExtdStateInp
+            ColIdx : ExtdStateInp
+            ColRIdx : ExtdStateOutp
         }
         EdgeSSlotCoordCp : Socket {
             # "Edge segments slot coords CP."
-            LeftX : CpStateInp
-            LeftY : CpStateInp
-            RightX : CpStateInp
-            RightY : CpStateInp
+            LeftX : ExtdStateInp
+            LeftY : ExtdStateInp
+            RightX : ExtdStateInp
+            RightY : ExtdStateInp
         }
         EdgeCrpHsSlot : ContainerMod.ColumnItemSlot {
             # ">>> Edge CRP Horizontal segment slot"
@@ -622,6 +631,7 @@ AvrMdl2 : Elem {
                 DrpMntp : ExtdSystExplorable
             }
             DrpAdp : DAdp (
+                _@ < LogLevel = "Dbg"
                 CpExploring ~ EdgeCrpCtx.DrpMntp
                 InpMagUri ~ : State {
                     = "URI _$"
@@ -721,12 +731,12 @@ AvrMdl2 : Elem {
             # ">>> Edge CRP Vertical segment slot"
             # "Extend chain CPs for positions io"
             Prev <  {
-                ItemPos : CpStateInp
-                ColumnPos : CpStateInp
+                ItemPos : ExtdStateInp
+                ColumnPos : ExtdStateInp
             }
             Next <  {
-                ItemPos : CpStateOutp
-                ColumnPos : CpStateOutp
+                ItemPos : ExtdStateOutp
+                ColumnPos : ExtdStateOutp
             }
             Prev.ItemPos ~ : TrAddVar (
                 Inp ~ Next.ItemPos
@@ -912,22 +922,40 @@ AvrMdl2 : Elem {
             DrpAdp.AdpSlotUri ~ SelfUri
             # "<<< Edge CRP Vertical segment slot"
         }
+        EsNextSockInt : SocketExtdInt {
+            X : CpStateOutp
+            Y : CpStateInp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
+        }
+        EsNextSock : SocketExtd {
+            X : CpStateInp
+            Y : CpStateOutp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+            Int : EsNextSockInt
+        }
+        EsPrevSockInt : SocketExtdInt {
+            X : CpStateInp
+            Y : CpStateOutp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+        }
+        EsPrevSock : SocketExtd {
+            X : CpStateOutp
+            Y : CpStateInp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
+            Int : EsPrevSockInt
+        }
         EdgeCrpRsSlot : Des {
             # "Edge CRP regular slot. The slot is combined from vertical and horisontal slots."
-            EsNext : SocketExtd {
-                Int : EhsSlCpm {
-                    Hash : CpStateInp
-                    ColIdx : CpStateInp
-                    ColRIdx : CpStateOutp
-                }
-            }
-            EsPrev : SocketExtd {
-                Int : EhsSlCp {
-                    Hash : CpStateOutp
-                    ColIdx : CpStateOutp
-                    ColRIdx : CpStateInp
-                }
-            }
+            EsNext : EsNextSock
+            EsPrev : EsPrevSock
             Hs : EdgeCrpHsSlot
             Vs : EdgeCrpVsSlot
             Hs.EsNext ~ EsNext.Int
@@ -973,13 +1001,13 @@ AvrMdl2 : Elem {
     EdgeCrp : FvWidgets.FWidgetBase {
         # ">>> Edge compact repesentation"
         WdgAgent : AEdgeCrp
-        _ <  {
-            WdgAgent < LogLevel = "Dbg"
-        }
+        WdgAgent < LogLevel = "Dbg"
         EdgeCrpCtx : DesCtxCsm {
             DrpMntp : ExtdSystExplorable
         }
         DrpAdp : DAdp (
+            _@ < LogLevel = "Dbg"
+            _@ < CpExpbl : CpSystExplorable
             CpExploring ~ EdgeCrpCtx.DrpMntp
             InpMagUri ~ : State {
                 = "URI _$"
@@ -1244,7 +1272,7 @@ AvrMdl2 : Elem {
                     Inp ~ : SdoPairsCount (
                         _@ < LogLevel = "Dbg"
                         Vp ~ : Const {
-                            = "SS VertCrpPCp"
+                            = "URI VertCrpPCp"
                         }
                     )
                     Inp2 ~ : SI_0
@@ -1252,7 +1280,7 @@ AvrMdl2 : Elem {
                 Inp ~ Dtv_Gt_2 : TrCmpVar (
                     Inp ~ : SdoPairsCount (
                         Vp ~ : Const {
-                            = "SS VertCrpQCp"
+                            = "URI VertCrpQCp"
                         }
                     )
                     Inp2 ~ : SI_0
@@ -1435,15 +1463,20 @@ AvrMdl2 : Elem {
                     )
                 )
                 VsEsPrev : TrApndVar (
+                    _@ < LogLevel = "Dbg"
                     Inp1 ~ VsSlotName
                     Inp2 ~ : Const {
                         = "SS .EsPrev"
                     }
                 )
+                # "Edges Vertial default segment Prev CP isn't connected"
                 VsEsPrevNCntd_Eq : TrCmpVar (
                     _@ < LogLevel = "Dbg"
                     Inp ~ SdoPc : SdoPairsCount (
-                        Vp ~ VsEsPrev
+                        _@ < LogLevel = "Dbg"
+                        Vp ~ : TrToUriVar (
+                            Inp ~ VsEsPrev
+                        )
                     )
                     Inp2 ~ : SI_0
                 )
@@ -1560,8 +1593,8 @@ AvrMdl2 : Elem {
         # "Vertex DRP column item slot"
         # "Extend widget CP to for positions io"
         SCp <  {
-            ItemPos : CpStateInp
-            ColumnPos : CpStateInp
+            ItemPos : ExtdStateInp
+            ColumnPos : ExtdStateInp
         }
         _ <  {
             SCp.ItemPos ~ Next.ItemPos
@@ -1601,6 +1634,10 @@ AvrMdl2 : Elem {
             ModelMntp : ExtdSystExplorable
             DrpMagUri : ExtdStateOutp
         }
+        DrpCtxMagUri_Dbg : State (
+            _@ < LogLevel = "Dbg"
+            Inp ~ DrpCtx.DrpMagUri
+        )
         # "Managed agent (MAG) adapter"
         MagAdp : DAdp (
             _@ <  {
@@ -1811,17 +1848,18 @@ AvrMdl2 : Elem {
         # "Vert CRP context"
         VertCrpCtx : DesCtxSpl {
             # "CRP parameters: positioning etc"
-            CrpPars : ExtdStateInp
+            CrpPars : ExtdStateOutp
         }
         {
             # ">>> Controller of CRPs ordering"
             # "CrpPars Iterator"
             CrpParsIter : DesUtils.InpItr (
-                InpM ~ VertCrpCtx.CrpPars.Int
+                InpM ~ VertCrpCtx.CrpPars
                 # "InpDone --> "
                 ChgDet : DesUtils.ChgDetector (
-                    Inp ~ VertCrpCtx.CrpPars.Int
+                    Inp ~ VertCrpCtx.CrpPars
                 )
+                ChgDet.Cmp_Neq < LogLevel = "Dbg"
                 InpReset ~ ChgDet.Outp
             )
             CrpParsIterDone_Dbg : State (
@@ -1833,7 +1871,7 @@ AvrMdl2 : Elem {
             )
             # "Selected CrpPars"
             SelectedCrpPars : TrInpSel (
-                Inp ~ VertCrpCtx.CrpPars.Int
+                Inp ~ VertCrpCtx.CrpPars
                 Idx ~ CrpParsIter.Outp
             )
             SelectedCrpPars_Dbg : State (
@@ -1878,6 +1916,7 @@ AvrMdl2 : Elem {
                 Inp ~ ColumnsCount
             )
             SameColAsPair_Eq : TrCmpVar (
+                _@ < LogLevel = "Dbg"
                 Inp ~ CrpColPos
                 Inp2 ~ CrpPmrColPos
             )
@@ -1889,6 +1928,7 @@ AvrMdl2 : Elem {
                 Inp ~ SameColAsPair_Eq
             )
             NewColNeeded_Ge : TrCmpVar (
+                _@ < LogLevel = "Dbg"
                 Inp ~ CrpColPos
                 Inp2 ~ LastColPos : TrAddVar (
                     Inp ~ ColumnsCount
@@ -1953,6 +1993,7 @@ AvrMdl2 : Elem {
             CpReposCrp : ContainerMod.ClReposWdgSm (
                 Enable ~ SameColAsPair_Eq
                 Enable ~ : TrNegVar (
+                    _@ < LogLevel = "Dbg"
                     Inp ~ NewColNeeded_Ge
                 )
                 Name ~ CrpName
@@ -1961,6 +2002,7 @@ AvrMdl2 : Elem {
             CpReposCrp ~ IoReposWdg
             # "Completion of iteration"
             CrpParsIter.InpDone ~ : TrAndVar (
+                _@ < LogLevel = "Dbg"
                 Inp ~ : TrNegVar (
                     Inp ~ SameColAsPair_Eq
                 )
@@ -2560,8 +2602,8 @@ AvrMdl2 : Elem {
             # ">>> System compact representation"
             # "Extend widget CP to for positions io"
             Cp <  {
-                ItemPos : CpStateOutp
-                ColumnPos : CpStateOutp
+                ItemPos : ExtdStateOutp
+                ColumnPos : ExtdStateOutp
             }
             MagAdp <  {
                 CompsUri : SdoCompsUri
@@ -2671,6 +2713,7 @@ AvrMdl2 : Elem {
                 CrpPars : ExtdStateInp
             }
             VertCrpCtx.CrpPars ~ : TrTuple (
+                _@ < LogLevel = "Dbg"
                 _@ <  {
                     name : CpStateInp
                     colpos : CpStateInp
@@ -2816,11 +2859,11 @@ AvrMdl2 : Elem {
         About = "Vis representation view CP"
         NavCtrl : Socket {
             About = "Navigation control"
-            CmdUp : CpStateInp
-            NodeSelected : CpStateInp
+            CmdUp : ExtdStateInp
+            NodeSelected : ExtdStateInp
             MutAddWidget : ContainerMod.DcAddWdgSc
             MutRmWidget : ContainerMod.DcRmWdgSc
-            DrpCreated : CpStateInp
+            DrpCreated : ExtdStateInp
             DrpCp : NDrpCpp
         }
     }
@@ -2828,11 +2871,11 @@ AvrMdl2 : Elem {
         About = "Vis representation controller CP"
         NavCtrl : Socket {
             About = "Navigation control"
-            CmdUp : CpStateOutp
-            NodeSelected : CpStateOutp
+            CmdUp : ExtdStateOutp
+            NodeSelected : ExtdStateOutp
             MutAddWidget : ContainerMod.DcAddWdgS
             MutRmWidget : ContainerMod.DcRmWdgS
-            DrpCreated : CpStateOutp
+            DrpCreated : ExtdStateOutp
             DrpCp : NDrpCp
         }
     }

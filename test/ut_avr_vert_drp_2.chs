@@ -22,6 +22,7 @@ testroot : Elem {
                             Model_vert2 : Vert
                             Model_vert1 ~ Model_vert2
                         }
+                        _ <  {
                         # "3 cycle. OK"
                         Model_vert1 : Vert
                         Model_vert2 : Vert
@@ -29,8 +30,9 @@ testroot : Elem {
                         Model_vert1 ~ Model_vert2
                         Model_vert1 ~ Model_vert3
                         Model_vert2 ~ Model_vert3
-                        _ <  {
+                        }
                             # "4 cycle. OK"
+                        _ <  {
                             Model_vert1 : Vert
                             Model_vert2 : Vert
                             Model_vert3 : Vert
@@ -41,7 +43,6 @@ testroot : Elem {
                             Model_vert4 ~ Model_vert1
                         }
                         # "4 all. OK"
-                        _ <  {
                             Model_vert1 : Vert
                             Model_vert2 : Vert
                             Model_vert3 : Vert
@@ -52,7 +53,6 @@ testroot : Elem {
                             Model_vert4 ~ Model_vert1
                             Model_vert1 ~ Model_vert3
                             Model_vert2 ~ Model_vert4
-                        }
                         _ <  {
                             # "5 cycle. OK"
                             Model_vert1 : Vert

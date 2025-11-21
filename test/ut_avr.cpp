@@ -109,11 +109,11 @@ void Ut_avr::test_VertDrp_2()
     printf("\n === Vertex DRP test 2 - edges\n");
     MNode* root = constructSystem("ut_avr_vert_drp_2");
     // Run
-    //PFLC_INIT("ut_avr_vert_drp_2_vis");
+    PFLC_INIT("ut_avr_vert_drp_2_vis");
     bool run = mEnv->RunSystem(200, 50);
     CPPUNIT_ASSERT_MESSAGE("Fail to run system", run);
-    //PFL_SAVE(); // Metrics for Env Profiler
-    //PFLC_SAVE();// Metrics for Common Profiler
+    PFL_SAVE(); // Metrics for Env Profiler
+    PFLC_SAVE();// Metrics for Common Profiler
 
     delete mEnv;
 }
