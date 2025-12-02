@@ -68,8 +68,8 @@ AvrMdl2 : Elem {
             End.Next !~ Start.Prev
             Name : FvWidgets.FLabel {
                 WdgAgent < LogLevel = "Err"
-                BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 0.0 0.7 0.0"
-                FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 1.0 0.0"
+                BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 0.0 0.7 1.0"
+                FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 1.0 1.0"
             }
             Slot_Name : ContainerMod.FHLayoutSlot (
                 Next ~ Start.Prev
@@ -2167,6 +2167,12 @@ AvrMdl2 : Elem {
                 InpV ~ InpCompNames.Int
                 InpReset ~ : SB_False
             )
+            CompsIdxIsChanged : DesUtils.IsChanged (
+                SInp ~ CompsIter.OutV
+            )
+            CompsIter.Sw2 < LogLevel = "Dbg"
+            CompsIter.Sw1 < LogLevel = "Dbg"
+            CompsIter.CidxAnd1 < LogLevel = "Dbg"
             CompNames_Dbg : State (
                 _@ < LogLevel = "Dbg"
                 _@ < = "VDU"
@@ -2189,12 +2195,94 @@ AvrMdl2 : Elem {
                 Inp1 ~ InpTargUri.Int
                 Inp2 ~ CompsIter.OutV
             )
-            CpResolver : DesUtils.PrntMappingResolver (
+            _ <  {
+                CpResolver : DesUtils.PrntMappingResolver2 (
+                    InpParents ~ CompAdapter.Parents
+                    InpMpg ~ InpCcMpg.Int
+                    InpDefRes ~ : Const {
+                        = "URI"
+                    }
+                )
+            }
+            _ <  {
+                # "TODO Creation of resolver heir failed if keep its chromo here. To debug"
+                PrntMappingResolverD : Des {
+                    # ">>> Parent mapping resolver"
+                    # "Finds data (URI) assosiated to parent"
+                    # "Input: parents hierarchy (VDU)"
+                    InpParents : ExtdStateInp
+                    # "Input: Mapping parent to result"
+                    InpMpg : ExtdStateInp
+                    # "Input: Default result"
+                    InpDefRes : ExtdStateInp
+                    # "Output: Resolved CRP URI"
+                    OutpRes : ExtdStateOutp
+                    # "System"
+                    InpChanged : DesUtils.BChange (
+                        SInp ~ InpParents.Int
+                    )
+                    ParentsIter : DesUtils.VectIter (
+                        _@ < LogLevel = "Dbg"
+                        InpV ~ InpParents.Int
+                        _ < InpDone ~ : SB_True
+                        InpReset ~ InpChanged.Outp
+                    )
+                    FindMapped : TrFindByP (
+                        Inp ~ InpMpg.Int
+                        Sample ~ ParentsIter.OutV
+                    )
+                    ParentsIter.InpDone ~ : TrNegVar (
+                        Inp ~ : TrIsValid (
+                            Inp ~ FindMapped
+                        )
+                    )
+                    Parents_Dbg : State (
+                        _@ < LogLevel = "Dbg"
+                        _@ < = "VDU"
+                        Inp ~ InpParents.Int
+                    )
+                    NotFound : TrAndVar (
+                        Inp ~ : TrIsValid (
+                            Inp ~ InpMpg.Int
+                        )
+                        Inp ~ : TrIsValid (
+                            Inp ~ InpParents.Int
+                        )
+                        Inp ~ : TrIsInvalid (
+                            Inp ~ FindMapped
+                        )
+                    )
+                    Res_Int : TrSwitchBool (
+                        _@ < LogLevel = "Dbg"
+                        Inp1 ~ FindMapped
+                        Inp2 ~ InpDefRes.Int
+                        Sel ~ NotFound
+                    )
+                    Res_Int2 : TrSwitchBool (
+                        _@ < LogLevel = "Dbg"
+                        Inp1 ~ Res_Int
+                        Inp2 ~ : Const {
+                            = "URI"
+                        }
+                        Sel ~ InpChanged.Outp
+                    )
+                    Res : State (
+                        _@ < LogLevel = "Dbg"
+                        _@ < = "URI"
+                        Inp ~ Res_Int2
+                    )
+                    OutpRes.Int ~ Res
+                    # ">>> Parent mapping resolver"
+                }
+            }
+            # "Redesigned acc to ds_csd_s1"
+            CpResolver : DesUtils.PrntMappingResolverD (
                 InpParents ~ CompAdapter.Parents
                 InpMpg ~ InpCcMpg.Int
                 InpDefRes ~ : Const {
                     = "URI"
                 }
+                InpRset ~ CompsIdxIsChanged.Outp
             )
             IsOutput_Eq : TrCmpVar (
                 _@ < LogLevel = "Dbg"
@@ -2213,15 +2301,8 @@ AvrMdl2 : Elem {
                     Inp ~ CpResolver.OutpRes
                 )
                 Enable ~ EnableAddOutpRp : TrAndVar (
-                    Inp ~ RslResValid : TrIsValid (
-                        Inp ~ CpResolver.OutpRes
-                    )
-                    Inp ~ Cmp_Eq : TrCmpVar (
-                        # "Enable only if CompsIter res corresponds to CpResolver out"
-                        Inp ~ CompsIter.OutV
-                        Inp2 ~ : State (
-                            Inp ~ CompsIter.OutV
-                        )
+                    Inp ~ : TrNegVar (
+                        Inp ~ CompsIdxIsChanged.Outp
                     )
                     Inp ~ IsOutput_Eq
                 )
@@ -2232,8 +2313,10 @@ AvrMdl2 : Elem {
                     Inp ~ CpResolver.OutpRes
                 )
                 Enable ~ EnableAddInpRp : TrAndVar (
-                    Inp ~ RslResValid
-                    Inp ~ Cmp_Eq
+                    _@ < LogLevel = "Dbg"
+                    Inp ~ : TrNegVar (
+                        Inp ~ CompsIdxIsChanged.Outp
+                    )
                     Inp ~ : TrNegVar (
                         Inp ~ IsOutput_Eq
                     )
@@ -2347,7 +2430,7 @@ AvrMdl2 : Elem {
                 V1 ~ : TrApndVar (
                     Inp1 ~ CprpName
                     Inp2 ~ : Const {
-                        = "SS .EdgeCrpCp.Int"
+                        = "SS .EdgeCrpCp"
                     }
                 )
                 V2 ~ : TrApndVar (
@@ -2357,17 +2440,7 @@ AvrMdl2 : Elem {
                     }
                 )
             )
-            CompsIter.InpDone ~ CompsIterInpDone : TrOrVar (
-                _@ < LogLevel = "Dbg"
-                Inp ~ ConnectCprpExtd.Outp
-                Inp ~ RslResInvalid : TrAndVar (
-                    _@ < LogLevel = "Dbg"
-                    Inp ~ Cmp_Eq
-                    Inp ~ : TrNegVar (
-                        Inp ~ RslResValid
-                    )
-                )
-            )
+            CompsIter.InpDone ~ ConnectCprpExtd.Outp
             # "<<< ConnPoints collector"
         }
         SystCpRp : FvWidgets.FLabel {
@@ -2611,19 +2684,19 @@ AvrMdl2 : Elem {
             # "CP RP context"
             CpRpCtx : DesCtxSpl {
                 # "Parameters: positioning etc"
-                CprpPars : ExtdStateInp
-                ColPos : ExtdStateOutp
-                ItemPos : ExtdStateOutp
+                CprpPars : ExtdStateOutp
+                ColPos : ExtdStateInp
+                ItemPos : ExtdStateInp
             }
             CpRpCtx  (
-                ColPos.Int ~ Cp.ColumnPos
-                ItemPos.Int ~ Cp.ItemPos
+                ColPos ~ Cp.ColumnPos
+                ItemPos ~ Cp.ItemPos
             )
             CprpIter : DesUtils.InpItr (
-                InpM ~ CpRpCtx.CprpPars.Int
+                InpM ~ CpRpCtx.CprpPars
                 InpDone ~ : SB_True
                 ChgDet : DesUtils.ChgDetector (
-                    Inp ~ CpRpCtx.CprpPars.Int
+                    Inp ~ CpRpCtx.CprpPars
                 )
                 InpReset ~ ChgDet.Outp
             )
@@ -2636,7 +2709,7 @@ AvrMdl2 : Elem {
             )
             # "   Selected input"
             CprpIterSel : TrInpSel (
-                Inp ~ CpRpCtx.CprpPars.Int
+                Inp ~ CpRpCtx.CprpPars
                 Idx ~ CprpIter.Outp
             )
             CprpIterSel_Dbg : State (
@@ -2743,11 +2816,15 @@ AvrMdl2 : Elem {
                     FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 1.0 0.0"
                     XPadding < = "SI 1"
                     YPadding < = "SI 1"
+                    Start.Prev.AlcX ~ : SI_0
+                    Start.Prev.AlcY ~ : SI_0
                 }
                 Slot_Inputs : ContainerMod.FHLayoutSlot (
                     Next ~ Start.Prev
                     SCp ~ Inputs.Cp
                 )
+                Start.Prev.AlcX ~ : SI_1
+                Start.Prev.AlcY ~ : SI_1
                 Outputs : SystCrpCpa {
                     CntAgent < LogLevel = "Err"
                     BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 0.0 0.0 0.0"

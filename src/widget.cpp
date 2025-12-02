@@ -730,10 +730,10 @@ AVWidget::TColor AVWidget::GetColor(const string& aUri)
 	auto* dt = pvg->DtGet<NTuple>();
         if (dt && dt->mData.size() == 4) {
             for (auto it = dt->mData.begin(); it != dt->mData.end(); it++) {
-                if (it->first == "r") res.r = static_cast<float>(reinterpret_cast<Sdata<int>*>(it->second)->mData);
-                else if (it->first == "g") res.g = static_cast<float>(reinterpret_cast<Sdata<int>*>(it->second)->mData);
-                else if (it->first == "b") res.b = static_cast<float>(reinterpret_cast<Sdata<int>*>(it->second)->mData);
-                else if (it->first == "a") res.a = static_cast<float>(reinterpret_cast<Sdata<int>*>(it->second)->mData);
+                if (it->first == "r") res.r = reinterpret_cast<Sdata<float>*>(it->second)->mData;
+                else if (it->first == "g") res.g = reinterpret_cast<Sdata<float>*>(it->second)->mData;
+                else if (it->first == "b") res.b = reinterpret_cast<Sdata<float>*>(it->second)->mData;
+                else if (it->first == "a") res.a = reinterpret_cast<Sdata<float>*>(it->second)->mData;
             }
             res.valid = dt->IsValid(); 
         }

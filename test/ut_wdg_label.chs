@@ -66,7 +66,7 @@ testroot : Elem {
                     }
                 )
                 Inp1 ~ WdgHeight
-                Inp2 ~ IncrW : TrAddVar (
+                Inp2 ~ IncrH : TrAddVar (
                     Inp ~ IncrData
                     Inp ~ WdgHeight
                 )

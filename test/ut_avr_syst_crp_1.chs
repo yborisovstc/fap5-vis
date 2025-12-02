@@ -1,11 +1,11 @@
 testroot : Elem {
-    # "UT of Node CRP"
+    # "UT of Syst CRP"
     + GVisComps
     + FvWidgets
     + AvrMdl2
     Comps : Elem
     Test : DesLauncher {
-        # "Visualisation environment"
+        _@ < LogLevel = "Dbg"
         Env : VisEnv
         Window : GVisComps.Window {
             Width < = "SI 1200"
@@ -14,19 +14,24 @@ testroot : Elem {
                 # "Visualisation scene"
                 # "- Model"
                 ModelMnt : Syst {
-                    Model : Node {
-                        Model_comp1 : Node
-                        Model_comp2 : Node
-                        Model_comp3 : Node
-                        Model_comp4 : Node
-                    }
                     CpExplb : CpSystExplorable
+                    Model : Syst {
+                        Model_syst1 : Syst {
+                            # "System 1"
+                            SysInp1 : ExtdStateInp
+                            SysInp2 : ExtdStateInp
+                            SysInp3 : ExtdStateInp
+                            SysOutp1 : ExtdStateOutp
+                            SysOutp2 : ExtdStateOutp
+                            SysOutp3 : ExtdStateOutp
+                        }
+                    }
                 }
                 View : ContainerMod.DAlignment {
                     End.Next !~ Start.Prev
                     Start.Prev.AlcX ~ : SI_0
                     Start.Prev.AlcY ~ : SI_0
-                    Model_comp1 : AvrMdl2.NodeCrp3 {
+                    Model_syst1 : AvrMdl2.SystCrp {
                         # "CRP under test"
                     }
                     Slot_Crp : ContainerMod.AlignmentSlot (

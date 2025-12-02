@@ -31,7 +31,7 @@ class Ut_cntr : public Ut_fixture
     //CPPUNIT_TEST(testVlayoutCmb);
     //CPPUNIT_TEST(testVlayoutCmb2);
     //CPPUNIT_TEST(testHlayout1);
-    //CPPUNIT_TEST(testHlayout2);
+    CPPUNIT_TEST(testHlayout2);
     //CPPUNIT_TEST(testHlayout_RmWidget1);
     //CPPUNIT_TEST(testDCntr1);
     //CPPUNIT_TEST(testDCntr2);
@@ -42,7 +42,7 @@ class Ut_cntr : public Ut_fixture
     //CPPUNIT_TEST(testColumnsLayout);
     //CPPUNIT_TEST(testColumnsLayout2);
     //CPPUNIT_TEST(testColumnsLayout3);
-    CPPUNIT_TEST(testColumnsLayout4);
+    //CPPUNIT_TEST(testColumnsLayout4);
     CPPUNIT_TEST_SUITE_END();
     public:
     virtual void setUp();
