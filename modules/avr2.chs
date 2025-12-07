@@ -321,22 +321,22 @@ AvrMdl2 : Elem {
     }
     VertCrpEdgeCpExtdInt : SocketExtdInt {
         # "VertCrpEdgeCpExtd int CP"
-        ColumnPos : CpStateOutp
-        PairColumnPos : CpStateInp
-        Pos : CpStateOutp
-        PairPos : CpStateInp
-        LeftCpAlloc : CpStateOutp
-        RightCpAlloc : CpStateOutp
-    }
-    VertCrpEdgeCpExtd : SocketExtd {
-        # "VertCrp CP to Edge"
         ColumnPos : CpStateInp
-        # "TODO unused?"
         PairColumnPos : CpStateOutp
         Pos : CpStateInp
         PairPos : CpStateOutp
         LeftCpAlloc : CpStateInp
         RightCpAlloc : CpStateInp
+    }
+    VertCrpEdgeCpExtd : SocketExtd {
+        # "VertCrp CP to Edge"
+        ColumnPos : CpStateOutp
+        # "TODO unused?"
+        PairColumnPos : CpStateInp
+        Pos : CpStateOutp
+        PairPos : CpStateInp
+        LeftCpAlloc : CpStateOutp
+        RightCpAlloc : CpStateOutp
         Int : VertCrpEdgeCpExtdInt
     }
     VertCrp : NodeCrp3 {
@@ -777,6 +777,7 @@ AvrMdl2 : Elem {
             SCp ~ WdgCp
             # "TODO Apply vertical tunnel specific padding"
             AddX : TrAddVar (
+                _@ < LogLevel = "Dbg"
                 Inp ~ Next.AlcX
                 Inp ~ Next.AlcW
                 Inp ~ Next.XPadding
@@ -2300,26 +2301,15 @@ AvrMdl2 : Elem {
                 Parent ~ : TrTostrVar (
                     Inp ~ CpResolver.OutpRes
                 )
-                Enable ~ EnableAddOutpRp : TrAndVar (
-                    Inp ~ : TrNegVar (
-                        Inp ~ CompsIdxIsChanged.Outp
-                    )
-                    Inp ~ IsOutput_Eq
-                )
+                Enable ~ IsOutput_Eq
             )
             CpAddInpRp  (
                 Name ~ CprpName
                 Parent ~ : TrTostrVar (
                     Inp ~ CpResolver.OutpRes
                 )
-                Enable ~ EnableAddInpRp : TrAndVar (
-                    _@ < LogLevel = "Dbg"
-                    Inp ~ : TrNegVar (
-                        Inp ~ CompsIdxIsChanged.Outp
-                    )
-                    Inp ~ : TrNegVar (
-                        Inp ~ IsOutput_Eq
-                    )
+                Enable ~ EnableAddInpRp : TrNegVar (
+                    Inp ~ IsOutput_Eq
                 )
             )
             EcpAdpCreatorPanel : SystEdgeCpAdpCreator (
@@ -2430,7 +2420,7 @@ AvrMdl2 : Elem {
                 V1 ~ : TrApndVar (
                     Inp1 ~ CprpName
                     Inp2 ~ : Const {
-                        = "SS .EdgeCrpCp"
+                        = "SS .EdgeCrpCp.Int"
                     }
                 )
                 V2 ~ : TrApndVar (
@@ -2962,6 +2952,7 @@ AvrMdl2 : Elem {
         CtrlCp : VrControllerCp
         ModelMnt : AMntp {
             # "TODO FIXME Not setting EnvVar here casuses wrong navigation in modnav"
+            LogLevel = "Dbg"
             EnvVar = "Model"
             CpExpbl : CpSystExplorable
         }
@@ -3059,7 +3050,8 @@ AvrMdl2 : Elem {
             LogLevel = "Dbg"
             = "SB false"
         }
-        VrpDirty.Inp ~ : TrAndVar (
+        VrpDirty.Inp ~ VrpDirty_Inp : TrAndVar (
+            _@ < LogLevel = "Dbg"
             Inp ~ U_Neq : TrCmpVar (
                 Inp ~ SMdlUri
                 Inp2 ~ Cursor

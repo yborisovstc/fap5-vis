@@ -23,9 +23,9 @@ const VisProv::TFReg VisProv::mReg ( {
 	Item<VisEnv>(), Item<GWindow>(), Item<GtScene>(), Item<AVWidget>(), Item<AVLabel>(), Item<AButton>(),
 	Item<AVDContainer>(), Item<ACnt>(),
 	Item<AEdgeCrp>(),
+	Item<VDesLauncher>(),
         /*
 	Item<AVrpView>(),
-	Item<VDesLauncher>(),
 	Item<SdoCoordOwr>()
         */
 	});

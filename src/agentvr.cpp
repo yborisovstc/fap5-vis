@@ -7,6 +7,27 @@
 #include "des.h"
 
 
+
+
+#if 0
+// Agents Visual representation view manager
+
+static const string K_UriNodeSelected = "NodeSelected";
+
+AVrpView::AVrpView(const string& aType, const string& aName, MEnv* aEnv): AgtBase(aType, aName, aEnv), mAgtCp(this)
+{
+}
+
+MNode* AVrpView::ahostNode()
+{
+    MAhost* ahost = (*mAgtCp.pairsBegin())->provided();
+    MNode* hostn = ahost ? ahost->lIf(hostn) : nullptr;
+    return hostn;
+}
+#endif
+
+
+
 // Edge CRP
 
 const string K_PLeftCpUri = "VertPApAlc";

@@ -17,6 +17,7 @@ testroot : Elem {
                 ModelMnt : Syst {
                     CpExplb : CpSystExplorable
                     Model : Syst {
+                        # "3 systems model"
                         Model_node1 : Node
                         Model_syst1 : Syst {
                             # "System 1"
@@ -50,6 +51,7 @@ testroot : Elem {
                             Model_syst1.SysOutp3 ~ Model_syst1.SysInp3
                         }
                         _ <  {
+                            # "1 systems model"
                             Model_syst1 : Syst {
                                 # "System 1"
                                 SysInp1 : ExtdStateInp
@@ -58,6 +60,7 @@ testroot : Elem {
                             Model_syst1.SysInp1 ~ Model_syst1.SysOutp1
                         }
                         _ <  {
+                            # "2 systems model"
                             Model_syst1 : Syst {
                                 # "System 1"
                                 SysInp1 : ExtdStateInp
@@ -76,9 +79,6 @@ testroot : Elem {
                         }
                     }
                 }
-                MdlUri : State {
-                    = "URI Model"
-                }
                 # "DRP context"
                 DrpCtx : DesCtxSpl (
                     _@ <  {
@@ -86,7 +86,9 @@ testroot : Elem {
                         DrpMagUri : ExtdStateInp
                     }
                     ModelMntp ~ ModelMnt.CpExplb
-                    DrpMagUri ~ MdlUri
+                    DrpMagUri ~ : Const {
+                        = "URI Model"
+                    }
                 )
                 # "DRP"
                 Drp : AvrMdl2.SystDrp {

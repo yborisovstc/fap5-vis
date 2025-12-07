@@ -5,6 +5,35 @@
 #include "widget.h"
 #include "container.h"
 
+
+#if 0
+// TODO Do we need it?
+/** @brief Agents Visual representation view manager
+ * */
+class AVrpView : public AgtBase
+{
+    public:
+	inline static constexpr std::string_view idStr() { return "AVrpView"sv;}
+    public:
+	using TAgtCp = NCpOnp<MAgent, MAhost>;  /*!< Agent conn point */
+    public:
+	AVrpView(const string& aType, const string& aName = string(), MEnv* aEnv = NULL);
+	// From MAgent
+	virtual string MAgent_Uid() const override { return getUid<MAgent>();}
+	// From Node.MOwned
+	virtual void onOwnerAttached() override;
+    protected:
+	MNode* ahostNode();
+	void CreateRp();
+    protected:
+	TAgtCp mAgtCp; /*!< Agent connpoint */ 
+	MEnv* mBEnv; /*!< Binded env, not owned */
+	MNode* mMdl; /*!< Binded model, not owned */
+	string mCtrBnd; /*!< Binding to controller info: URI */
+	MAgent* mMAgentPtr = nullptr;
+};
+#endif
+
 /** @brief Edge CRP widget agent
  * */
 class AEdgeCrp : public AVWidget

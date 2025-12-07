@@ -105,7 +105,7 @@ class GWindow: public Des, public MWindow
 class VDesLauncher: public DesLauncher
 {
     public:
-	static const char* Type() { return "VDesLauncher";};
+	inline static constexpr std::string_view idStr() { return "VDesLauncher"sv;}
 	VDesLauncher(const string& aType, const string& aName = string(), MEnv* aEnv = NULL);
 	// From DesLauncher
 	virtual void OnIdle() override;
