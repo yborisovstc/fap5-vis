@@ -115,8 +115,8 @@ testroot : Elem {
             AlcW < LogLevel = "Dbg"
             AlcH < LogLevel = "Dbg"
         }
-        HBox_AddWdg : ContainerMod.DcAddWdgSc
-        HBox_AddWdg ~ Wnd.Scene.HBox.IoAddWidg
+        HBox_AddWdg : ContainerMod.DcAddWdgCp
+        HBox_AddWdg.Int ~ Wnd.Scene.HBox.IoAddWidg
         HBox_AddWdg.Enable ~ : Const {
             = "SB true"
         }

@@ -86,6 +86,10 @@ void GtScene::onOwnedAttached(MOwned* aOwned)
 
 void GtScene::GetCursorPos(double& aX, double& aY)
 {
+    const MWindow* wnd = getWnd();
+    if (wnd) {
+        wnd->GetCursorPos(aX, aY);
+    }
 }
 
 void GtScene::GetFbSize(int* aW, int* aH) const
@@ -104,6 +108,6 @@ void GtScene::getCoordOwrSeo(int& aOutX, int& aOutY, int aLevel)
 
 const MWindow* GtScene::getWnd() const
 {
-    auto pair = mSceneCp.pairAt(0);
+    auto pair = mSceneCp.mPair;
     return pair ? pair->provided() : nullptr;
 }

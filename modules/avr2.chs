@@ -107,15 +107,15 @@ AvrMdl2 : Elem {
             SCp ~ Body.Cp
         )
     }
-    NDrpCp : Socket {
+    NDrpS : Socket2 {
         # "Node DRP output socket"
-        InpModelUri : ExtdStateInp
-        InpModelMntp : ExtdSystExploring
+        InpModelUri : CpStateInp
+        InpModelMntp : CpSystExploring
     }
-    NDrpCpp : Socket {
+    NDrpSc : Socket2 {
         # "Node DRP output socket"
-        InpModelUri : ExtdStateOutp
-        InpModelMntp : ExtdSystExplorable
+        InpModelUri : CpStateOutp
+        InpModelMntp : CpSystExplorable
     }
     _ <  {
         NodeDrp : ContainerMod.DHLayout {
@@ -161,8 +161,8 @@ AvrMdl2 : Elem {
                 Inp ~ MagAdp.CompsCount
             )
             # " Add wdg controlling Cp"
-            CpAddCrp : ContainerMod.DcAddWdgSc
-            CpAddCrp ~ IoAddWidg
+            CpAddCrp : ContainerMod.DcAddWdgCp
+            CpAddCrp.Int ~ IoAddWidg
             SCrpCreated_Dbg : State (
                 _@ <  {
                     LogLevel = "Dbg"
@@ -1668,24 +1668,21 @@ AvrMdl2 : Elem {
             }
             DrpMntp ~ VertDrpCpExplb
         )
-        # " Add wdg controlling Cp"
-        CpAddCrp : ContainerMod.DcAddWdgSc
-        CpAddCrp ~ IoAddWidg
         SCrpCreated_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"
                 = "SB false"
             }
-            Inp ~ CpAddCrp.Added
+            Inp ~ IoAddWidg.Added
         )
         CrpAddedPulse : DesUtils.BChange (
-            SInp ~ CpAddCrp.Added
+            SInp ~ IoAddWidg.Added
         )
         # "Model components Iterator"
         CompsIter : DesUtils.IdxItr (
             InpCnt ~ MagAdp.CompsCount
             _ <  {
-                InpDone ~ CpAddCrp.Added
+                InpDone ~ IoAddWidg.Added
             }
             InpDone ~ CrpAddedPulse.Outp
             InpReset ~ : SB_False
@@ -1757,16 +1754,16 @@ AvrMdl2 : Elem {
             Inp ~ CrpResolver.OutpRes
         )
         # "CRP creation"
-        CpAddCrp.Name ~ CompNameD
-        CpAddCrp.Parent ~ : TrTostrVar (
+        IoAddWidg.Name ~ CompNameD
+        IoAddWidg.Parent ~ : TrTostrVar (
             Inp ~ CrpResolver.OutpRes
         )
-        CpAddCrp.Enable ~ CmpCn_Ge : TrCmpVar (
+        IoAddWidg.Enable ~ CmpCn_Ge : TrCmpVar (
             Inp ~ MagAdp.CompsCount
             Inp2 ~ : SI_1
         )
         # "Add widget to the first column (pos 2). Note that pos 1 corresponds to most left v-tunnel"
-        CpAddCrp.Pos ~ : Const {
+        IoAddWidg.Pos ~ : Const {
             = "SI 2"
         }
         # ">>> Edge CRPs creator"
@@ -2156,8 +2153,8 @@ AvrMdl2 : Elem {
             InpMdlLink : ExtdSystExploring
             InpTargUri : ExtdStateInp
             # "IO : Cps container adding widget CP"
-            CpAddInpRp : ContainerMod.DcAddWdgSc
-            CpAddOutpRp : ContainerMod.DcAddWdgSc
+            CpAddInpRp : ContainerMod.DcAddWdgCp
+            CpAddOutpRp : ContainerMod.DcAddWdgCp
             # "INP: System CRP link"
             InpCrpLink : ExtdSystExploring
             InpCrpUri : ExtdStateInp
@@ -2848,8 +2845,8 @@ AvrMdl2 : Elem {
                 InpCcMpg ~ : State {
                     = "VPDU ( PDU ( URI ExtdStateInp , URI SysInpRp ) , PDU ( URI ExtdStateOutp , URI SysOutpRp ), PDU ( URI CpStateInp , URI SysInpRp ), PDU ( URI CpStateOutp , URI SysOutpRp ) )"
                 }
-                CpAddOutpRp ~ Body.Outputs.IoAddWidg
-                CpAddInpRp ~ Body.Inputs.IoAddWidg
+                CpAddOutpRp.Int ~ Body.Outputs.IoAddWidg
+                CpAddInpRp.Int ~ Body.Inputs.IoAddWidg
                 InpMagb ~ CpExplorable
                 InpMagu ~ : Const {
                     = "URI ''"
@@ -2922,29 +2919,35 @@ AvrMdl2 : Elem {
             # "<<< System detailed representation"
         }
     }
-    VrViewCp : Socket {
+    VrControllerS : Socket2 {
         About = "Vis representation view CP"
-        NavCtrl : Socket {
+        NavCtrl : Socket2 {
             About = "Navigation control"
-            CmdUp : ExtdStateInp
-            NodeSelected : ExtdStateInp
+            CmdUp : CpStateInp
+            NodeSelected : CpStateInp
             MutAddWidget : ContainerMod.DcAddWdgSc
             MutRmWidget : ContainerMod.DcRmWdgSc
-            DrpCreated : ExtdStateInp
-            DrpCp : NDrpCpp
+            DrpCreated : CpStateInp
+            DrpCp : NDrpSc
         }
     }
-    VrControllerCp : Socket {
+    VrControllerSc : Socket2 {
         About = "Vis representation controller CP"
-        NavCtrl : Socket {
+        NavCtrl : Socket2 {
             About = "Navigation control"
-            CmdUp : ExtdStateOutp
-            NodeSelected : ExtdStateOutp
+            CmdUp : CpStateOutp
+            NodeSelected : CpStateOutp
             MutAddWidget : ContainerMod.DcAddWdgS
             MutRmWidget : ContainerMod.DcRmWdgS
-            DrpCreated : ExtdStateOutp
-            DrpCp : NDrpCp
+            DrpCreated : CpStateOutp
+            DrpCp : NDrpS
         }
+    }
+    VrControllerCp : VrControllerS {
+        Int : VrControllerSc
+    }
+    VrViewCp : VrControllerSc {
+        Int : VrControllerS
     }
     VrController : Des {
         # " Visual representation controller"
@@ -2956,7 +2959,7 @@ AvrMdl2 : Elem {
             EnvVar = "Model"
             CpExpbl : CpSystExplorable
         }
-        CtrlCp.NavCtrl.DrpCp.InpModelMntp ~ ModelMnt.CpExpbl
+        CtrlCp.Int.NavCtrl.DrpCp.InpModelMntp ~ ModelMnt.CpExpbl
         # " Cursor"
         Cursor : State {
             LogLevel = "Dbg"
@@ -2967,25 +2970,25 @@ AvrMdl2 : Elem {
                 LogLevel = "Dbg"
                 = "SB false"
             }
-            Inp ~ CtrlCp.NavCtrl.CmdUp
+            Inp ~ CtrlCp.Int.NavCtrl.CmdUp
         )
         # "NodeSelected Pulse"
         Nsp : DesUtils.DPulse (
-            InpD ~ CtrlCp.NavCtrl.NodeSelected
-            InpE ~ : State {
-                = "URI _INV"
+            InpD ~ CtrlCp.Int.NavCtrl.NodeSelected
+            InpE ~ : Const {
+                = "URI"
             }
         )
         Nsp.Delay < = "URI"
         Nsp.Delay < LogLevel = "Dbg"
         NspDbg : State {
             LogLevel = "Dbg"
-            = "URI _INV"
+            = "URI"
         }
         NspDbg.Inp ~ Nsp.Outp
-        Cursor.Inp ~ : TrSwitchBool (
+        Cursor.Inp ~ Cursor_Inp : TrSwitchBool (
             _@ < LogLevel = "Dbg"
-            Sel ~ CtrlCp.NavCtrl.CmdUp
+            Sel ~ CtrlCp.Int.NavCtrl.CmdUp
             Inp1 ~ Tr1Dbg : TrSwitchBool (
                 _@ < LogLevel = "Dbg"
                 Sel ~ : TrIsValid (
@@ -3017,8 +3020,8 @@ AvrMdl2 : Elem {
             Inp ~ CursorOwner
         )
         # " DRP creation"
-        CpAddDrp : ContainerMod.DcAddWdgSc
-        CpAddDrp ~ CtrlCp.NavCtrl.MutAddWidget
+        CpAddDrp : ContainerMod.DcAddWdgCp
+        CpAddDrp.Int ~ CtrlCp.Int.NavCtrl.MutAddWidget
         CpAddDrp.Name ~ : Const {
             = "SS Drp"
         }
@@ -3044,7 +3047,7 @@ AvrMdl2 : Elem {
                 Inp2 ~ SMdlUri
             )
         )
-        CtrlCp.NavCtrl.DrpCp.InpModelUri ~ SMdlUri
+        CtrlCp.Int.NavCtrl.DrpCp.InpModelUri ~ SMdlUri
         # " VRP dirty indication"
         VrpDirty : State {
             LogLevel = "Dbg"
@@ -3062,8 +3065,8 @@ AvrMdl2 : Elem {
             )
         )
         # " DRP removal on VRP dirty"
-        CpRmDrp : ContainerMod.DcRmWdgSc
-        CpRmDrp ~ CtrlCp.NavCtrl.MutRmWidget
+        CpRmDrp : ContainerMod.DcRmWdgCp
+        CpRmDrp.Int ~ CtrlCp.Int.NavCtrl.MutRmWidget
         CpRmDrp.Name ~ : Const {
             = "SS Drp"
         }

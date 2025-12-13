@@ -1,12 +1,18 @@
 GVisComps : Elem {
     About = "Visualization system based on GLUT"
-    SceneCp : Socket {
+    SceneSc : Socket2 {
         Width : CpStateOutp
         Height : CpStateOutp
     }
-    SceneCpc : Socket {
+    SceneS : Socket2 {
         Width : CpStateInp
         Height : CpStateInp
+    }
+    SceneCp : SceneS {
+        Int : SceneSc
+    }
+    SceneCpc : SceneSc {
+        Int : SceneS
     }
     Window : GWindow {
         About = "Top-level window"
@@ -22,8 +28,8 @@ GVisComps : Elem {
             = "SI 480"
         }
         ScCpc : SceneCpc
-        ScCpc.Width ~ Width
-        ScCpc.Height ~ Height
+        ScCpc.Int.Width ~ Width
+        ScCpc.Int.Height ~ Height
     }
     Scene : GtScene {
         About = "Visualization system scene"

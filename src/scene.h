@@ -43,6 +43,7 @@ class GtScene: public Des, public MScene, public MSceneElemOwner
 	virtual void update() override;
     protected:
         const MWindow* getWnd() const;
+        inline MWindow* getWnd() { return mSceneCp.mPair ? mSceneCp.mPair->provided() : nullptr;}
 	// From MOwned
 	MIface* MOwned_getLif(TIdHash aId) override;
     protected:

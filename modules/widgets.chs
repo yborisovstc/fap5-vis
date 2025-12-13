@@ -129,11 +129,13 @@ FvWidgets : Elem {
                 = "SB true"
             }
         }
-        Pressed : State
-        Pressed < LogLevel = "Dbg"
-        Pressed < = "SB false"
-        PressedReset : State
-        PressedReset < = "SB false"
+        Pressed : State {
+            LogLevel = "Dbg"
+            = "SB false"
+        }
+        PressedReset : Const {
+            = "SB false"
+        }
         Pressed.Inp ~ PressedReset
     }
 }

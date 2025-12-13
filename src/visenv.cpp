@@ -362,7 +362,7 @@ void GWindow::confirm()
     PFL_DUR_STAT_REC(PVisEvents::EDurStat_Confirm);
 }
 
-void GWindow::GetCursorPos(double& aX, double& aY)
+void GWindow::GetCursorPos(double& aX, double& aY) const
 {
     double y = 0;
     glfwGetCursorPos(mWindow, &aX, &y);

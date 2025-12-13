@@ -50,7 +50,7 @@ testroot : Elem {
             InpReset ~ : SB_False
         )
         # " Adding new button"
-        HBox_AddWdg : ContainerMod.DcAddWdgSc (
+        HBox_AddWdg : ContainerMod.DcAddWdgCp (
             Enable ~ : SB_True
             Name ~ ItemName : TrApndVar (
                 Inp1 ~ : Const {
@@ -70,7 +70,7 @@ testroot : Elem {
                 = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
             }
         )
-        HBox_AddWdg ~ Wnd.Scene.Box.IoAddWidg
+        HBox_AddWdg.Int ~ Wnd.Scene.Box.IoAddWidg
         ItemsIter.InpDone ~ HBox_AddWdg.Added
         AddedWdg_Dbg : State (
             _@ <  {

@@ -53,7 +53,7 @@ testroot : Elem {
             InpReset ~ : SB_False
         )
         # " Adding new button"
-        HBox_AddWdg : ContainerMod.DcAddWdgSc (
+        HBox_AddWdg : ContainerMod.DcAddWdgCp (
             Enable ~ : SB_True
             Name ~ ItemName : TrApndVar (
                 Inp1 ~ : Const {
@@ -73,7 +73,7 @@ testroot : Elem {
                 = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
             }
         )
-        HBox_AddWdg ~ Wnd.Scene.Box.IoAddWidg
+        HBox_AddWdg.Int ~ Wnd.Scene.Box.IoAddWidg
         ItemsIter.InpDone ~ HBox_AddWdg.Added
         AddedWdg_Dbg : State (
             _@ <  {
@@ -91,7 +91,7 @@ testroot : Elem {
                 Inp ~ ItemsIter.OutpDone
             )
         )
-        Box_RmWdg : ContainerMod.DcRmWdgSc (
+        Box_RmWdg : ContainerMod.DcRmWdgCp (
             Enable ~ ItemsIter.OutpDone
             Name ~ RmItemName : TrApndVar (
                 Inp1 ~ : Const {
@@ -103,7 +103,7 @@ testroot : Elem {
             )
         )
         RmItemsIter.InpDone ~ Box_RmWdg.Done
-        Box_RmWdg ~ Wnd.Scene.Box.IoRmWidg
+        Box_RmWdg.Int ~ Wnd.Scene.Box.IoRmWidg
         RmWdg_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"

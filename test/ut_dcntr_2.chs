@@ -49,8 +49,8 @@ testroot : Elem {
             }
         }
         # " Adding new button"
-        HBox_AddWdg : ContainerMod.DcAddWdgSc
-        HBox_AddWdg ~ Wnd.Scene.HBox.IoAddWidg
+        HBox_AddWdg : ContainerMod.DcAddWdgCp
+        HBox_AddWdg.Int ~ Wnd.Scene.HBox.IoAddWidg
         HBox_AddWdg.Enable ~ : State {
             = "SB true"
         }
@@ -77,8 +77,8 @@ testroot : Elem {
         WdgAdded_Tg : DesUtils.RSTg
         WdgAdded_Tg.InpS ~ HBox_AddWdg.Added
         # " Removing button 1"
-        HBox_RmWdg : ContainerMod.DcRmWdgSc
-        HBox_RmWdg ~ Wnd.Scene.HBox.IoRmWidg
+        HBox_RmWdg : ContainerMod.DcRmWdgCp
+        HBox_RmWdg.Int ~ Wnd.Scene.HBox.IoRmWidg
         HBox_RmWdg.Enable ~ WdgAdded_Tg.Value
         HBox_RmWdg.Name ~ : State {
             = "SS Btn1"

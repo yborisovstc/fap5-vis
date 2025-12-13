@@ -12,7 +12,7 @@ class MWindow: public MIface
 	inline static constexpr TIdHash idHash() { return 0xd4c5d430f4a0719e;}
 	TIdHash id() const override { return idHash();}
 	/** @brief Gets cursor position */
-	virtual void GetCursorPos(double& aX, double& aY) = 0;
+	virtual void GetCursorPos(double& aX, double& aY) const = 0;
 	/** @brief Gets size of window in pixels (actually framebuffer size) */
 	virtual void GetFbSize(int* aW, int* aH) const = 0;
 	// From MIface

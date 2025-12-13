@@ -85,7 +85,7 @@ testroot : Elem {
         _ <  {
             Wnd.Scene.ColumnsView.CreateWdg < LogLevel = "Dbg"
         }
-        Clms_AddWdg : ContainerMod.DcAddWdgSc (
+        Clms_AddWdg : ContainerMod.DcAddWdgCp (
             Enable ~ : State {
                 = "SB true"
             }
@@ -107,7 +107,7 @@ testroot : Elem {
                 = "CHR2 '{ SText < = \\\"SS Button_New\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\"; FgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\"; }'"
             }
         )
-        Clms_AddWdg ~ Wnd.Scene.ColumnsView.IoAddWidg
+        Clms_AddWdg.Int ~ Wnd.Scene.ColumnsView.IoAddWidg
         AddedWdg_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"

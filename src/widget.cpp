@@ -428,6 +428,7 @@ void AVWidget::Construct()
     mOutpRqsW = addOutput(KUri_OstRqsW);
     mOutpRqsH = addOutput(KUri_OstRqsH);
     mOstLbpUri = addState(KUri_OstLbpUri);
+    mOstLbpUri->setContent("", "URI");
 }
 
 AVWidget::~AVWidget()

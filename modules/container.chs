@@ -134,34 +134,37 @@ ContainerMod : Elem {
         AddCH.Inp ~ Next.YPadding
     }
     # " DES controlled container"
-    DcAddWdgS : Socket {
-        Enable : ExtdStateOutp
-        Name : ExtdStateOutp
-        Parent : ExtdStateOutp
-        Mut : ExtdStateOutp
-        Pos : ExtdStateOutp
-        Added : ExtdStateInp
-        # "TODO not used, remove"
-        AddedName : ExtdStateInp
+    DcAddWdgSc : Socket2 {
+        Enable : CpStateOutp
+        Name : CpStateOutp
+        Parent : CpStateOutp
+        Mut : CpStateOutp
+        Pos : CpStateOutp
+        Added : CpStateInp
     }
-    DcAddWdgSc : Socket {
-        Enable : ExtdStateInp
-        Name : ExtdStateInp
-        Parent : ExtdStateInp
-        Mut : ExtdStateInp
-        Pos : ExtdStateInp
-        Added : ExtdStateOutp
-        AddedName : ExtdStateOutp
+    DcAddWdgS : Socket2 {
+        Enable : CpStateInp
+        Name : CpStateInp
+        Parent : CpStateInp
+        Mut : CpStateInp
+        Pos : CpStateInp
+        Added : CpStateOutp
     }
-    DcRmWdgS : Socket {
-        Enable : ExtdStateOutp
-        Name : ExtdStateOutp
-        Done : ExtdStateInp
+    DcAddWdgCp : DcAddWdgS {
+        Int : DcAddWdgSc
     }
-    DcRmWdgSc : Socket {
-        Enable : ExtdStateInp
-        Name : ExtdStateInp
-        Done : ExtdStateOutp
+    DcRmWdgSc : Socket2 {
+        Enable : CpStateOutp
+        Name : CpStateOutp
+        Done : CpStateInp
+    }
+    DcRmWdgS : Socket2 {
+        Enable : CpStateInp
+        Name : CpStateInp
+        Done : CpStateOutp
+    }
+    DcRmWdgCp : DcRmWdgS {
+        Int : DcRmWdgSc
     }
     DContainer : FvWidgets.FWidgetBase {
         CntAgent : AVDContainer
@@ -177,26 +180,26 @@ ContainerMod : Elem {
         YPadding : State {
             = "SI 1"
         }
-        IoAddWidg : DcAddWdgS
-        IoRmWidg : DcRmWdgS
+        IoAddWidg : DcAddWdgCp
+        IoRmWidg : DcRmWdgCp
         # " Adding widget"
         CreateWdg : ASdcComp (
-            Enable ~ IoAddWidg.Enable
-            Name ~ IoAddWidg.Name
-            Parent ~ IoAddWidg.Parent
+            Enable ~ IoAddWidg.Int.Enable
+            Name ~ IoAddWidg.Int.Name
+            Parent ~ IoAddWidg.Int.Parent
         )
         SdcMut : ASdcMut (
             Enable ~ CreateWdg.Outp
-            Target ~ IoAddWidg.Name
-            Mut ~ IoAddWidg.Mut
+            Target ~ IoAddWidg.Int.Name
+            Mut ~ IoAddWidg.Int.Mut
         )
         AddSlot : ASdcComp (
-            Enable ~ IoAddWidg.Enable
+            Enable ~ IoAddWidg.Int.Enable
             Name ~ AdSlotName : TrApndVar (
                 Inp1 ~ SlotNamePref : Const {
                     = "SS Slot_"
                 }
-                Inp2 ~ IoAddWidg.Name
+                Inp2 ~ IoAddWidg.Int.Name
             )
             Parent ~ SlotParent : State
         )
@@ -210,11 +213,11 @@ ContainerMod : Elem {
             )
         }
         SdcConnWdg : ASdcConn (
-            Enable ~ IoAddWidg.Enable
+            Enable ~ IoAddWidg.Int.Enable
             Enable ~ CreateWdg.Outp
             Enable ~ AddSlot.Outp
             V1 ~ : TrApndVar (
-                Inp1 ~ IoAddWidg.Name
+                Inp1 ~ IoAddWidg.Int.Name
                 Inp2 ~ : Const {
                     = "SS .Cp"
                 }
@@ -237,10 +240,10 @@ ContainerMod : Elem {
         }
         # " Removing widget"
         SdcExtrSlot : ASdcExtract (
-            Enable ~ IoRmWidg.Enable
+            Enable ~ IoRmWidg.Int.Enable
             Name ~ ExtrSlotName : TrApndVar (
                 Inp1 ~ SlotNamePref
-                Inp2 ~ IoRmWidg.Name
+                Inp2 ~ IoRmWidg.Int.Name
             )
             Prev ~ : Const {
                 = "SS Prev"
@@ -250,16 +253,16 @@ ContainerMod : Elem {
             }
         )
         RmWdg : ASdcRm (
-            Enable ~ IoRmWidg.Enable
+            Enable ~ IoRmWidg.Int.Enable
             Enable ~ SdcExtrSlot.Outp
-            Name ~ IoRmWidg.Name
+            Name ~ IoRmWidg.Int.Name
         )
         RmSlot : ASdcRm (
-            Enable ~ IoRmWidg.Enable
+            Enable ~ IoRmWidg.Int.Enable
             Enable ~ SdcExtrSlot.Outp
             Name ~ ExtrSlotName
         )
-        IoRmWidg.Done ~ : TrAndVar (
+        IoRmWidg.Int.Done ~ : TrAndVar (
             Inp ~ RmWdg.Outp
             Inp ~ RmSlot.Outp
             Inp ~ SdcExtrSlot.Outp
@@ -275,6 +278,7 @@ ContainerMod : Elem {
         # "TODO AlcX ~ : SI_0 AlcY ~ : SI_0 ??"
         End : LinEnd
         Cp.LbpUri ~ TLbpUri : TrApndVar (
+            _@ < LogLevel = "Dbg"
             Inp1 ~ CntAgent.OutpLbpUri
             Inp2 ~ : TrSvldVar (
                 Inp1 ~ End.Next.LbpComp
@@ -284,18 +288,19 @@ ContainerMod : Elem {
             )
         )
         _ <  {
-            SLbpComp_Dbg : State (
-                _@ <  {
-                    LogLevel = "Dbg"
-                    = "URI"
-                }
-                Inp ~ TLbpUri
-            )
+            # "TODO to disable"
         }
+        SLbpComp_Dbg : State (
+            _@ <  {
+                LogLevel = "Dbg"
+                = "URI"
+            }
+            Inp ~ TLbpUri
+        )
         Start.Prev ~ End.Next
         # "Inserting new widget to the end"
         SdcInsert : ASdcInsert2 (
-            Enable ~ IoAddWidg.Enable
+            Enable ~ IoAddWidg.Int.Enable
             Enable ~ CreateWdg.Outp
             Enable ~ AddSlot.Outp
             Name ~ AdSlotName
@@ -309,7 +314,7 @@ ContainerMod : Elem {
                 = "SS Next"
             }
         )
-        IoAddWidg.Added ~ SdcInsert.Outp
+        IoAddWidg.Int.Added ~ SdcInsert.Outp
     }
     DAlignment : DLinearLayout {
         RqsW.Inp ~ End.Next.CntRqsW
@@ -664,7 +669,7 @@ ContainerMod : Elem {
             )
         }
         ColToInsertWdg : DesUtils.ListItemByPos (
-            InpPos ~ IoAddWidg.Pos
+            InpPos ~ IoAddWidg.Int.Pos
             Subsys.CpExploring ~ CpExplorable
         )
         _ <  {
@@ -689,7 +694,7 @@ ContainerMod : Elem {
         }
         # "Inserting new widget to the end of given column"
         SdcInsert : ASdcInsert2 (
-            Enable ~ IoAddWidg.Enable
+            Enable ~ IoAddWidg.Int.Enable
             Enable ~ CreateWdg.Outp
             Enable ~ AddSlot.Outp
             # "Name ~ AddSlot.OutpName;"
@@ -701,7 +706,7 @@ ContainerMod : Elem {
             Prev ~ KS_Prev
             Next ~ KS_Next
         )
-        IoAddWidg.Added ~ SdcInsert.Outp
+        IoAddWidg.Int.Added ~ SdcInsert.Outp
         # ">>> Adding column"
         # "  Creating column slot"
         CreateColSlot : ASdcComp (

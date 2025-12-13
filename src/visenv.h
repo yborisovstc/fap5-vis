@@ -52,12 +52,12 @@ class GWindow: public Des, public MWindow
 	MIface* MNode_getLif(TIdHash aId) override;
         void onOwnedAttached(MOwned* aOwned) override;
 	// From MWindow
-	virtual string MWindow_Uid() const override { return getUid<MWindow>();}
-	virtual void GetCursorPos(double& aX, double& aY) override;
-	virtual void GetFbSize(int* aW, int* aH) const override;
+	string MWindow_Uid() const override { return getUid<MWindow>();}
+	void GetCursorPos(double& aX, double& aY) const override;
+	void GetFbSize(int* aW, int* aH) const override;
 	// From MDesSyncable
-	virtual void update() override;
-	virtual void confirm() override;
+	void update() override;
+	void confirm() override;
     protected:
 	void InitGlCtx();
 	void doConstruct();

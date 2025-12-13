@@ -90,7 +90,7 @@ testroot : Elem {
             }
         }
         # " Adding new button"
-        HBox_AddWdg : ContainerMod.DcAddWdgSc (
+        HBox_AddWdg : ContainerMod.DcAddWdgCp (
             Enable ~ : SB_True
             Name ~ : State {
                 = "SS Btn3"
@@ -105,7 +105,7 @@ testroot : Elem {
                 = "CHR2 '{ SText < = \\\"SS Button_3\\\";  BgColor < = \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0\\\";  FgColor < =  \\\"TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0\\\" }'"
             }
         )
-        HBox_AddWdg ~ Wnd.Scene.HBox.IoAddWidg
+        HBox_AddWdg.Int ~ Wnd.Scene.HBox.IoAddWidg
         AddedWdg_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"
@@ -117,13 +117,13 @@ testroot : Elem {
         WdgAdded_Tg : DesUtils.RSTg
         WdgAdded_Tg.InpS ~ HBox_AddWdg.Added
         # " Removing button 1"
-        HBox_RmWdg : ContainerMod.DcRmWdgSc (
+        HBox_RmWdg : ContainerMod.DcRmWdgCp (
             Enable ~ WdgAdded_Tg.Value
             Name ~ : State {
                 = "SS Btn1"
             }
         )
-        HBox_RmWdg ~ Wnd.Scene.HBox.IoRmWidg
+        HBox_RmWdg.Int ~ Wnd.Scene.HBox.IoRmWidg
         RmWdg_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"

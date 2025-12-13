@@ -107,6 +107,7 @@ void AVDContainer::getCoordOwrSeo(int& aOutX, int& aOutY, int aLevel)
 
 void AVDContainer::GetCursorPos(double& aX, double& aY)
 {
+    GetScelOwner()->GetCursorPos(aX, aY);
 }
 
 void AVDContainer::GetFbSize(int* aW, int* aH) const

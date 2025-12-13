@@ -17,13 +17,14 @@ testroot : Elem {
                     ModelMntp : ExtdSystExploring
                     DrpMagUri : ExtdStateInp
                 }
-                ModelMntp ~ VrvCp.NavCtrl.DrpCp.InpModelMntp
-                DrpMagUri ~ VrvCp.NavCtrl.DrpCp.InpModelUri
+                ModelMntp ~ VrvCp.Int.NavCtrl.DrpCp.InpModelMntp
+                DrpMagUri ~ VrvCp.Int.NavCtrl.DrpCp.InpModelUri
             )
             Scene : GVisComps.Scene {
                 # "Scene"
                 VBox : ContainerMod.DVLayout {
                     About = "Application view main vertical layout"
+                    LogLevel = "Dbg"
                     # "Unset DrawOnComplete to draw menu even if DRP makes VBox not completed"
                     DrawOnComplete = "no"
                     End.Next !~ Start.Prev
@@ -72,19 +73,26 @@ testroot : Elem {
                     Slot_2.Next ~ Slot_1.Prev
                     End.Next ~ Slot_2.Prev
                 }
-                Scp : ContainerMod.SlotCp
-                Scp ~ VBox.Cp
-                Scp.InpAlcW ~ Cp.Width
-                Scp.InpAlcH ~ Cp.Height
+                _ <  {
+                    Scp : ContainerMod.SlotCp
+                    Scp ~ VBox.Cp
+                    Scp.InpAlcW ~ Cp.Int.Width
+                    Scp.InpAlcH ~ Cp.Int.Height
+                }
+                VBox.Cp.InpAlcW.Int ~ Cp.Int.Width
+                VBox.Cp.InpAlcH.Int ~ Cp.Int.Height
             }
             Scene.Cp ~ ScCpc
-            VrvCp.NavCtrl.CmdUp ~ Scene.VBox.Toolbar.BtnUp.Pressed
-            Scene.VBox.ModelView.IoAddWidg ~ VrvCp.NavCtrl.MutAddWidget
-            Scene.VBox.ModelView.IoRmWidg ~ VrvCp.NavCtrl.MutRmWidget
+            VrvCp.Int.NavCtrl.CmdUp ~ Scene.VBox.Toolbar.BtnUp.Pressed
+            BtnUpPressed_Dbg : State (
+                _@ < LogLevel = "Dbg"
+                _@ < = "SB"
+                Inp ~ Scene.VBox.Toolbar.BtnUp.Pressed
+            )
+            Scene.VBox.ModelView.IoAddWidg ~ VrvCp.Int.NavCtrl.MutAddWidget
+            Scene.VBox.ModelView.IoRmWidg ~ VrvCp.Int.NavCtrl.MutRmWidget
             Scene.VBox.ModelView.CreateWdg < LogLevel = "Dbg"
             # "Node selected new desing debug"
-            VBoxCpc : FvWidgets.WidgetCpc
-            VBoxCpc ~ Scene.VBox.Cp
             NodeSelected2 : State (
                 _@ <  {
                     LogLevel = "Dbg"
@@ -92,7 +100,7 @@ testroot : Elem {
                 }
                 Inp ~ Nsl : TrTailVar (
                     Inp ~ : TrHeadVar (
-                        Inp ~ VBoxCpc.LbpUri
+                        Inp ~ Scene.VBox.Cp.LbpUri.Int
                         Tail ~ : State {
                             = "URI Header.Name"
                         }
@@ -108,7 +116,7 @@ testroot : Elem {
                     = "URI _INV"
                 }
             )
-            VrvCp.NavCtrl.NodeSelected ~ NodeSelected2
+            VrvCp.Int.NavCtrl.NodeSelected ~ NodeSelected2
         }
         EnvWidth : State
         EnvHeight : State
