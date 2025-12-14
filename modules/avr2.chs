@@ -2193,86 +2193,6 @@ AvrMdl2 : Elem {
                 Inp1 ~ InpTargUri.Int
                 Inp2 ~ CompsIter.OutV
             )
-            _ <  {
-                CpResolver : DesUtils.PrntMappingResolver2 (
-                    InpParents ~ CompAdapter.Parents
-                    InpMpg ~ InpCcMpg.Int
-                    InpDefRes ~ : Const {
-                        = "URI"
-                    }
-                )
-            }
-            _ <  {
-                # "TODO Creation of resolver heir failed if keep its chromo here. To debug"
-                PrntMappingResolverD : Des {
-                    # ">>> Parent mapping resolver"
-                    # "Finds data (URI) assosiated to parent"
-                    # "Input: parents hierarchy (VDU)"
-                    InpParents : ExtdStateInp
-                    # "Input: Mapping parent to result"
-                    InpMpg : ExtdStateInp
-                    # "Input: Default result"
-                    InpDefRes : ExtdStateInp
-                    # "Output: Resolved CRP URI"
-                    OutpRes : ExtdStateOutp
-                    # "System"
-                    InpChanged : DesUtils.BChange (
-                        SInp ~ InpParents.Int
-                    )
-                    ParentsIter : DesUtils.VectIter (
-                        _@ < LogLevel = "Dbg"
-                        InpV ~ InpParents.Int
-                        _ < InpDone ~ : SB_True
-                        InpReset ~ InpChanged.Outp
-                    )
-                    FindMapped : TrFindByP (
-                        Inp ~ InpMpg.Int
-                        Sample ~ ParentsIter.OutV
-                    )
-                    ParentsIter.InpDone ~ : TrNegVar (
-                        Inp ~ : TrIsValid (
-                            Inp ~ FindMapped
-                        )
-                    )
-                    Parents_Dbg : State (
-                        _@ < LogLevel = "Dbg"
-                        _@ < = "VDU"
-                        Inp ~ InpParents.Int
-                    )
-                    NotFound : TrAndVar (
-                        Inp ~ : TrIsValid (
-                            Inp ~ InpMpg.Int
-                        )
-                        Inp ~ : TrIsValid (
-                            Inp ~ InpParents.Int
-                        )
-                        Inp ~ : TrIsInvalid (
-                            Inp ~ FindMapped
-                        )
-                    )
-                    Res_Int : TrSwitchBool (
-                        _@ < LogLevel = "Dbg"
-                        Inp1 ~ FindMapped
-                        Inp2 ~ InpDefRes.Int
-                        Sel ~ NotFound
-                    )
-                    Res_Int2 : TrSwitchBool (
-                        _@ < LogLevel = "Dbg"
-                        Inp1 ~ Res_Int
-                        Inp2 ~ : Const {
-                            = "URI"
-                        }
-                        Sel ~ InpChanged.Outp
-                    )
-                    Res : State (
-                        _@ < LogLevel = "Dbg"
-                        _@ < = "URI"
-                        Inp ~ Res_Int2
-                    )
-                    OutpRes.Int ~ Res
-                    # ">>> Parent mapping resolver"
-                }
-            }
             # "Redesigned acc to ds_csd_s1"
             CpResolver : DesUtils.PrntMappingResolverD (
                 InpParents ~ CompAdapter.Parents
@@ -2908,7 +2828,7 @@ AvrMdl2 : Elem {
                 SdcInsert < LogLevel = "Dbg"
             }
             # "Adjust CRP resolver"
-            CrpResMpg < = "VPDU ( PDU ( URI Vert , URI VertCrp ) , PDU ( URI Vertu , URI VertCrp )  , PDU ( URI Syst , URI SystCrp ) , PDU ( URI State , URI VertcCrp ) , PDU ( URI Const , URI VertcCrp )  , PDU ( URI TrBase , URI VertcCrp )  )"
+            CrpResMpg < = "VPDU ( PDU ( URI Syst , URI SystCrp ) , PDU ( URI State , URI VertcCrp ) , PDU ( URI Const , URI VertcCrp ) , PDU ( URI TrBase , URI VertcCrp )  , PDU ( URI ExtdStateOutp , URI VertcCrp )  , PDU ( URI ExtdStateInp , URI VertcCrp ) ,  PDU ( URI Vert , URI VertCrp ) , PDU ( URI Vertu , URI VertCrp ) )"
             CrpResDRes < = "URI SystCrp"
             _ <  {
                 # "Modify EdgeP target"
