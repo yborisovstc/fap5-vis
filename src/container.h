@@ -56,11 +56,6 @@ class AVDContainer: public AVWidget, public MSceneElemOwner, public MObserver
         // From MObserver
         string MObserver_Uid() const override {return getUid<MObserver>();}
         MIface* MObserver_getLif(TIdHash aId) override { return nullptr;}
-        void onObsOwnerAttached(MObservable* aObl) override {}
-        void onObsOwnedAttached(MObservable* aObl, MOwned* aOwned) override { }
-        void onObsOwnedDetached(MObservable* aObl, MOwned* aOwned) override {}
-        void onObsContentChanged(MObservable* aObl, const string& aCont) override { }
-        void onObsChanged(MObservable* aObl) override { }
         void onObsEvent(MObservable* aObl, const MEvent* aEvent) override;
         MObserver::TCp* observerCp() override { return &mObrCp;}
     protected:
