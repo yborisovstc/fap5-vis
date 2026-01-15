@@ -83,8 +83,9 @@ testroot : Elem {
         }
         # " Adding new button"
         _ <  {
-            Wnd.Scene.ColumnsView.CreateWdg < LogLevel = "Dbg"
+            # " "
         }
+        Wnd.Scene.ColumnsView.CreateWdg < LogLevel = "Dbg"
         Clms_AddWdg : ContainerMod.DcAddWdgCp (
             Enable ~ : State {
                 = "SB true"
@@ -116,7 +117,8 @@ testroot : Elem {
             Inp ~ Clms_AddWdg.Added
         )
         # " Adding new column"
-        Clms_AddCol : ContainerMod.ClAddColumnSm (
+        # "Using extending of IoAddColumn just to check it's working."
+        Clms_AddCol : ContainerMod.ClAddColumnS (
             Enable ~ Clms_AddWdg.Added
             Name ~ : State {
                 = "SS New_column"
@@ -130,7 +132,7 @@ testroot : Elem {
             Inp ~ Clms_AddCol.Done
         )
         WdgNameSel.Sel ~ Clms_AddCol.Done
-        Clms_AddCol ~ Wnd.Scene.ColumnsView.IoAddColumn
+        Clms_AddCol.Int ~ Wnd.Scene.ColumnsView.IoAddColumn
         # "Adding button to new column"
         # " Misc env"
         EnvWidth : State

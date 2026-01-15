@@ -17,8 +17,8 @@ testroot : Elem {
                     AlcW < = "SI 80"
                     AlcH < = "SI 100"
                 }
-                Wdg1Cp : FvWidgets.WidgetCpc
-                Wdg1Cp ~ Wdg1.Cp
+                Wdg1Cp : FvWidgets.WidgetCp
+                Wdg1Cp.Int ~ Wdg1.Cp
             }
         }
         EnvWidth : State

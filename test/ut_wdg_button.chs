@@ -21,9 +21,6 @@ testroot : Elem {
                         AlcX < = "SI 200"
                         AlcY < = "SI 100"
                     }
-                    # "TODO with ds_sock_ses_s2 we now don't need auxiliary WidgetCpc here, can connect directly to Wdg1.Cp"
-                    Wdg1Cp : FvWidgets.WidgetCpc
-                    Wdg1Cp ~ Wdg1.Cp
                 }
             }
             EnvWidth : State
@@ -68,19 +65,19 @@ testroot : Elem {
                     }
                 )
                 Inp1 ~ WdgHeight
-                Inp2 ~ IncrW : TrAddVar (
+                Inp2 ~ IncrH : TrAddVar (
                     Inp ~ IncrData
                     Inp ~ WdgHeight
                 )
             )
-            WdgWidth ~ Wnd.Scene.Wdg1Cp.InpAlcW
-            WdgHeight ~ Wnd.Scene.Wdg1Cp.InpAlcH
+            WdgWidth ~ Wnd.Scene.Wdg1.Cp.InpAlcW
+            WdgHeight ~ Wnd.Scene.Wdg1.Cp.InpAlcH
             SLbpUri_Dbg : State (
                 _@ <  {
                     LogLevel = "Dbg"
                     = "URI"
                 }
-                Inp ~ Wnd.Scene.Wdg1Cp.LbpUri
+                Inp ~ Wnd.Scene.Wdg1.Cp.LbpUri
             )
         }
     }

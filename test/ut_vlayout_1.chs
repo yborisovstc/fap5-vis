@@ -18,8 +18,8 @@ testroot : Elem {
                     AlcW < = "SI 220"
                     AlcH < = "SI 330"
                     Start.Prev !~ End.Next
-                    Start.Prev.AlcY ~ : SI_0
-                    Start.Prev.AlcH ~ : SI_0
+                    Start.Prev.Int.AlcY ~ : SI_0
+                    Start.Prev.Int.AlcH ~ : SI_0
                     Btn1 : FvWidgets.FButton {
                         WdgAgent < LogLevel = "Dbg"
                         SText < = "SS Button_1"

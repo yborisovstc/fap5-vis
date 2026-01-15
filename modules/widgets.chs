@@ -1,30 +1,36 @@
 FvWidgets : Elem {
     About = "FAP5 visualization system. Widget-to-slot linkage approach"
-    WidgetCp : Socket {
-        InpAlcX : ExtdStateOutp
-        InpAlcY : ExtdStateOutp
-        InpAlcW : ExtdStateOutp
-        InpAlcH : ExtdStateOutp
-        OutAlcX : ExtdStateInp
-        OutAlcY : ExtdStateInp
-        OutAlcW : ExtdStateInp
-        OutAlcH : ExtdStateInp
-        RqsW : ExtdStateInp
-        RqsH : ExtdStateInp
-        LbpUri : ExtdStateInp
+    WidgetCpSc : Socket2 {
+        InpAlcX : CpStateOutp
+        InpAlcY : CpStateOutp
+        InpAlcW : CpStateOutp
+        InpAlcH : CpStateOutp
+        OutAlcX : CpStateInp
+        OutAlcY : CpStateInp
+        OutAlcW : CpStateInp
+        OutAlcH : CpStateInp
+        RqsW : CpStateInp
+        RqsH : CpStateInp
+        LbpUri : CpStateInp
     }
-    WidgetCpc : Socket {
-        InpAlcX : ExtdStateInp
-        InpAlcY : ExtdStateInp
-        InpAlcW : ExtdStateInp
-        InpAlcH : ExtdStateInp
-        OutAlcX : ExtdStateOutp
-        OutAlcY : ExtdStateOutp
-        OutAlcW : ExtdStateOutp
-        OutAlcH : ExtdStateOutp
-        RqsW : ExtdStateOutp
-        RqsH : ExtdStateOutp
-        LbpUri : ExtdStateOutp
+    WidgetCpS : Socket2 {
+        InpAlcX : CpStateInp
+        InpAlcY : CpStateInp
+        InpAlcW : CpStateInp
+        InpAlcH : CpStateInp
+        OutAlcX : CpStateOutp
+        OutAlcY : CpStateOutp
+        OutAlcW : CpStateOutp
+        OutAlcH : CpStateOutp
+        RqsW : CpStateOutp
+        RqsH : CpStateOutp
+        LbpUri : CpStateOutp
+    }
+    WidgetCp : WidgetCpS {
+        Int : WidgetCpSc
+    }
+    WidgetCpc : WidgetCpSc {
+        Int : WidgetCpS
     }
     IWidget : Des {
         # "Widget iface"
@@ -79,16 +85,16 @@ FvWidgets : Elem {
             = "SI 0"
         }
         # " Connections"
-        AlcX.Inp ~ Cp.InpAlcX
-        AlcY.Inp ~ Cp.InpAlcY
-        AlcW.Inp ~ Cp.InpAlcW
-        AlcH.Inp ~ Cp.InpAlcH
-        AlcX ~ Cp.OutAlcX
-        AlcY ~ Cp.OutAlcY
-        AlcW ~ Cp.OutAlcW
-        AlcH ~ Cp.OutAlcH
-        RqsW ~ Cp.RqsW
-        RqsH ~ Cp.RqsH
+        AlcX.Inp ~ Cp.Int.InpAlcX
+        AlcY.Inp ~ Cp.Int.InpAlcY
+        AlcW.Inp ~ Cp.Int.InpAlcW
+        AlcH.Inp ~ Cp.Int.InpAlcH
+        AlcX ~ Cp.Int.OutAlcX
+        AlcY ~ Cp.Int.OutAlcY
+        AlcW ~ Cp.Int.OutAlcW
+        AlcH ~ Cp.Int.OutAlcH
+        RqsW ~ Cp.Int.RqsW
+        RqsH ~ Cp.Int.RqsH
     }
     FWidget : FWidgetBase {
         # " Widget"
@@ -100,7 +106,7 @@ FvWidgets : Elem {
         WdgAgent.InpText ~ SText
         RqsW.Inp ~ WdgAgent.OutpRqsW
         RqsH.Inp ~ WdgAgent.OutpRqsH
-        Cp.LbpUri ~ WdgAgent.OutpLbpUri
+        Cp.Int.LbpUri ~ WdgAgent.OutpLbpUri
     }
     FLabel : FWidgetBase {
         # " Label"
@@ -112,7 +118,7 @@ FvWidgets : Elem {
         WdgAgent.InpText ~ SText
         RqsW.Inp ~ WdgAgent.OutpRqsW
         RqsH.Inp ~ WdgAgent.OutpRqsH
-        Cp.LbpUri ~ WdgAgent.OutpLbpUri
+        Cp.Int.LbpUri ~ WdgAgent.OutpLbpUri
     }
     FButton : FWidgetBase {
         # " Button"
@@ -123,7 +129,7 @@ FvWidgets : Elem {
         WdgAgent.InpText ~ SText
         RqsW.Inp ~ WdgAgent.OutpRqsW
         RqsH.Inp ~ WdgAgent.OutpRqsH
-        Cp.LbpUri ~ WdgAgent.OutpLbpUri
+        Cp.Int.LbpUri ~ WdgAgent.OutpLbpUri
         VisPars : Des {
             Border : State {
                 = "SB true"

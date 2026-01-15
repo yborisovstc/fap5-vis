@@ -70,12 +70,10 @@ testroot : Elem {
                 }
             )
         )
-        HBox_RmWdg : ContainerMod.DcRmWdgSc (
-            Name ~ : State {
-                = "SS Btn1"
-            }
-        )
-        HBox_RmWdg.Enable ~ : TrSwitchBool (
+        Window.Scene.HBox.IoRmWidg.Name ~ : Const {
+            = "SS Btn1"
+        }
+        Window.Scene.HBox.IoRmWidg.Enable ~ : TrSwitchBool (
             Sel ~ Cmp_Eq : TrCmpVar (
                 Inp ~ Timeout
                 Inp2 ~ : State {
@@ -96,7 +94,6 @@ testroot : Elem {
             }
             Inp ~ HBox_RmWdg.Done
         )
-        Window.Scene.HBox.IoRmWidg ~ HBox_RmWdg
         Window.Scene.HBox.SdcExtrSlot < LogLevel = "Dbg"
     }
 }

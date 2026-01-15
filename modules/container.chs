@@ -3,40 +3,62 @@ ContainerMod : Elem {
     About = "FAP3 widget visualization system"
     + FvWidgets
     + DesUtils
-    SlotCp : Socket {
-        InpAlcX : ExtdStateInp
-        InpAlcY : ExtdStateInp
-        InpAlcW : ExtdStateInp
-        InpAlcH : ExtdStateInp
-        OutAlcX : ExtdStateOutp
-        OutAlcY : ExtdStateOutp
-        OutAlcW : ExtdStateOutp
-        OutAlcH : ExtdStateOutp
-        RqsW : ExtdStateOutp
-        RqsH : ExtdStateOutp
-        LbpUri : ExtdStateOutp
+    SlotCpSc : Socket2 {
+        InpAlcX : CpStateInp
+        InpAlcY : CpStateInp
+        InpAlcW : CpStateInp
+        InpAlcH : CpStateInp
+        OutAlcX : CpStateOutp
+        OutAlcY : CpStateOutp
+        OutAlcW : CpStateOutp
+        OutAlcH : CpStateOutp
+        RqsW : CpStateOutp
+        RqsH : CpStateOutp
+        LbpUri : CpStateOutp
     }
-    SlotLinNextCp : Socket {
-        AlcX : ExtdStateOutp
-        AlcY : ExtdStateOutp
-        AlcW : ExtdStateOutp
-        AlcH : ExtdStateOutp
-        CntRqsW : ExtdStateOutp
-        CntRqsH : ExtdStateOutp
-        XPadding : ExtdStateOutp
-        YPadding : ExtdStateOutp
-        LbpComp : ExtdStateOutp
+    SlotCpS : Socket2 {
+        InpAlcX : CpStateOutp
+        InpAlcY : CpStateOutp
+        InpAlcW : CpStateOutp
+        InpAlcH : CpStateOutp
+        OutAlcX : CpStateInp
+        OutAlcY : CpStateInp
+        OutAlcW : CpStateInp
+        OutAlcH : CpStateInp
+        RqsW : CpStateInp
+        RqsH : CpStateInp
+        LbpUri : CpStateInp
     }
-    SlotLinPrevCp : Socket {
-        AlcX : ExtdStateInp
-        AlcY : ExtdStateInp
-        AlcW : ExtdStateInp
-        AlcH : ExtdStateInp
-        CntRqsW : ExtdStateInp
-        CntRqsH : ExtdStateInp
-        XPadding : ExtdStateInp
-        YPadding : ExtdStateInp
-        LbpComp : ExtdStateInp
+    SlotCp : SlotCpS {
+        Int : SlotCpSc
+    }
+    SlotLinNextCpS : Socket2 {
+        AlcX : CpStateOutp
+        AlcY : CpStateOutp
+        AlcW : CpStateOutp
+        AlcH : CpStateOutp
+        CntRqsW : CpStateOutp
+        CntRqsH : CpStateOutp
+        XPadding : CpStateOutp
+        YPadding : CpStateOutp
+        LbpComp : CpStateOutp
+    }
+    SlotLinPrevCpS : Socket2 {
+        AlcX : CpStateInp
+        AlcY : CpStateInp
+        AlcW : CpStateInp
+        AlcH : CpStateInp
+        CntRqsW : CpStateInp
+        CntRqsH : CpStateInp
+        XPadding : CpStateInp
+        YPadding : CpStateInp
+        LbpComp : CpStateInp
+    }
+    SlotLinNextCp : SlotLinPrevCpS {
+        Int : SlotLinNextCpS
+    }
+    SlotLinPrevCp : SlotLinNextCpS {
+        Int : SlotLinPrevCpS
     }
     FSlot : Des {
         SCp : SlotCp
@@ -53,85 +75,85 @@ ContainerMod : Elem {
     FSlotLin : FSlot {
         Prev : SlotLinPrevCp
         Next : SlotLinNextCp
-        Prev.XPadding ~ Next.XPadding
-        Prev.YPadding ~ Next.YPadding
-        Prev.LbpComp ~ LbpCompDbg : TrSvldVar (
-            Inp1 ~ Next.LbpComp
-            Inp2 ~ SCp.LbpUri
+        Prev.Int.XPadding ~ Next.Int.XPadding
+        Prev.Int.YPadding ~ Next.Int.YPadding
+        Prev.Int.LbpComp ~ LbpCompDbg : TrSvldVar (
+            Inp1 ~ Next.Int.LbpComp
+            Inp2 ~ SCp.Int.LbpUri
         )
     }
     FVLayoutSlot : FSlotLin {
         # " Vertical layout slot"
         Add1 : TrAddVar (
-            Inp ~ Next.AlcY
-            Inp ~ Next.YPadding
-            Inp ~ Next.AlcH
+            Inp ~ Next.Int.AlcY
+            Inp ~ Next.Int.YPadding
+            Inp ~ Next.Int.AlcH
         )
         Max1 : TrMaxVar (
-            Inp ~ Next.CntRqsW
-            Inp ~ SCp.RqsW
+            Inp ~ Next.Int.CntRqsW
+            Inp ~ SCp.Int.RqsW
         )
-        Prev  (
-            AlcX ~ SCp.OutAlcX
-            AlcY ~ SCp.OutAlcY
-            AlcW ~ SCp.OutAlcW
-            AlcH ~ SCp.OutAlcH
+        Prev.Int  (
+            AlcX ~ SCp.Int.OutAlcX
+            AlcY ~ SCp.Int.OutAlcY
+            AlcW ~ SCp.Int.OutAlcW
+            AlcH ~ SCp.Int.OutAlcH
             CntRqsW ~ Max1
             CntRqsH ~ : TrAdd2Var (
-                Inp ~ Next.CntRqsH
+                Inp ~ Next.Int.CntRqsH
                 Inp2 ~ Add1
             )
         )
         SCp  (
-            InpAlcW ~ SCp.RqsW
-            InpAlcH ~ SCp.RqsH
-            InpAlcX ~ Next.AlcX
-            InpAlcY ~ Add1
+            Int.InpAlcW ~ SCp.Int.RqsW
+            Int.InpAlcH ~ SCp.Int.RqsH
+            Int.InpAlcX ~ Next.Int.AlcX
+            Int.InpAlcY ~ Add1
         )
     }
     FHLayoutSlot : FSlotLin {
         # " Horisontal layout slot"
-        Prev.AlcX ~ SCp.OutAlcX
-        Prev.AlcY ~ SCp.OutAlcY
-        Prev.AlcW ~ SCp.OutAlcW
-        Prev.AlcH ~ SCp.OutAlcH
-        SCp.InpAlcW ~ SCp.RqsW
-        SCp.InpAlcH ~ SCp.RqsH
-        SCp.InpAlcY ~ Next.AlcY
+        Prev.Int.AlcX ~ SCp.Int.OutAlcX
+        Prev.Int.AlcY ~ SCp.Int.OutAlcY
+        Prev.Int.AlcW ~ SCp.Int.OutAlcW
+        Prev.Int.AlcH ~ SCp.Int.OutAlcH
+        SCp.Int.InpAlcW ~ SCp.Int.RqsW
+        SCp.Int.InpAlcH ~ SCp.Int.RqsH
+        SCp.Int.InpAlcY ~ Next.Int.AlcY
         Add1 : TrAddVar
-        SCp.InpAlcX ~ Add1
-        Add1.Inp ~ Next.AlcX
-        Add1.Inp ~ Next.XPadding
-        Add1.Inp ~ Next.AlcW
+        SCp.Int.InpAlcX ~ Add1
+        Add1.Inp ~ Next.Int.AlcX
+        Add1.Inp ~ Next.Int.XPadding
+        Add1.Inp ~ Next.Int.AlcW
         Max1 : TrMaxVar
-        Prev.CntRqsH ~ Max1
-        Max1.Inp ~ Next.CntRqsH
-        Max1.Inp ~ SCp.RqsH
+        Prev.Int.CntRqsH ~ Max1
+        Max1.Inp ~ Next.Int.CntRqsH
+        Max1.Inp ~ SCp.Int.RqsH
     }
     AlignmentSlot : FSlotLin {
         # " Horisontal layout slot"
-        Prev.AlcX ~ SCp.OutAlcX
-        Prev.AlcY ~ SCp.OutAlcY
-        Prev.AlcW ~ SCp.OutAlcW
-        Prev.AlcH ~ SCp.OutAlcH
-        SCp.InpAlcW ~ SCp.RqsW
-        SCp.InpAlcH ~ SCp.RqsH
+        Prev.Int.AlcX ~ SCp.Int.OutAlcX
+        Prev.Int.AlcY ~ SCp.Int.OutAlcY
+        Prev.Int.AlcW ~ SCp.Int.OutAlcW
+        Prev.Int.AlcH ~ SCp.Int.OutAlcH
+        SCp.Int.InpAlcW ~ SCp.Int.RqsW
+        SCp.Int.InpAlcH ~ SCp.Int.RqsH
         AddX : TrAddVar
-        SCp.InpAlcX ~ AddX
-        AddX.Inp ~ Next.AlcX
-        AddX.Inp ~ Next.XPadding
+        SCp.Int.InpAlcX ~ AddX
+        AddX.Inp ~ Next.Int.AlcX
+        AddX.Inp ~ Next.Int.XPadding
         AddY : TrAddVar
-        SCp.InpAlcY ~ AddY
-        AddY.Inp ~ Next.AlcY
-        AddY.Inp ~ Next.YPadding
+        SCp.Int.InpAlcY ~ AddY
+        AddY.Inp ~ Next.Int.AlcY
+        AddY.Inp ~ Next.Int.YPadding
         AddCW : TrAddVar
-        Prev.CntRqsW ~ AddCW
-        AddCW.Inp ~ SCp.RqsW
-        AddCW.Inp ~ Next.XPadding
+        Prev.Int.CntRqsW ~ AddCW
+        AddCW.Inp ~ SCp.Int.RqsW
+        AddCW.Inp ~ Next.Int.XPadding
         AddCH : TrAddVar
-        Prev.CntRqsH ~ AddCH
-        AddCH.Inp ~ SCp.RqsH
-        AddCH.Inp ~ Next.YPadding
+        Prev.Int.CntRqsH ~ AddCH
+        AddCH.Inp ~ SCp.Int.RqsH
+        AddCH.Inp ~ Next.Int.YPadding
     }
     # " DES controlled container"
     DcAddWdgSc : Socket2 {
@@ -270,18 +292,18 @@ ContainerMod : Elem {
     }
     DLinearLayout : DContainer {
         Start : LinStart
-        Start.Prev.XPadding ~ XPadding
-        Start.Prev.YPadding ~ YPadding
-        Start.Prev.LbpComp ~ : State {
+        Start.Prev.Int.XPadding ~ XPadding
+        Start.Prev.Int.YPadding ~ YPadding
+        Start.Prev.Int.LbpComp ~ : State {
             = "URI _INV"
         }
         # "TODO AlcX ~ : SI_0 AlcY ~ : SI_0 ??"
         End : LinEnd
-        Cp.LbpUri ~ TLbpUri : TrApndVar (
+        Cp.Int.LbpUri ~ TLbpUri : TrApndVar (
             _@ < LogLevel = "Dbg"
             Inp1 ~ CntAgent.OutpLbpUri
             Inp2 ~ : TrSvldVar (
-                Inp1 ~ End.Next.LbpComp
+                Inp1 ~ End.Next.Int.LbpComp
                 Inp2 ~ : State {
                     = "URI"
                 }
@@ -317,37 +339,37 @@ ContainerMod : Elem {
         IoAddWidg.Int.Added ~ SdcInsert.Outp
     }
     DAlignment : DLinearLayout {
-        RqsW.Inp ~ End.Next.CntRqsW
-        RqsH.Inp ~ End.Next.CntRqsH
+        RqsW.Inp ~ End.Next.Int.CntRqsW
+        RqsH.Inp ~ End.Next.Int.CntRqsH
         SlotParent < = "SS AlignmentSlot"
     }
     DVLayout : DLinearLayout {
         RqsW.Inp ~ : TrAddVar (
-            Inp ~ End.Next.CntRqsW
+            Inp ~ End.Next.Int.CntRqsW
             Inp ~ : TrMplVar (
-                Inp ~ End.Next.XPadding
+                Inp ~ End.Next.Int.XPadding
                 Inp ~ : State {
                     = "SI 2"
                 }
             )
         )
         RqsH.Inp ~ Add2 : TrAddVar (
-            Inp ~ End.Next.AlcY
-            Inp ~ End.Next.AlcH
-            Inp ~ End.Next.YPadding
+            Inp ~ End.Next.Int.AlcY
+            Inp ~ End.Next.Int.AlcH
+            Inp ~ End.Next.Int.YPadding
         )
         SlotParent < = "SS FVLayoutSlot"
     }
     DHLayout : DLinearLayout {
         RqsW.Inp ~ : TrAddVar (
-            Inp ~ End.Next.AlcX
-            Inp ~ End.Next.AlcW
-            Inp ~ End.Next.XPadding
+            Inp ~ End.Next.Int.AlcX
+            Inp ~ End.Next.Int.AlcW
+            Inp ~ End.Next.Int.XPadding
         )
         RqsH.Inp ~ : TrAddVar (
-            Inp ~ End.Next.CntRqsH
+            Inp ~ End.Next.Int.CntRqsH
             Inp ~ : TrMplVar (
-                Inp ~ End.Next.YPadding
+                Inp ~ End.Next.Int.YPadding
                 Inp ~ : State {
                     = "SI 2"
                 }
@@ -357,15 +379,17 @@ ContainerMod : Elem {
     }
     # ">>> Column layout. Set of the colums of the widgets."
     ColumnsSlotPrevCp : SlotLinPrevCp {
-        Pos : ExtdStateInp
+        Pos : CpStateOutp
+        Int < Pos : CpStateInp
     }
     ColumnsSlotNextCp : SlotLinNextCp {
-        Pos : ExtdStateOutp
+        Pos : CpStateInp
+        Int < Pos : CpStateOutp
     }
     ColumnsStart : Syst {
         # "Column layout columns start slot"
         Prev : ColumnsSlotPrevCp
-        Prev.Pos ~ : SI_1
+        Prev.Int.Pos ~ : SI_1
     }
     ColumnsEnd : Syst {
         # "Column layout columns end slot"
@@ -374,15 +398,23 @@ ContainerMod : Elem {
     ColumnStart : Syst {
         # "Column layout column slots list start"
         Prev : SlotLinPrevCp {
-            ItemPos : ExtdStateInp
-            ColumnPos : ExtdStateInp
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
+            Int <  {
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
+            }
         }
     }
     ColumnEnd : Syst {
         # "Column layout column slots list end"
         Next : SlotLinNextCp {
-            ItemPos : ExtdStateOutp
-            ColumnPos : ExtdStateOutp
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
+            Int <  {
+                ItemPos : CpStateOutp
+                ColumnPos : CpStateOutp
+            }
         }
     }
     ColumnLayoutSlot : Des {
@@ -392,71 +424,71 @@ ContainerMod : Elem {
         Start : ColumnStart
         End : ColumnEnd
         Start.Prev ~ End.Next
-        Start.Prev.AlcX ~ Add1 : TrAdd2Var (
-            Inp ~ Next.AlcX
+        Start.Prev.Int.AlcX ~ Add1 : TrAdd2Var (
+            Inp ~ Next.Int.AlcX
             Inp2 ~ Add1n : TrAdd2Var (
-                Inp ~ Next.AlcW
-                Inp2 ~ Next.XPadding
+                Inp ~ Next.Int.AlcW
+                Inp2 ~ Next.Int.XPadding
             )
         )
-        Start.Prev.AlcY ~ Next.AlcY
-        Start.Prev.YPadding ~ Next.YPadding
-        Start.Prev.CntRqsW ~ : SI_0
-        Start.Prev.CntRqsH ~ : SI_0
+        Start.Prev.Int.AlcY ~ Next.Int.AlcY
+        Start.Prev.Int.YPadding ~ Next.Int.YPadding
+        Start.Prev.Int.CntRqsW ~ : SI_0
+        Start.Prev.Int.CntRqsH ~ : SI_0
         # "Using isolated LbpComp chain for column slot"
-        Start.Prev.LbpComp ~ : Const {
+        Start.Prev.Int.LbpComp ~ : Const {
             = "URI"
         }
         # "Calc container reqs as sum of elems reqs plus paddings"
-        Prev.CntRqsW ~ CntRqsW_Dbg : TrAdd2Var (
-            Inp ~ End.Next.CntRqsW
+        Prev.Int.CntRqsW ~ CntRqsW_Dbg : TrAdd2Var (
+            Inp ~ End.Next.Int.CntRqsW
             Inp2 ~ CntRqsW_Dbg2 : TrAdd2Var (
-                Inp ~ Next.CntRqsW
-                Inp2 ~ Next.XPadding
+                Inp ~ Next.Int.CntRqsW
+                Inp2 ~ Next.Int.XPadding
             )
         )
-        Prev.CntRqsH ~ MaxCntRqsH : TrMaxVar (
-            Inp ~ Next.CntRqsH
+        Prev.Int.CntRqsH ~ MaxCntRqsH : TrMaxVar (
+            Inp ~ Next.Int.CntRqsH
             Inp ~ : TrAdd2Var (
-                Inp ~ End.Next.CntRqsH
-                Inp2 ~ Next.AlcY
+                Inp ~ End.Next.Int.CntRqsH
+                Inp2 ~ Next.Int.AlcY
             )
         )
-        Prev.AlcX ~ Add1
-        Prev.AlcY ~ Next.AlcY
+        Prev.Int.AlcX ~ Add1
+        Prev.Int.AlcY ~ Next.Int.AlcY
         # "Requisite CntRqsW is used as allocation AlcW to represent column width"
         # "This is because the column is not a widget but plays as a widget"
         # "TODO consider more strong design for such pseudo-widgets"
-        Prev.AlcW ~ End.Next.CntRqsW
-        Prev.AlcH ~ End.Next.CntRqsH
-        Prev.XPadding ~ Next.XPadding
-        Prev.YPadding ~ Next.YPadding
+        Prev.Int.AlcW ~ End.Next.Int.CntRqsW
+        Prev.Int.AlcH ~ End.Next.Int.CntRqsH
+        Prev.Int.XPadding ~ Next.Int.XPadding
+        Prev.Int.YPadding ~ Next.Int.YPadding
         # "Using isolated LbpComp chain for column slot"
-        Prev.LbpComp ~ LbpCompDbg : TrSvldVar (
+        Prev.Int.LbpComp ~ LbpCompDbg : TrSvldVar (
             _@ < LogLevel = "Dbg"
-            Inp1 ~ Next.LbpComp
-            Inp2 ~ End.Next.LbpComp
+            Inp1 ~ Next.Int.LbpComp
+            Inp2 ~ End.Next.Int.LbpComp
         )
         SLbpCompDbg : State (
             _@ <  {
                 LogLevel = "Dbg"
                 = "URI"
             }
-            Inp ~ End.Next.LbpComp
+            Inp ~ End.Next.Int.LbpComp
         )
-        Prev.Pos ~ : TrAddVar (
-            Inp ~ Next.Pos
+        Prev.Int.Pos ~ : TrAddVar (
+            Inp ~ Next.Int.Pos
             Inp ~ : SI_1
         )
-        Start.Prev.ItemPos ~ : SI_0
-        Start.Prev.ColumnPos ~ Next.Pos
+        Start.Prev.Int.ItemPos ~ : SI_0
+        Start.Prev.Int.ColumnPos ~ Next.Int.Pos
         _ <  {
             Pos_Dbg : State (
                 _@ <  {
                     LogLevel = "Dbg"
                     = "SI _INV"
                 }
-                Inp ~ Next.Pos
+                Inp ~ Next.Int.Pos
             )
         }
         _ <  {
@@ -465,7 +497,7 @@ ContainerMod : Elem {
                     LogLevel = "Dbg"
                     = "SI _INV"
                 }
-                Inp ~ End.Next.ItemPos
+                Inp ~ End.Next.Int.ItemPos
             )
         }
     }
@@ -473,45 +505,65 @@ ContainerMod : Elem {
         # "Column item slot"
         # "Extend chain CPs for positions io"
         Prev <  {
-            ItemPos : ExtdStateInp
-            ColumnPos : ExtdStateInp
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
+            Int <  {
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
+            }
         }
         Next <  {
-            ItemPos : ExtdStateOutp
-            ColumnPos : ExtdStateOutp
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
+            Int <  {
+                ItemPos : CpStateOutp
+                ColumnPos : CpStateOutp
+            }
         }
-        Prev.ItemPos ~ : TrAddVar (
-            Inp ~ Next.ItemPos
+        Prev.Int.ItemPos ~ : TrAddVar (
+            Inp ~ Next.Int.ItemPos
             Inp ~ : SI_1
         )
         Prev.ColumnPos ~ Next.ColumnPos
     }
-    ClAddColumnS : Socket {
-        Enable : ExtdStateOutp
-        Name : ExtdStateOutp
+    ClAddColumnSSc : Socket2 {
+        Enable : CpStateOutp
+        Name : CpStateOutp
         # " Position: bool, false - start, true - end. Not used ATM"
-        # "Pos : ExtdStateOutp"
-        Done : ExtdStateInp
+        # "Pos : CpStateOutp"
+        Done : CpStateInp
     }
-    ClAddColumnSm : Socket {
-        Enable : ExtdStateInp
-        Name : ExtdStateInp
-        # "Pos : ExtdStateInp"
-        Done : ExtdStateOutp
+    ClAddColumnSS : Socket2 {
+        Enable : CpStateInp
+        Name : CpStateInp
+        # "Pos : CpStateInp"
+        Done : CpStateOutp
     }
-    ClReposWdgS : Socket {
-        Enable : ExtdStateOutp
-        Name : ExtdStateOutp
+    ClAddColumnS : ClAddColumnSS {
+        Int : ClAddColumnSSc
+    }
+    ClAddColumnSm : ClAddColumnSSc {
+        Int : ClAddColumnSS
+    }
+    ClReposWdgSS : Socket2 {
+        Enable : CpStateOutp
+        Name : CpStateOutp
         # "New column pos"
-        ColPos : ExtdStateOutp
-        Done : ExtdStateInp
+        ColPos : CpStateOutp
+        Done : CpStateInp
     }
-    ClReposWdgSm : Socket {
-        Enable : ExtdStateInp
-        Name : ExtdStateInp
+    ClReposWdgSmS : Socket2 {
+        Enable : CpStateInp
+        Name : CpStateInp
         # "New column pos"
-        ColPos : ExtdStateInp
-        Done : ExtdStateOutp
+        ColPos : CpStateInp
+        Done : CpStateOutp
+    }
+    ClReposWdgS : ClReposWdgSmS {
+        Int : ClReposWdgSS
+    }
+    ClReposWdgSm : ClReposWdgSS {
+        Int : ClReposWdgSmS
     }
     ColumnsLayout : DContainer {
         # ">>> Columns layout"
@@ -550,29 +602,29 @@ ContainerMod : Elem {
             = "SS ColumnLayoutSlot"
         }
         Start : ColumnsStart
-        Start.Prev.XPadding ~ XPadding
-        Start.Prev.YPadding ~ YPadding
-        Start.Prev.AlcX ~ XPadding
-        Start.Prev.AlcY ~ YPadding
-        Start.Prev.CntRqsW ~ : SI_0
-        Start.Prev.CntRqsH ~ YPadding
-        Start.Prev.AlcW ~ : SI_0
-        Start.Prev.AlcH ~ : SI_0
-        Start.Prev.LbpComp ~ : State {
+        Start.Prev.Int.XPadding ~ XPadding
+        Start.Prev.Int.YPadding ~ YPadding
+        Start.Prev.Int.AlcX ~ XPadding
+        Start.Prev.Int.AlcY ~ YPadding
+        Start.Prev.Int.CntRqsW ~ : SI_0
+        Start.Prev.Int.CntRqsH ~ YPadding
+        Start.Prev.Int.AlcW ~ : SI_0
+        Start.Prev.Int.AlcH ~ : SI_0
+        Start.Prev.Int.LbpComp ~ : State {
             = "URI"
         }
         End : ColumnsEnd
         # "Requisites"
-        RqsW.Inp ~ End.Next.CntRqsW
-        RqsH.Inp ~ End.Next.CntRqsH
+        RqsW.Inp ~ End.Next.Int.CntRqsW
+        RqsH.Inp ~ End.Next.Int.CntRqsH
         ColumnsCount : ExtdStateOutp (
-            Int ~ End.Next.Pos
+            Int ~ End.Next.Int.Pos
         )
         SlotParent < = "SS ColumnItemSlot"
-        Cp.LbpUri ~ TLbpUri : TrApndVar (
+        Cp.Int.LbpUri ~ TLbpUri : TrApndVar (
             Inp1 ~ CntAgent.OutpLbpUri
             Inp2 ~ : TrSvldVar (
-                Inp1 ~ End.Next.LbpComp
+                Inp1 ~ End.Next.Int.LbpComp
                 Inp2 ~ : State {
                     = "URI"
                 }
@@ -711,8 +763,8 @@ ContainerMod : Elem {
         # "  Creating column slot"
         CreateColSlot : ASdcComp (
             _@ < LogLevel = "Dbg"
-            Enable ~ IoAddColumn.Enable
-            Name ~ IoAddColumn.Name
+            Enable ~ IoAddColumn.Int.Enable
+            Name ~ IoAddColumn.Int.Name
             Parent ~ ColumnSlotParent
         )
         _ <  {
@@ -727,25 +779,25 @@ ContainerMod : Elem {
         # "  Inserting column slot"
         SdcInsertColE : ASdcInsert2 (
             _@ < LogLevel = "Dbg"
-            Enable ~ IoAddColumn.Enable
+            Enable ~ IoAddColumn.Int.Enable
             Enable ~ CreateColSlot.Outp
-            # "Enable ~ IoAddColumn.Pos"
-            Name ~ IoAddColumn.Name
+            # "Enable ~ IoAddColumn.Int.Pos"
+            Name ~ IoAddColumn.Int.Name
             Pname ~ KSEnd
             Prev ~ KS_Prev
             Next ~ KS_Next
         )
-        IoAddColumn.Done ~ SdcInsertColE.Outp
+        IoAddColumn.Int.Done ~ SdcInsertColE.Outp
         # "<<< Adding column"
         {
             # ">>> Reposition widget"
             # "   Extract"
             SdcReposExtrSlot : ASdcExtract (
                 _@ < LogLevel = "Dbg"
-                Enable ~ IoReposWdg.Enable
+                Enable ~ IoReposWdg.Int.Enable
                 Name ~ ReposSlotName : TrApndVar (
                     Inp1 ~ SlotNamePref
-                    Inp2 ~ IoReposWdg.Name
+                    Inp2 ~ IoReposWdg.Int.Name
                 )
                 Prev ~ KS_Prev
                 Next ~ KS_Next
@@ -753,7 +805,7 @@ ContainerMod : Elem {
             # "   Insert"
             _ <  {
                 ColToReposWdg : DesUtils.ListItemByPos (
-                    InpPos ~ IoReposWdg.ColPos
+                    InpPos ~ IoReposWdg.Int.ColPos
                     InpMagLink ~ _$
                 )
             }
@@ -763,7 +815,7 @@ ContainerMod : Elem {
                 }
                 Inp2 ~ : TrTostrVar (
                     Inp ~ : TrAddVar (
-                        Inp ~ IoReposWdg.ColPos
+                        Inp ~ IoReposWdg.Int.ColPos
                         InpN ~ : SI_1
                     )
                 )
@@ -793,7 +845,7 @@ ContainerMod : Elem {
             }
             SdcReposInsertSlot : ASdcInsert2 (
                 _@ < LogLevel = "Dbg"
-                # "Enable ~ IoReposWdg.Enable"
+                # "Enable ~ IoReposWdg.Int.Enable"
                 Enable ~ SdcReposExtrSlot.Outp
                 Name ~ ReposSlotName
                 Pname ~ : TrTostrVar (
@@ -802,7 +854,7 @@ ContainerMod : Elem {
                 Prev ~ KS_Prev
                 Next ~ KS_Next
             )
-            IoReposWdg.Done ~ SdcReposInsertSlot.Outp
+            IoReposWdg.Int.Done ~ SdcReposInsertSlot.Outp
             # "<<< Reposition widget"
         }
         # "<<< Columns layout"

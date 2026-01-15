@@ -226,78 +226,88 @@ AvrMdl2 : Elem {
     VtStartSlot : Syst {
         # "VertDRP vertical tunnel slot. Start Comp slot."
         Prev : ContainerMod.SlotLinPrevCp {
-            ItemPos : ExtdStateInp
-            ColumnPos : ExtdStateInp
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
+            Int <  {
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
+            }
         }
     }
     VtEndSlot : Syst {
         # "VertDRP vertical tunnel slot. End Comp slot."
         Next : ContainerMod.SlotLinNextCp {
-            ItemPos : ExtdStateOutp
-            ColumnPos : ExtdStateOutp
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
+            Int <  {
+                ItemPos : CpStateOutp
+                ColumnPos : CpStateOutp
+            }
         }
     }
     VertDrpVtSlot : Syst {
         # "VertDRP vertical tunnel slot"
         Prev : ContainerMod.SlotLinPrevCp {
-            Pos : ExtdStateInp
+            Pos : CpStateOutp
+            Int < Pos : CpStateInp
         }
         Next : ContainerMod.SlotLinNextCp {
-            Pos : ExtdStateOutp
+            Pos : CpStateInp
+            Int < Pos : CpStateOutp
         }
         # "Break long IRM chain, ds_irm_wprc"
-        Prev.XPadding ~ : ExtdStateOutp (
-            Int ~ Next.XPadding
+        Prev.Int.XPadding ~ : ExtdStateOutp (
+            Int ~ Next.Int.XPadding
         )
-        Prev.YPadding ~ : ExtdStateOutp (
-            Int ~ Next.YPadding
+        Prev.Int.YPadding ~ : ExtdStateOutp (
+            Int ~ Next.Int.YPadding
         )
-        Prev.Pos ~ Next.Pos
+        Prev.Int.Pos ~ Next.Int.Pos
         Start : VtStartSlot
         End : VtEndSlot
         Start.Prev ~ End.Next
-        Start.Prev.AlcX ~ AddAlcX : TrAddVar (
+        Start.Prev.Int.AlcX ~ AddAlcX : TrAddVar (
             _@ < LogLevel = "Dbg"
-            Inp ~ Next.AlcX
-            Inp ~ Next.AlcW
-            Inp ~ Next.XPadding
+            Inp ~ Next.Int.AlcX
+            Inp ~ Next.Int.AlcW
+            Inp ~ Next.Int.XPadding
         )
-        Start.Prev.AlcY ~ Next.AlcY
-        Start.Prev.AlcW ~ : SI_0
-        Start.Prev.AlcH ~ : SI_0
-        Start.Prev.XPadding ~ Next.XPadding
-        Start.Prev.YPadding ~ Next.YPadding
+        Start.Prev.Int.AlcY ~ Next.Int.AlcY
+        Start.Prev.Int.AlcW ~ : SI_0
+        Start.Prev.Int.AlcH ~ : SI_0
+        Start.Prev.Int.XPadding ~ Next.Int.XPadding
+        Start.Prev.Int.YPadding ~ Next.Int.YPadding
         # "We calculate CntRqsW separately for this slot to use if as RqsW of the slot"
-        Start.Prev.CntRqsW ~ : SI_0
-        Start.Prev.CntRqsH ~ : SI_0
-        Start.Prev.ColumnPos ~ Next.Pos
-        Start.Prev.ItemPos ~ : SI_0
-        Start.Prev.LbpComp ~ : Const {
+        Start.Prev.Int.CntRqsW ~ : SI_0
+        Start.Prev.Int.CntRqsH ~ : SI_0
+        Start.Prev.Int.ColumnPos ~ Next.Int.Pos
+        Start.Prev.Int.ItemPos ~ : SI_0
+        Start.Prev.Int.LbpComp ~ : Const {
             = "URI"
         }
-        Prev.AlcX ~ AddAlcX
-        Prev.AlcY ~ Next.AlcY
+        Prev.Int.AlcX ~ AddAlcX
+        Prev.Int.AlcY ~ Next.Int.AlcY
         # "Slot is not widget, so we use slot AlcW pin just to conn CntRqsW of slot"
-        Prev.AlcW ~ End.Next.CntRqsW
-        Prev.AlcH ~ End.Next.CntRqsH
-        Prev.CntRqsW ~ VtCntRqsW_Dbg : TrAdd2Var (
-            Inp ~ End.Next.CntRqsW
+        Prev.Int.AlcW ~ End.Next.Int.CntRqsW
+        Prev.Int.AlcH ~ End.Next.Int.CntRqsH
+        Prev.Int.CntRqsW ~ VtCntRqsW_Dbg : TrAdd2Var (
+            Inp ~ End.Next.Int.CntRqsW
             Inp2 ~ VtCntRqsW_Dbg2 : TrAdd2Var (
-                Inp ~ Next.CntRqsW
-                Inp2 ~ Next.XPadding
+                Inp ~ Next.Int.CntRqsW
+                Inp2 ~ Next.Int.XPadding
             )
         )
-        Prev.CntRqsH ~ MaxCntRqsH : TrMaxVar (
-            Inp ~ Next.CntRqsH
+        Prev.Int.CntRqsH ~ MaxCntRqsH : TrMaxVar (
+            Inp ~ Next.Int.CntRqsH
             Inp ~ : TrAdd2Var (
-                Inp ~ End.Next.CntRqsH
-                Inp2 ~ Next.AlcY
+                Inp ~ End.Next.Int.CntRqsH
+                Inp2 ~ Next.Int.AlcY
             )
         )
-        Prev.LbpComp ~ LbpCompDbg : TrSvldVar (
+        Prev.Int.LbpComp ~ LbpCompDbg : TrSvldVar (
             _@ < LogLevel = "Dbg"
-            Inp1 ~ Next.LbpComp
-            Inp2 ~ End.Next.LbpComp
+            Inp1 ~ Next.Int.LbpComp
+            Inp2 ~ End.Next.Int.LbpComp
         )
     }
     VertCrpEdgeCp : Socket {
@@ -500,86 +510,152 @@ AvrMdl2 : Elem {
     }
     _$ <  {
         # ">>> Edge CRP segments"
-        EhsSlCp : Socket {
+        EhsSlCpSc : Socket2 {
+            X : CpStateOutp
+            Y : CpStateInp
+        }
+        EhsSlCpS : Socket2 {
+            X : CpStateInp
+            Y : CpStateOutp
+        }
+        EhsSlCp : EhsSlCpS {
             # "Edges horizontal segment slot CP. Provides Y and requires X"
-            X : ExtdStateOutp
-            Y : ExtdStateInp
+            Int : EhsSlCpSc
         }
         EhsSlCpNext : EhsSlCp {
             # "Edges horizontal segment slot Next Cp. Left (ColIdx) and right (ColRIdx) col idxs"
-            Hash : ExtdStateOutp
-            ColIdx : ExtdStateOutp
-            ColRIdx : ExtdStateInp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+            Int <  {
+                Hash : CpStateOutp
+                ColIdx : CpStateOutp
+                ColRIdx : CpStateInp
+            }
         }
         EhsSlCpPrev : EhsSlCp {
             # "Edges horizontal segment slot Prev Cp."
-            Hash : ExtdStateInp
-            ColIdx : ExtdStateInp
-            ColRIdx : ExtdStateOutp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
+            Int <  {
+                Hash : CpStateInp
+                ColIdx : CpStateInp
+                ColRIdx : CpStateOutp
+            }
         }
-        EhtsSlCp : Socket {
+        EhtsSlCpInt : Socket2 {
+            X : CpStateOutp
+            Y : CpStateOutp
+        }
+        EhtsSlCp : Socket2 {
             # "Edges horizontal terminal segment slot terminal CP. Requires X, Y"
-            X : ExtdStateOutp
-            Y : ExtdStateOutp
+            X : CpStateInp
+            Y : CpStateInp
+            Int : EhtsSlCpInt 
         }
         EhtsSlCpNext : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Next CP."
-            Hash : ExtdStateOutp
-            ColIdx : ExtdStateOutp
-            ColRIdx : ExtdStateInp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+            Int <  {
+                Hash : CpStateOutp
+                ColIdx : CpStateOutp
+                ColRIdx : CpStateInp
+            }
         }
         EhtsSlCpPrev : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Prev CP."
-            Hash : ExtdStateInp
-            ColIdx : ExtdStateInp
-            ColRIdx : ExtdStateOutp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
+            Int <  {
+                Hash : CpStateInp
+                ColIdx : CpStateInp
+                ColRIdx : CpStateOutp
+            }
         }
-        EhsSlCpm : Socket {
+        EhsSlCpm : Socket2 {
             # "Edges horizontal segment slot CP mate. Provides X and requires Y"
-            X : ExtdStateInp
-            Y : ExtdStateOutp
+            X : CpStateOutp
+            Y : CpStateInp
+            Int : Socket2 {
+                X : CpStateInp
+                Y : CpStateOutp
+            }
         }
         EhsSlCpmNext : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Next."
-            Hash : ExtdStateOutp
-            ColIdx : ExtdStateOutp
-            ColRIdx : ExtdStateInp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+            Int <  {
+                Hash : CpStateOutp
+                ColIdx : CpStateOutp
+                ColRIdx : CpStateInp
+            }
         }
         EhsSlCpmPrev : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Prev."
-            Hash : ExtdStateInp
-            ColIdx : ExtdStateInp
-            ColRIdx : ExtdStateOutp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateOutp
+            Int <  {
+                Hash : CpStateInp
+                ColIdx : CpStateInp
+                ColRIdx : CpStateOutp
+            }
         }
-        EhtsSlCpm : Socket {
+        EhtsSlCpm : Socket2 {
             # "Edges horizontal terminal segment slot terminal CP mate. Provides X, Y"
-            X : ExtdStateInp
-            Y : ExtdStateInp
+            X : CpStateOutp
+            Y : CpStateOutp
+            Int : Socket2 {
+                X : CpStateInp
+                Y : CpStateInp
+            }
         }
         EhtsSlCpmNext : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Next."
-            Hash : ExtdStateOutp
-            ColIdx : ExtdStateOutp
-            ColRIdx : ExtdStateInp
+            Hash : CpStateInp
+            ColIdx : CpStateInp
+            ColRIdx : CpStateOutp
+            Int <  {
+                Hash : CpStateOutp
+                ColIdx : CpStateOutp
+                ColRIdx : CpStateInp
+            }
         }
         EhtsSlCpmPrev : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Prev."
-            Hash : ExtdStateInp
-            ColIdx : ExtdStateInp
-            ColRIdx : ExtdStateOutp
+            Hash : CpStateOutp
+            ColIdx : CpStateOutp
+            ColRIdx : CpStateInp
+            Int <  {
+                Hash : CpStateInp
+                ColIdx : CpStateInp
+                ColRIdx : CpStateOutp
+            }
         }
-        EdgeSSlotCoordCp : Socket {
+        EdgeSSlotCoordCp : Socket2 {
             # "Edge segments slot coords CP."
-            LeftX : ExtdStateInp
-            LeftY : ExtdStateInp
-            RightX : ExtdStateInp
-            RightY : ExtdStateInp
+            LeftX : CpStateOutp
+            LeftY : CpStateOutp
+            RightX : CpStateOutp
+            RightY : CpStateOutp
+            Int : Socket2 {
+                LeftX : CpStateInp
+                LeftY : CpStateInp
+                RightX : CpStateInp
+                RightY : CpStateInp
+            }
         }
         EdgeCrpHsSlot : ContainerMod.ColumnItemSlot {
             # ">>> Edge CRP Horizontal segment slot"
-            Prev  (
+            Prev.Int  (
                 AlcX !~ SCp.OutAlcX
-                AlcX ~ Next.AlcX
+                AlcX ~ Next.Int.AlcX
                 AlcY !~ SCp.OutAlcY
                 AlcY ~ Add1
                 # "TODO Do we need to set AlcH ?"
@@ -587,13 +663,9 @@ AvrMdl2 : Elem {
             EsPrev : EhsSlCpPrev
             EsNext : EhsSlCpNext
             EsPrev.Y ~ Add1
-            _ <  {
-                EsPrev.Hash ~ EsNext.Hash
-                EsPrev.Hash ~ Next.AlcY
-            }
             EsPrev.Hash ~ : TrHash (
                 Inp ~ EsNext.Hash
-                Inp ~ Next.AlcY
+                Inp ~ Next.Int.AlcY
             )
             EsPrev.ColIdx ~ EsNext.ColIdx
             EsNext.Y ~ Add1

@@ -76,7 +76,6 @@ testroot : Elem {
         VEnv : VisEnv
         # "Window"
         Wnd : GVisComps.Window {
-            Init = "Yes"
             Width < = "SI 1200"
             Height < = "SI 800"
             Scene : GVisComps.Scene {
