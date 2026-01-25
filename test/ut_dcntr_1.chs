@@ -18,9 +18,12 @@ testroot : Elem {
                     SdcConnWdg < LogLevel = "Dbg"
                     Start.Prev !~ End.Next
                     YPadding < = "SI 20"
+                    _ < {
                     AlcW < = "SI 220"
                     AlcH < = "SI 330"
-                    BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 1.0 1.0 1.0"
+                    }
+                    BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 1.0 1.0 0.5"
+                    FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 0.5 1.0 0.4"
                     Btn1 : FvWidgets.FButton {
                         SText < = "SS 'Button 1'"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
@@ -56,6 +59,8 @@ testroot : Elem {
                     Slot_Btn1.Next ~ Start.Prev
                     Slot_Btn2.Prev ~ End.Next
                 }
+                VBox.Cp.InpAlcW ~ VBox.Cp.RqsW
+                VBox.Cp.InpAlcH ~ VBox.Cp.RqsH
             }
         }
         # " Adding new button"

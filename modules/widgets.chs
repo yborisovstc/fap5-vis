@@ -1,6 +1,6 @@
 FvWidgets : Elem {
     About = "FAP5 visualization system. Widget-to-slot linkage approach"
-    WidgetCpSc : Socket2 {
+    WidgetCpc : Socket3Extd {
         InpAlcX : CpStateOutp
         InpAlcY : CpStateOutp
         InpAlcW : CpStateOutp
@@ -13,7 +13,7 @@ FvWidgets : Elem {
         RqsH : CpStateInp
         LbpUri : CpStateInp
     }
-    WidgetCpS : Socket2 {
+    WidgetCp : Socket3Extd {
         InpAlcX : CpStateInp
         InpAlcY : CpStateInp
         InpAlcW : CpStateInp
@@ -25,12 +25,6 @@ FvWidgets : Elem {
         RqsW : CpStateOutp
         RqsH : CpStateOutp
         LbpUri : CpStateOutp
-    }
-    WidgetCp : WidgetCpS {
-        Int : WidgetCpSc
-    }
-    WidgetCpc : WidgetCpSc {
-        Int : WidgetCpS
     }
     IWidget : Des {
         # "Widget iface"

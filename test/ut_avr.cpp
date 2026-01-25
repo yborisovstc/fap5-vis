@@ -31,11 +31,11 @@
 class Ut_avr : public Ut_fixture
 {
     CPPUNIT_TEST_SUITE(Ut_avr);
-    CPPUNIT_TEST(test_Node);
-    ///CPPUNIT_TEST(test_NodeDrp);
+    //CPPUNIT_TEST(test_Node);
+    //CPPUNIT_TEST(test_NodeDrp);
     //    CPPUNIT_TEST(test_NodeDrp_Asr_1);
     //    CPPUNIT_TEST(test_VrCtrl);
-    //CPPUNIT_TEST(test_SystDrp);
+    CPPUNIT_TEST(test_SystDrp);
     //CPPUNIT_TEST(test_NodeCrp_2);
     //CPPUNIT_TEST(test_SystCrp_1);
     //CPPUNIT_TEST(test_VertDrp);

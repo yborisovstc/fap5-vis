@@ -1,6 +1,5 @@
 testroot : Elem {
     # "Unit test of combined horizontal layout"
-    Modules : Node
     + GVisComps
     + ContainerMod
     Test : DesLauncher {
@@ -27,7 +26,8 @@ testroot : Elem {
                         AlcH < = "SI 330"
                         Start.Prev !~ End.Next
                         Btn2_1 : FvWidgets.FButton {
-                            SText < = "SS Button 2_1"
+                            WdgAgent < LogLevel = "Dbg"
+                            SText < = "SS Button_2_1"
                             BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                             FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
                         }
@@ -35,7 +35,8 @@ testroot : Elem {
                         Slot_1.SCp ~ Btn2_1.Cp
                         Slot_1.Next ~ Start.Prev
                         Btn2_2 : FvWidgets.FButton {
-                            SText < = "SS Button 2_2"
+                            WdgAgent < LogLevel = "Dbg"
+                            SText < = "SS Button_2_2"
                             BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                             FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"
                         }
@@ -49,6 +50,7 @@ testroot : Elem {
                     Slot_1.Next ~ Start.Prev
                     # " ==== Slot 2 ===="
                     Btn3 : FvWidgets.FButton {
+                        WdgAgent < LogLevel = "Dbg"
                         SText < = "SS Button_3"
                         BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 0.0 1.0"
                         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 0.0 0.0 0.0"

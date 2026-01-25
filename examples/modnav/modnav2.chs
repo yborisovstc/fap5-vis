@@ -79,8 +79,8 @@ testroot : Elem {
                     Scp.InpAlcW ~ Cp.Int.Width
                     Scp.InpAlcH ~ Cp.Int.Height
                 }
-                VBox.Cp.InpAlcW.Int ~ Cp.Int.Width
-                VBox.Cp.InpAlcH.Int ~ Cp.Int.Height
+                VBox.Cp.InpAlcW ~ Cp.Int.Width
+                VBox.Cp.InpAlcH ~ Cp.Int.Height
             }
             Scene.Cp ~ ScCpc
             VrvCp.Int.NavCtrl.CmdUp ~ Scene.VBox.Toolbar.BtnUp.Pressed
@@ -100,7 +100,7 @@ testroot : Elem {
                 }
                 Inp ~ Nsl : TrTailVar (
                     Inp ~ : TrHeadVar (
-                        Inp ~ Scene.VBox.Cp.LbpUri.Int
+                        Inp ~ Scene.VBox.Cp.LbpUri
                         Tail ~ : State {
                             = "URI Header.Name"
                         }

@@ -7,7 +7,7 @@ AvrMdl2 : Elem {
     CrpBase : ContainerMod.DVLayout {
         # "CRP v.3 DES controlled, base. Head, no body"
         CntAgent <  {
-            LogLevel = "Err"
+            LogLevel = "Dbg"
         }
         # "CRP context"
         CrpCtx : DesCtxCsm {
@@ -107,12 +107,12 @@ AvrMdl2 : Elem {
             SCp ~ Body.Cp
         )
     }
-    NDrpS : Socket2 {
+    NDrpS : Socket3 {
         # "Node DRP output socket"
         InpModelUri : CpStateInp
         InpModelMntp : CpSystExploring
     }
-    NDrpSc : Socket2 {
+    NDrpSc : Socket3 {
         # "Node DRP output socket"
         InpModelUri : CpStateOutp
         InpModelMntp : CpSystExplorable
@@ -228,10 +228,6 @@ AvrMdl2 : Elem {
         Prev : ContainerMod.SlotLinPrevCp {
             ItemPos : CpStateOutp
             ColumnPos : CpStateOutp
-            Int <  {
-                ItemPos : CpStateInp
-                ColumnPos : CpStateInp
-            }
         }
     }
     VtEndSlot : Syst {
@@ -239,29 +235,18 @@ AvrMdl2 : Elem {
         Next : ContainerMod.SlotLinNextCp {
             ItemPos : CpStateInp
             ColumnPos : CpStateInp
-            Int <  {
-                ItemPos : CpStateOutp
-                ColumnPos : CpStateOutp
-            }
         }
     }
     VertDrpVtSlot : Syst {
         # "VertDRP vertical tunnel slot"
         Prev : ContainerMod.SlotLinPrevCp {
             Pos : CpStateOutp
-            Int < Pos : CpStateInp
         }
         Next : ContainerMod.SlotLinNextCp {
             Pos : CpStateInp
-            Int < Pos : CpStateOutp
         }
-        # "Break long IRM chain, ds_irm_wprc"
-        Prev.Int.XPadding ~ : ExtdStateOutp (
-            Int ~ Next.Int.XPadding
-        )
-        Prev.Int.YPadding ~ : ExtdStateOutp (
-            Int ~ Next.Int.YPadding
-        )
+        Prev.Int.XPadding ~ Next.Int.XPadding
+        Prev.Int.YPadding ~ Next.Int.YPadding
         Prev.Int.Pos ~ Next.Int.Pos
         Start : VtStartSlot
         End : VtEndSlot
@@ -310,35 +295,7 @@ AvrMdl2 : Elem {
             Inp2 ~ End.Next.Int.LbpComp
         )
     }
-    VertCrpEdgeCp : Socket {
-        # "VertCrp CP to Edge"
-        ColumnPos : ExtdStateInp
-        # "TODO unused?"
-        PairColumnPos : ExtdStateOutp
-        Pos : ExtdStateInp
-        PairPos : ExtdStateOutp
-        LeftCpAlloc : ExtdStateInp
-        RightCpAlloc : ExtdStateInp
-    }
-    VertCrpEdgeCpm : Socket {
-        # "VertCrp CP to Edge. Mate."
-        ColumnPos : ExtdStateOutp
-        PairColumnPos : ExtdStateInp
-        Pos : ExtdStateOutp
-        PairPos : ExtdStateInp
-        LeftCpAlloc : ExtdStateOutp
-        RightCpAlloc : ExtdStateOutp
-    }
-    VertCrpEdgeCpExtdInt : SocketExtdInt {
-        # "VertCrpEdgeCpExtd int CP"
-        ColumnPos : CpStateInp
-        PairColumnPos : CpStateOutp
-        Pos : CpStateInp
-        PairPos : CpStateOutp
-        LeftCpAlloc : CpStateInp
-        RightCpAlloc : CpStateInp
-    }
-    VertCrpEdgeCpExtd : SocketExtd {
+    VertCrpEdgeCp : Socket3Extd {
         # "VertCrp CP to Edge"
         ColumnPos : CpStateOutp
         # "TODO unused?"
@@ -347,19 +304,37 @@ AvrMdl2 : Elem {
         PairPos : CpStateInp
         LeftCpAlloc : CpStateOutp
         RightCpAlloc : CpStateOutp
-        Int : VertCrpEdgeCpExtdInt
+    }
+    VertCrpEdgeCpm : Socket3Extd {
+        # "VertCrp CP to Edge. Mate."
+        ColumnPos : CpStateInp
+        PairColumnPos : CpStateOutp
+        Pos : CpStateInp
+        PairPos : CpStateOutp
+        LeftCpAlloc : CpStateInp
+        RightCpAlloc : CpStateInp
+    }
+    VertCrpEdgeCpExtd : Socket3Extd {
+        # "VertCrp CP to Edge"
+        ColumnPos : CpStateOutp
+        # "TODO unused?"
+        PairColumnPos : CpStateInp
+        Pos : CpStateOutp
+        PairPos : CpStateInp
+        LeftCpAlloc : CpStateOutp
+        RightCpAlloc : CpStateOutp
     }
     VertCrp : NodeCrp3 {
         # ">>> Vertex compact representation"
         # "Extend widget CP to for positions io"
         Cp <  {
-            ItemPos : ExtdStateOutp
-            ColumnPos : ExtdStateOutp
+            ItemPos : CpStateInp
+            ColumnPos : CpStateInp
         }
         # "Edge CRP connpoint"
         EdgeCrpCp : VertCrpEdgeCp (
-            ColumnPos ~ Cp.ColumnPos
-            Pos ~ Tpl1 : TrTuple (
+            Int.ColumnPos ~ Cp.Int.ColumnPos
+            Int.Pos ~ Tpl1 : TrTuple (
                 Inp ~ : State {
                     = "TPL,SI:col,SI:item -1 -1"
                 }
@@ -367,8 +342,8 @@ AvrMdl2 : Elem {
                     col : CpStateInp
                     item : CpStateInp
                 }
-                col ~ Cp.ColumnPos
-                item ~ Cp.ItemPos
+                col ~ Cp.Int.ColumnPos
+                item ~ Cp.Int.ItemPos
             )
             # "LeftCpAlloc -> "
         )
@@ -389,22 +364,22 @@ AvrMdl2 : Elem {
                 = "SI _INV"
                 LogLevel = "Dbg"
             }
-            Inp ~ Cp.ItemPos
+            Inp ~ Cp.Int.ItemPos
         )
         ColumnPos_Dbg : State (
             _@ <  {
                 = "SI _INV"
                 LogLevel = "Dbg"
             }
-            Inp ~ Cp.ColumnPos
+            Inp ~ Cp.Int.ColumnPos
         )
         # "Most right column of the pairs"
         # "   Inputs Iterator"
         PairPosIter : DesUtils.InpItr (
-            InpM ~ EdgeCrpCp.PairPos
+            InpM ~ EdgeCrpCp.Int.PairPos
             InpDone ~ : SB_True
             PosChgDet : DesUtils.ChgDetector (
-                Inp ~ EdgeCrpCp.PairPos
+                Inp ~ EdgeCrpCp.Int.PairPos
             )
             InpReset ~ PosChgDet.Outp
         )
@@ -417,7 +392,7 @@ AvrMdl2 : Elem {
         )
         # "   Selected input"
         PairPosSel : TrInpSel (
-            Inp ~ EdgeCrpCp.PairPos
+            Inp ~ EdgeCrpCp.Int.PairPos
             Idx ~ PairPosIter.Outp
         )
         PairPosSel_Dbg : State (
@@ -451,7 +426,7 @@ AvrMdl2 : Elem {
                             = "SS col"
                         }
                     )
-                    Inp2 ~ Cp.ColumnPos
+                    Inp2 ~ Cp.Int.ColumnPos
                 )
             )
         )
@@ -467,7 +442,7 @@ AvrMdl2 : Elem {
                 = "TPL,SS:name,SI:colpos,SI:pmrcolpos _INV -2 -1"
             }
             name ~ MagAdp.Name
-            colpos ~ Cp.ColumnPos
+            colpos ~ Cp.Int.ColumnPos
             pmrcolpos ~ : TrTupleSel (
                 Inp ~ SameColPair
                 Comp ~ : State {
@@ -488,7 +463,7 @@ AvrMdl2 : Elem {
                 )
             )
         )
-        EdgeCrpCp.LeftCpAlloc ~ LeftCpAlc
+        EdgeCrpCp.Int.LeftCpAlloc ~ LeftCpAlc
         # "Right connpoint allocation"
         RightCpAlc : TrPair (
             First ~ : TrAddVar (
@@ -505,172 +480,106 @@ AvrMdl2 : Elem {
                 )
             )
         )
-        EdgeCrpCp.RightCpAlloc ~ RightCpAlc
+        EdgeCrpCp.Int.RightCpAlloc ~ RightCpAlc
         # "<<< Vertex compact representation"
     }
     _$ <  {
         # ">>> Edge CRP segments"
-        EhsSlCpSc : Socket2 {
-            X : CpStateOutp
-            Y : CpStateInp
-        }
-        EhsSlCpS : Socket2 {
+        EhsSlCp : Socket3Extd {
+            # "Edges horizontal segment slot CP. Provides Y and requires X"
             X : CpStateInp
             Y : CpStateOutp
-        }
-        EhsSlCp : EhsSlCpS {
-            # "Edges horizontal segment slot CP. Provides Y and requires X"
-            Int : EhsSlCpSc
         }
         EhsSlCpNext : EhsSlCp {
             # "Edges horizontal segment slot Next Cp. Left (ColIdx) and right (ColRIdx) col idxs"
             Hash : CpStateInp
             ColIdx : CpStateInp
             ColRIdx : CpStateOutp
-            Int <  {
-                Hash : CpStateOutp
-                ColIdx : CpStateOutp
-                ColRIdx : CpStateInp
-            }
         }
         EhsSlCpPrev : EhsSlCp {
             # "Edges horizontal segment slot Prev Cp."
             Hash : CpStateOutp
             ColIdx : CpStateOutp
             ColRIdx : CpStateInp
-            Int <  {
-                Hash : CpStateInp
-                ColIdx : CpStateInp
-                ColRIdx : CpStateOutp
-            }
         }
-        EhtsSlCpInt : Socket2 {
-            X : CpStateOutp
-            Y : CpStateOutp
-        }
-        EhtsSlCp : Socket2 {
+        EhtsSlCp : Socket3Extd {
             # "Edges horizontal terminal segment slot terminal CP. Requires X, Y"
             X : CpStateInp
             Y : CpStateInp
-            Int : EhtsSlCpInt 
         }
         EhtsSlCpNext : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Next CP."
             Hash : CpStateInp
             ColIdx : CpStateInp
             ColRIdx : CpStateOutp
-            Int <  {
-                Hash : CpStateOutp
-                ColIdx : CpStateOutp
-                ColRIdx : CpStateInp
-            }
         }
         EhtsSlCpPrev : EhtsSlCp {
             # "Edges horizontal terminal segment slot terminal Prev CP."
             Hash : CpStateOutp
             ColIdx : CpStateOutp
             ColRIdx : CpStateInp
-            Int <  {
-                Hash : CpStateInp
-                ColIdx : CpStateInp
-                ColRIdx : CpStateOutp
-            }
         }
-        EhsSlCpm : Socket2 {
+        EhsSlCpm : Socket3Extd {
             # "Edges horizontal segment slot CP mate. Provides X and requires Y"
             X : CpStateOutp
             Y : CpStateInp
-            Int : Socket2 {
-                X : CpStateInp
-                Y : CpStateOutp
-            }
         }
         EhsSlCpmNext : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Next."
             Hash : CpStateInp
             ColIdx : CpStateInp
             ColRIdx : CpStateOutp
-            Int <  {
-                Hash : CpStateOutp
-                ColIdx : CpStateOutp
-                ColRIdx : CpStateInp
-            }
         }
         EhsSlCpmPrev : EhsSlCpm {
             # "Edges horizontal segment slot CP mate Prev."
             Hash : CpStateOutp
             ColIdx : CpStateOutp
-            ColRIdx : CpStateOutp
-            Int <  {
-                Hash : CpStateInp
-                ColIdx : CpStateInp
-                ColRIdx : CpStateOutp
-            }
+            ColRIdx : CpStateInp
         }
-        EhtsSlCpm : Socket2 {
+        EhtsSlCpm : Socket3Extd {
             # "Edges horizontal terminal segment slot terminal CP mate. Provides X, Y"
             X : CpStateOutp
             Y : CpStateOutp
-            Int : Socket2 {
-                X : CpStateInp
-                Y : CpStateInp
-            }
         }
         EhtsSlCpmNext : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Next."
             Hash : CpStateInp
             ColIdx : CpStateInp
             ColRIdx : CpStateOutp
-            Int <  {
-                Hash : CpStateOutp
-                ColIdx : CpStateOutp
-                ColRIdx : CpStateInp
-            }
         }
         EhtsSlCpmPrev : EhtsSlCpm {
             # "Edges horizontal terminal segment slot terminal CP mate Prev."
             Hash : CpStateOutp
             ColIdx : CpStateOutp
             ColRIdx : CpStateInp
-            Int <  {
-                Hash : CpStateInp
-                ColIdx : CpStateInp
-                ColRIdx : CpStateOutp
-            }
         }
-        EdgeSSlotCoordCp : Socket2 {
+        EdgeSSlotCoordCp : Socket3Extd {
             # "Edge segments slot coords CP."
             LeftX : CpStateOutp
             LeftY : CpStateOutp
             RightX : CpStateOutp
             RightY : CpStateOutp
-            Int : Socket2 {
-                LeftX : CpStateInp
-                LeftY : CpStateInp
-                RightX : CpStateInp
-                RightY : CpStateInp
-            }
         }
         EdgeCrpHsSlot : ContainerMod.ColumnItemSlot {
             # ">>> Edge CRP Horizontal segment slot"
             Prev.Int  (
                 AlcX !~ SCp.OutAlcX
                 AlcX ~ Next.Int.AlcX
-                AlcY !~ SCp.OutAlcY
+                AlcY !~ SCp.Int.OutAlcY
                 AlcY ~ Add1
                 # "TODO Do we need to set AlcH ?"
             )
             EsPrev : EhsSlCpPrev
             EsNext : EhsSlCpNext
-            EsPrev.Y ~ Add1
-            EsPrev.Hash ~ : TrHash (
-                Inp ~ EsNext.Hash
+            EsPrev.Int.Y ~ Add1
+            EsPrev.Int.Hash ~ : TrHash (
+                Inp ~ EsNext.Int.Hash
                 Inp ~ Next.Int.AlcY
             )
-            EsPrev.ColIdx ~ EsNext.ColIdx
-            EsNext.Y ~ Add1
-            EsNext.ColRIdx ~ : TrSub2Var (
-                Inp ~ EsPrev.ColRIdx
+            EsPrev.Int.ColIdx ~ EsNext.Int.ColIdx
+            EsNext.Int.Y ~ Add1
+            EsNext.Int.ColRIdx ~ : TrSub2Var (
+                Inp ~ EsPrev.Int.ColRIdx
                 Inp2 ~ : SI_1
             )
             # "Monolitic EdgeCrp agent is used ATM. So we don't need real widget"
@@ -678,7 +587,7 @@ AvrMdl2 : Elem {
             # "but we still keeps compatibility with standard design"
             # "So to handle mouse events we need to use stub instead of widget"
             WdgCp : FvWidgets.WidgetCp (
-                LbpUri ~ : Const {
+                Int.LbpUri ~ : Const {
                     = "URI"
                 }
                 _ <  {
@@ -687,17 +596,17 @@ AvrMdl2 : Elem {
                         = "SI 1"
                     }
                     RqsW ~ : TrSub2Var (
-                        Inp ~ EsPrev.Y
-                        Inp2 ~ EsNext.Y
+                        Inp ~ EsPrev.Int.Y
+                        Inp2 ~ EsNext.Int.Y
                     )
                 }
             )
             SCp ~ WdgCp
             Coords : EdgeSSlotCoordCp
-            Coords.LeftX ~ EsNext.X
-            Coords.LeftY ~ Add1
-            Coords.RightX ~ EsPrev.X
-            Coords.RightY ~ Add1
+            Coords.Int.LeftX ~ EsNext.Int.X
+            Coords.Int.LeftY ~ Add1
+            Coords.Int.RightX ~ EsPrev.Int.X
+            Coords.Int.RightY ~ Add1
             # "Uses EdgeCRP context to get controlling access to DRP"
             EdgeCrpCtx : DesCtxCsm {
                 DrpMntp : ExtdSystExplorable
@@ -715,7 +624,7 @@ AvrMdl2 : Elem {
                     = "SS Column_"
                 }
                 Inp2 ~ : TrTostrVar (
-                    Inp ~ EsNext.ColIdx
+                    Inp ~ EsNext.Int.ColIdx
                 )
             )
             SelfUri : SdoUri
@@ -793,9 +702,9 @@ AvrMdl2 : Elem {
                 )
             }
             DrpAdp.AdpTnlSlotName ~ TnlSlotName
-            DrpAdp.CurColIdx ~ Next.ColumnPos
-            DrpAdp.ReqColIdx ~ EsNext.ColIdx
-            DrpAdp.ColRIdx ~ EsPrev.ColRIdx
+            DrpAdp.CurColIdx ~ Next.Int.ColumnPos
+            DrpAdp.ReqColIdx ~ EsNext.Int.ColIdx
+            DrpAdp.ColRIdx ~ EsPrev.Int.ColRIdx
             DrpAdp.AdpSlotUri ~ SelfUri
             # "<<< Edge CRP Horizontal segment slot"
         }
@@ -803,20 +712,18 @@ AvrMdl2 : Elem {
             # ">>> Edge CRP Vertical segment slot"
             # "Extend chain CPs for positions io"
             Prev <  {
-                ItemPos : ExtdStateInp
-                ColumnPos : ExtdStateInp
+                ItemPos : CpStateOutp
+                ColumnPos : CpStateOutp
             }
             Next <  {
-                ItemPos : ExtdStateOutp
-                ColumnPos : ExtdStateOutp
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
             }
-            Prev.ItemPos ~ : TrAddVar (
-                Inp ~ Next.ItemPos
+            Prev.Int.ItemPos ~ : TrAddVar (
+                Inp ~ Next.Int.ItemPos
                 Inp ~ : SI_1
             )
-            Prev.ColumnPos ~ : ExtdStateOutp (
-                Int ~ Next.ColumnPos
-            )
+            Prev.Int.ColumnPos ~ Next.Int.ColumnPos
             # "Uses EdgeCRP context to get controlling access to DRP"
             EdgeCrpCtx : DesCtxCsm {
                 DrpMntp : ExtdSystExplorable
@@ -835,52 +742,52 @@ AvrMdl2 : Elem {
             # "So to handle mouse events we need to use stub instead of widget"
             # "Consider to avoid using FSlotLin"
             WdgCp : FvWidgets.WidgetCp (
-                LbpUri ~ : Const {
+                Int.LbpUri ~ : Const {
                     = "URI"
                 }
-                RqsW ~ : Const {
+                Int.RqsW ~ : Const {
                     = "SI 0"
                 }
-                RqsH ~ : TrSub2Var (
-                    Inp ~ EsPrev.Y
-                    Inp2 ~ EsNext.Y
+                Int.RqsH ~ : TrSub2Var (
+                    Inp ~ EsPrev.Int.Y
+                    Inp2 ~ EsNext.Int.Y
                 )
             )
             SCp ~ WdgCp
             # "TODO Apply vertical tunnel specific padding"
             AddX : TrAddVar (
                 _@ < LogLevel = "Dbg"
-                Inp ~ Next.AlcX
-                Inp ~ Next.AlcW
-                Inp ~ Next.XPadding
+                Inp ~ Next.Int.AlcX
+                Inp ~ Next.Int.AlcW
+                Inp ~ Next.Int.XPadding
             )
-            Prev.AlcX ~ AddX
-            Prev.AlcY ~ Next.AlcY
-            Prev.AlcH ~ Next.AlcH
-            Prev.AlcW ~ SCp.RqsW
-            Prev.CntRqsW ~ VtsCntRqsW : TrAddVar (
-                Inp ~ Next.CntRqsW
-                Inp ~ SCp.RqsW
-                Inp ~ Next.XPadding
+            Prev.Int.AlcX ~ AddX
+            Prev.Int.AlcY ~ Next.Int.AlcY
+            Prev.Int.AlcH ~ Next.Int.AlcH
+            Prev.Int.AlcW ~ SCp.Int.RqsW
+            Prev.Int.CntRqsW ~ VtsCntRqsW : TrAddVar (
+                Inp ~ Next.Int.CntRqsW
+                Inp ~ SCp.Int.RqsW
+                Inp ~ Next.Int.XPadding
             )
-            Prev.CntRqsH ~ VtsCntRqsH : TrAdd2Var (
-                Inp ~ Next.CntRqsH
-                Inp2 ~ SCp.RqsH
+            Prev.Int.CntRqsH ~ VtsCntRqsH : TrAdd2Var (
+                Inp ~ Next.Int.CntRqsH
+                Inp2 ~ SCp.Int.RqsH
             )
-            EsPrev.X ~ AddX
-            EsNext.X ~ AddX
-            EsNext.ColRIdx ~ EsPrev.ColRIdx
-            EsPrev.Hash ~ EsNext.Hash
-            EsPrev.Hash ~ Next.AlcX
-            EsPrev.ColIdx ~ : TrAddVar (
-                Inp ~ EsNext.ColIdx
+            EsPrev.Int.X ~ AddX
+            EsNext.Int.X ~ AddX
+            EsNext.Int.ColRIdx ~ EsPrev.Int.ColRIdx
+            EsPrev.Int.Hash ~ EsNext.Int.Hash
+            EsPrev.Int.Hash ~ Next.Int.AlcX
+            EsPrev.Int.ColIdx ~ : TrAddVar (
+                Inp ~ EsNext.Int.ColIdx
                 Inp ~ : SI_1
             )
             Coords : EdgeSSlotCoordCp
-            Coords.LeftX ~ AddX
-            Coords.LeftY ~ EsNext.Y
-            Coords.RightX ~ AddX
-            Coords.RightY ~ EsPrev.Y
+            Coords.Int.LeftX ~ AddX
+            Coords.Int.LeftY ~ EsNext.Int.Y
+            Coords.Int.RightX ~ AddX
+            Coords.Int.RightY ~ EsPrev.Int.Y
             TnlSlotName : TrApndVar (
                 _@ < LogLevel = "Dbg"
                 Inp1 ~ : TrApndVar (
@@ -888,7 +795,7 @@ AvrMdl2 : Elem {
                         = "SS Column_"
                     }
                     Inp2 ~ : TrTostrVar (
-                        Inp ~ EsNext.ColIdx
+                        Inp ~ EsNext.Int.ColIdx
                     )
                 )
                 Inp2 ~ : Const {
@@ -984,46 +891,30 @@ AvrMdl2 : Elem {
             DrpAdp.AdpTnlSlotName ~ TnlSlotName
             DrpAdp.CurColIdx ~ : TrAdd2Var (
                 # "Note that tunnel idx is (col_idx + 1) atm"
-                Inp ~ Next.ColumnPos
+                Inp ~ Next.Int.ColumnPos
                 Inp2 ~ : State {
                     = "SI -1"
                 }
             )
-            DrpAdp.ReqColIdx ~ EsNext.ColIdx
-            DrpAdp.ColRIdx ~ EsPrev.ColRIdx
+            DrpAdp.ReqColIdx ~ EsNext.Int.ColIdx
+            DrpAdp.ColRIdx ~ EsPrev.Int.ColRIdx
             DrpAdp.AdpSlotName ~ SelfName
             DrpAdp.AdpSlotUri ~ SelfUri
             # "<<< Edge CRP Vertical segment slot"
         }
-        EsNextSockInt : SocketExtdInt {
-            X : CpStateOutp
-            Y : CpStateInp
-            Hash : CpStateOutp
-            ColIdx : CpStateOutp
-            ColRIdx : CpStateInp
-        }
-        EsNextSock : SocketExtd {
-            X : CpStateInp
-            Y : CpStateOutp
-            Hash : CpStateInp
-            ColIdx : CpStateInp
-            ColRIdx : CpStateOutp
-            Int : EsNextSockInt
-        }
-        EsPrevSockInt : SocketExtdInt {
+        EsNextSock : Socket3Extd {
             X : CpStateInp
             Y : CpStateOutp
             Hash : CpStateInp
             ColIdx : CpStateInp
             ColRIdx : CpStateOutp
         }
-        EsPrevSock : SocketExtd {
+        EsPrevSock : Socket3Extd {
             X : CpStateOutp
             Y : CpStateInp
             Hash : CpStateOutp
             ColIdx : CpStateOutp
             ColRIdx : CpStateInp
-            Int : EsPrevSockInt
         }
         EdgeCrpRsSlot : Des {
             # "Edge CRP regular slot. The slot is combined from vertical and horisontal slots."
@@ -1039,35 +930,35 @@ AvrMdl2 : Elem {
             # "Edge CRP Horizontal start segment slot"
             EsPrev : EhsSlCpPrev
             EsNext : EhtsSlCpNext
-            EsPrev.Y ~ EsNext.Y
-            EsPrev.Hash ~ EsNext.X
-            EsPrev.Hash ~ EsNext.Y
-            EsPrev.ColIdx ~ EsNext.ColIdx
-            EsNext.ColRIdx ~ : TrSub2Var (
-                Inp ~ EsPrev.ColRIdx
+            EsPrev.Int.Y ~ EsNext.Int.Y
+            EsPrev.Int.Hash ~ EsNext.Int.X
+            EsPrev.Int.Hash ~ EsNext.Int.Y
+            EsPrev.Int.ColIdx ~ EsNext.Int.ColIdx
+            EsNext.Int.ColRIdx ~ : TrSub2Var (
+                Inp ~ EsPrev.Int.ColRIdx
                 Inp2 ~ : SI_1
             )
             Coords : EdgeSSlotCoordCp
-            Coords.LeftX ~ EsNext.X
-            Coords.LeftY ~ EsNext.Y
-            Coords.RightX ~ EsPrev.X
-            Coords.RightY ~ EsNext.Y
+            Coords.Int.LeftX ~ EsPrev.Int.X
+            Coords.Int.LeftY ~ EsNext.Int.Y
+            Coords.Int.RightX ~ EsNext.Int.X
+            Coords.Int.RightY ~ EsNext.Int.Y
         }
         EdgeCrpHesSlot : Syst {
             # "Edge CRP Horizontal end segment slot"
             EsPrev : EhtsSlCpPrev
             EsNext : EhsSlCpNext
-            EsNext.Y ~ EsPrev.Y
-            EsNext.ColRIdx ~ EsPrev.ColRIdx
-            EsPrev.Hash ~ EsNext.Hash
-            EsPrev.Hash ~ EsPrev.Y
-            EsPrev.Hash ~ EsNext.X
-            EsPrev.ColIdx ~ EsNext.ColIdx
+            EsNext.Int.Y ~ EsPrev.Int.Y
+            EsNext.Int.ColRIdx ~ EsPrev.Int.ColRIdx
+            EsPrev.Int.Hash ~ EsNext.Int.Hash
+            EsPrev.Int.Hash ~ EsPrev.Int.Y
+            EsPrev.Int.Hash ~ EsNext.Int.X
+            EsPrev.Int.ColIdx ~ EsNext.Int.ColIdx
             Coords : EdgeSSlotCoordCp
-            Coords.LeftX ~ EsNext.X
-            Coords.LeftY ~ EsPrev.Y
-            Coords.RightX ~ EsPrev.X
-            Coords.RightY ~ EsPrev.Y
+            Coords.Int.LeftX ~ EsPrev.Int.X
+            Coords.Int.LeftY ~ EsPrev.Int.Y
+            Coords.Int.RightX ~ EsNext.Int.X
+            Coords.Int.RightY ~ EsPrev.Int.Y
         }
         # "<<< Edge CRP segments"
     }
@@ -1090,42 +981,36 @@ AvrMdl2 : Elem {
         FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 1.0 0.0"
         VertCrpPCp : VertCrpEdgeCpm
         VertCrpQCp : VertCrpEdgeCpm
-        VertCrpPCp.PairColumnPos ~ : ExtdStateOutp (
-            Int ~ VertCrpQCp.ColumnPos
-        )
-        VertCrpQCp.PairColumnPos ~ : ExtdStateOutp (
-            Int ~ VertCrpPCp.ColumnPos
-        )
-        VertCrpPCp.PairPos ~ : ExtdStateOutp (
-            Int ~ VertCrpQCp.Pos
-        )
-        VertCrpQCp.PairPos ~ VertCrpPCp.Pos
+        VertCrpPCp.Int.PairColumnPos ~ VertCrpQCp.Int.ColumnPos
+        VertCrpQCp.Int.PairColumnPos ~ VertCrpPCp.Int.ColumnPos
+        VertCrpPCp.Int.PairPos ~ VertCrpQCp.Int.Pos
+        VertCrpQCp.Int.PairPos ~ VertCrpPCp.Int.Pos
         PLeftCpAlc_Dbg : State (
             _@ <  {
                 LogLevel = "Dbg"
                 = "PSI (SI _INV , SI _INV)"
             }
-            Inp ~ VertCrpPCp.LeftCpAlloc
+            Inp ~ VertCrpPCp.Int.LeftCpAlloc
         )
         # "Vert P"
         VertPOnLeft_Lt : TrSwitchBool (
             _@ < LogLevel = "Dbg"
             Inp1 ~ PCol_Lt : TrCmpVar (
                 _@ < LogLevel = "Dbg"
-                Inp ~ VertCrpPCp.ColumnPos
-                Inp2 ~ VertCrpQCp.ColumnPos
+                Inp ~ VertCrpPCp.Int.ColumnPos
+                Inp2 ~ VertCrpQCp.Int.ColumnPos
             )
             Inp2 ~ PLeftAlc_Ge : TrCmpVar (
                 Inp ~ : TrAtgVar (
-                    Inp ~ VertCrpPCp.LeftCpAlloc
+                    Inp ~ VertCrpPCp.Int.LeftCpAlloc
                     Index ~ : SI_0
                 )
                 Inp2 ~ : SI_0
             )
             Sel ~ PQColPos_Eq : TrCmpVar (
                 _@ < LogLevel = "Dbg"
-                Inp ~ VertCrpPCp.ColumnPos
-                Inp2 ~ VertCrpQCp.ColumnPos
+                Inp ~ VertCrpPCp.Int.ColumnPos
+                Inp2 ~ VertCrpQCp.Int.ColumnPos
             )
         )
         VPLeftCpNotSupp_Lt : TrCmpVar (
@@ -1133,7 +1018,7 @@ AvrMdl2 : Elem {
             _@ < LogLevel = "Dbg"
             Inp ~ : TrAtgVar (
                 _@ < LogLevel = "Dbg"
-                Inp ~ VertCrpPCp.LeftCpAlloc
+                Inp ~ VertCrpPCp.Int.LeftCpAlloc
                 Index ~ : SI_0
             )
             Inp2 ~ : SI_0
@@ -1142,7 +1027,7 @@ AvrMdl2 : Elem {
             # "Vert P doesn't supports right CP"
             _@ < LogLevel = "Dbg"
             Inp ~ : TrAtgVar (
-                Inp ~ VertCrpPCp.RightCpAlloc
+                Inp ~ VertCrpPCp.Int.RightCpAlloc
                 Index ~ : SI_0
             )
             Inp2 ~ : SI_0
@@ -1163,8 +1048,8 @@ AvrMdl2 : Elem {
         _ <  {
             VertQOnLeft_Lt : TrCmpVar (
                 _@ < LogLevel = "Dbg"
-                Inp ~ VertCrpQCp.ColumnPos
-                Inp2 ~ VertCrpPCp.ColumnPos
+                Inp ~ VertCrpQCp.Int.ColumnPos
+                Inp2 ~ VertCrpPCp.Int.ColumnPos
             )
         }
         VertQOnLeft_Lt : TrNegVar (
@@ -1173,7 +1058,7 @@ AvrMdl2 : Elem {
         VQLeftCpNotSupp_Lt : TrCmpVar (
             # "Vert Q doesn't supports left CP"
             Inp ~ : TrAtgVar (
-                Inp ~ VertCrpQCp.LeftCpAlloc
+                Inp ~ VertCrpQCp.Int.LeftCpAlloc
                 Index ~ : SI_0
             )
             Inp2 ~ : SI_0
@@ -1181,7 +1066,7 @@ AvrMdl2 : Elem {
         VQRightCpNotSupp_Lt : TrCmpVar (
             # "Vert Q doesn't supports right CP"
             Inp ~ : TrAtgVar (
-                Inp ~ VertCrpQCp.RightCpAlloc
+                Inp ~ VertCrpQCp.Int.RightCpAlloc
                 Index ~ : SI_0
             )
             Inp2 ~ : SI_0
@@ -1201,13 +1086,13 @@ AvrMdl2 : Elem {
         # "VertCrp P attachment point allocation"
         VertPApAlc : TrSwitchBool (
             Inp1 ~ : TrSwitchBool (
-                Inp1 ~ VertCrpPCp.LeftCpAlloc
-                Inp2 ~ VertCrpPCp.RightCpAlloc
+                Inp1 ~ VertCrpPCp.Int.LeftCpAlloc
+                Inp2 ~ VertCrpPCp.Int.RightCpAlloc
                 Sel ~ VPLeftCpNotSupp_Lt
             )
             Inp2 ~ : TrSwitchBool (
-                Inp1 ~ VertCrpPCp.RightCpAlloc
-                Inp2 ~ VertCrpPCp.LeftCpAlloc
+                Inp1 ~ VertCrpPCp.Int.RightCpAlloc
+                Inp2 ~ VertCrpPCp.Int.LeftCpAlloc
                 Sel ~ VPRightCpNotSupp_Lt
             )
             Sel ~ VertPOnLeft_Lt
@@ -1215,21 +1100,21 @@ AvrMdl2 : Elem {
         # "VertCrp Q attachment point allocation"
         VertQApAlc : TrSwitchBool (
             Inp1 ~ : TrSwitchBool (
-                Inp1 ~ VertCrpQCp.LeftCpAlloc
-                Inp2 ~ VertCrpQCp.RightCpAlloc
+                Inp1 ~ VertCrpQCp.Int.LeftCpAlloc
+                Inp2 ~ VertCrpQCp.Int.RightCpAlloc
                 Sel ~ VQLeftCpNotSupp_Lt
             )
             Inp2 ~ : TrSwitchBool (
-                Inp1 ~ VertCrpQCp.RightCpAlloc
-                Inp2 ~ VertCrpQCp.LeftCpAlloc
+                Inp1 ~ VertCrpQCp.Int.RightCpAlloc
+                Inp2 ~ VertCrpQCp.Int.LeftCpAlloc
                 Sel ~ VQRightCpNotSupp_Lt
             )
             Sel ~ VertQOnLeft_Lt
         )
         LeftVertColPos : TrSwitchBool (
             _@ < LogLevel = "Dbg"
-            Inp1 ~ VertCrpQCp.ColumnPos
-            Inp2 ~ VertCrpPCp.ColumnPos
+            Inp1 ~ VertCrpQCp.Int.ColumnPos
+            Inp2 ~ VertCrpPCp.Int.ColumnPos
             Sel ~ VertPOnLeft_Lt
         )
         LeftVertColPos_Dbg : State (
@@ -1240,8 +1125,9 @@ AvrMdl2 : Elem {
             Inp ~ LeftVertColPos
         )
         RightVertColPos : TrSwitchBool (
-            Inp1 ~ VertCrpPCp.ColumnPos
-            Inp2 ~ VertCrpQCp.ColumnPos
+            _@ < LogLevel = "Dbg"
+            Inp1 ~ VertCrpPCp.Int.ColumnPos
+            Inp2 ~ VertCrpQCp.Int.ColumnPos
             Sel ~ VertPOnLeft_Lt
         )
         _ <  {
@@ -1267,15 +1153,15 @@ AvrMdl2 : Elem {
         )
         # "Left vert allocation CP - bridge to edge terminal segment"
         LeftVertAlcCp : EhtsSlCpmPrev (
-            X ~ : TrAtgVar (
+            Int.X ~ : TrAtgVar (
                 Inp ~ LeftVertApAlc
                 Index ~ : SI_0
             )
-            Y ~ : TrAtgVar (
+            Int.Y ~ : TrAtgVar (
                 Inp ~ LeftVertApAlc
                 Index ~ : SI_1
             )
-            ColIdx ~ LeftVertAlcCp_ColIdx : TrSwitchBool (
+            Int.ColIdx ~ LeftVertAlcCp_ColIdx : TrSwitchBool (
                 _@ < LogLevel = "Dbg"
                 Inp1 ~ LeftVertColPos
                 Inp2 ~ : TrSub2Var (
@@ -1288,10 +1174,11 @@ AvrMdl2 : Elem {
         SegmentsColRIdxRes : State (
             _@ < = "SI"
             _@ < LogLevel = "Dbg"
-            Inp ~ LeftVertAlcCp.ColRIdx
+            Inp ~ LeftVertAlcCp.Int.ColRIdx
         )
         # "Right vert attachment point allocation"
         RightVertApAlc : TrSwitchBool (
+            _@ < LogLevel = "Dbg"
             Inp1 ~ VertPApAlc
             Inp2 ~ VertQApAlc
             Sel ~ VertPOnLeft_Lt
@@ -1304,15 +1191,15 @@ AvrMdl2 : Elem {
         )
         # "Right vert allocation CP - bridge to edge terminal segment"
         RightVertAlcCp : EhtsSlCpmNext (
-            X ~ : TrAtgVar (
+            Int.X ~ : TrAtgVar (
                 Inp ~ RightVertApAlc
                 Index ~ : SI_0
             )
-            Y ~ : TrAtgVar (
+            Int.Y ~ : TrAtgVar (
                 Inp ~ RightVertApAlc
                 Index ~ : SI_1
             )
-            ColRIdx ~ RightVertAlcCp_ColRIdx : TrSwitchBool (
+            Int.ColRIdx ~ RightVertAlcCp_ColRIdx : TrSwitchBool (
                 _@ < LogLevel = "Dbg"
                 Inp1 ~ : TrSub2Var (
                     Inp ~ RightVertColPos
@@ -1326,13 +1213,13 @@ AvrMdl2 : Elem {
         SegmentsColIdxRes : State (
             _@ < = "SI"
             _@ < LogLevel = "Dbg"
-            Inp ~ RightVertAlcCp.ColIdx
+            Inp ~ RightVertAlcCp.Int.ColIdx
         )
         SegmentsHash : State (
             _@ < = "SI"
             _@ < LogLevel = "Dbg"
             Inp ~ : TrHash (
-                Inp ~ RightVertAlcCp.Hash
+                Inp ~ RightVertAlcCp.Int.Hash
             )
         )
         _$ <  {
@@ -1666,21 +1553,11 @@ AvrMdl2 : Elem {
         # "Vertex DRP column item slot"
         # "Extend widget CP to for positions io"
         SCp <  {
-            ItemPos : ExtdStateInp
-            ColumnPos : ExtdStateInp
+            ItemPos : CpStateOutp
+            ColumnPos : CpStateOutp
         }
-        _ <  {
-            SCp.ItemPos ~ Next.ItemPos
-            SCp.ColumnPos ~ Next.ColumnPos
-        }
-        # "Break long IRM chain, ds_irm_wprc"
-        SCp.ItemPos ~ : ExtdStateOutp (
-            Int ~ Next.ItemPos
-        )
-        # "Break long IRM chain, ds_irm_wprc"
-        SCp.ColumnPos ~ : ExtdStateOutp (
-            Int ~ Next.ColumnPos
-        )
+        SCp.Int.ItemPos ~ Next.Int.ItemPos
+        SCp.Int.ColumnPos ~ Next.Int.ColumnPos
     }
     VertDrp : ContainerMod.ColumnsLayout {
         # " Vertex detail representation"
@@ -1812,7 +1689,7 @@ AvrMdl2 : Elem {
         # "PrntMappingResolver2 works also. To decide what solution to use persistently"
         CrpResolver : DesUtils.PrntMappingResolver2 (
             InpMpg ~ CrpResMpg : State {
-                LogLevel = "Dbg2"
+                LogLevel = "Verbose"
                 = "VPDU ( PDU ( URI Vert , URI VertCrp ) , PDU ( URI Node , URI VertCrp ) )"
             }
             InpDefRes ~ CrpResDRes : Const {
@@ -1941,6 +1818,7 @@ AvrMdl2 : Elem {
             )
             # "Selected CrpPars"
             SelectedCrpPars : TrInpSel (
+                _@ < LogLevel = "Dbg"
                 Inp ~ VertCrpCtx.CrpPars
                 Idx ~ CrpParsIter.Outp
             )
@@ -2012,7 +1890,7 @@ AvrMdl2 : Elem {
                 }
                 Inp ~ NewColNeeded_Ge
             )
-            CpAddColumn : ContainerMod.ClAddColumnSm (
+            IoAddColumn (
                 Enable ~ : TrAndVar (
                     Inp ~ SameColAsPair_Eq
                     Inp ~ NewColNeeded_Ge
@@ -2027,7 +1905,6 @@ AvrMdl2 : Elem {
                     )
                 )
             )
-            CpAddColumn ~ IoAddColumn
             NewColNameDelayed : State (
                 # "TODO Workaround to form correct outp. Redesign"
                 _@ <  {
@@ -2039,7 +1916,7 @@ AvrMdl2 : Elem {
             SdcCreateVtSlot : ASdcComp (
                 # "Creating vtunnel slot"
                 _@ < LogLevel = "Dbg"
-                Enable ~ CpAddColumn.Done
+                Enable ~ IoAddColumn.Done
                 Name ~ SVtnlSlotName : TrApndVar (
                     Inp1 ~ NewColNameDelayed
                     Inp2 ~ : Const {
@@ -2060,7 +1937,7 @@ AvrMdl2 : Elem {
                 Next ~ KS_Next
             )
             # "Reposition CRP"
-            CpReposCrp : ContainerMod.ClReposWdgSm (
+            IoReposWdg (
                 Enable ~ SameColAsPair_Eq
                 Enable ~ : TrNegVar (
                     _@ < LogLevel = "Dbg"
@@ -2069,9 +1946,8 @@ AvrMdl2 : Elem {
                 Name ~ CrpName
                 ColPos ~ ColumnsCount
             )
-            CpReposCrp ~ IoReposWdg
             # "Completion of iteration"
-            CrpParsIter.InpDone ~ : TrAndVar (
+            CrpParsIter.InpDone ~ ParsIter_InpDone : TrAndVar (
                 _@ < LogLevel = "Dbg"
                 Inp ~ : TrNegVar (
                     Inp ~ SameColAsPair_Eq
@@ -2085,7 +1961,7 @@ AvrMdl2 : Elem {
                     LogLevel = "Dbg"
                     = "SB _INV"
                 }
-                Inp ~ CpReposCrp.Done
+                Inp ~ IoReposWdg.Done
             )
             # "<<< Controller of CRPs ordering"
         }
@@ -2103,38 +1979,38 @@ AvrMdl2 : Elem {
             Intr : VertCrpEdgeCpm
             # "CP directed outside"
             Extr : VertCrpEdgeCp (
-                ColumnPos ~ Intr.ColumnPos
-                PairColumnPos ~ Intr.PairColumnPos
-                Pos ~ Intr.Pos
-                PairPos ~ Intr.PairPos
-                LeftCpAlloc ~ : TrPair (
+                Int.ColumnPos ~ Intr.Int.ColumnPos
+                Int.PairColumnPos ~ Intr.Int.PairColumnPos
+                Int.Pos ~ Intr.Int.Pos
+                Int.PairPos ~ Intr.Int.PairPos
+                Int.LeftCpAlloc ~ : TrPair (
                     First ~ LcpAllocX : TrAdd2Var (
                         _@ < LogLevel = "Dbg"
                         Inp ~ : TrAtgVar (
-                            Inp ~ Intr.LeftCpAlloc
+                            Inp ~ Intr.Int.LeftCpAlloc
                             Index ~ : SI_0
                         )
                         Inp2 ~ InpAlcX.Int
                     )
                     Second ~ : TrAdd2Var (
                         Inp ~ : TrAtgVar (
-                            Inp ~ Intr.LeftCpAlloc
+                            Inp ~ Intr.Int.LeftCpAlloc
                             Index ~ : SI_1
                         )
                         Inp2 ~ InpAlcY.Int
                     )
                 )
-                RightCpAlloc ~ : TrPair (
+                Int.RightCpAlloc ~ : TrPair (
                     First ~ : TrAdd2Var (
                         Inp ~ : TrAtgVar (
-                            Inp ~ Intr.RightCpAlloc
+                            Inp ~ Intr.Int.RightCpAlloc
                             Index ~ : SI_0
                         )
                         Inp2 ~ InpAlcX.Int
                     )
                     Second ~ : TrAdd2Var (
                         Inp ~ : TrAtgVar (
-                            Inp ~ Intr.RightCpAlloc
+                            Inp ~ Intr.Int.RightCpAlloc
                             Index ~ : SI_1
                         )
                         Inp2 ~ InpAlcY.Int
@@ -2440,8 +2316,8 @@ AvrMdl2 : Elem {
             }
             # "Edge CRP connpoint"
             EdgeCrpCp : VertCrpEdgeCp (
-                ColumnPos ~ CpRpCtx.ColPos
-                Pos ~ Tpl1 : TrTuple (
+                Int.ColumnPos ~ CpRpCtx.ColPos
+                Int.Pos ~ Tpl1 : TrTuple (
                     Inp ~ : State {
                         = "TPL,SI:col,SI:item -1 -1"
                     }
@@ -2475,10 +2351,10 @@ AvrMdl2 : Elem {
             # ">>> Most right/left column of the pairs"
             # "   Inputs Iterator"
             PairPosIter : DesUtils.InpItr (
-                InpM ~ EdgeCrpCp.PairPos
+                InpM ~ EdgeCrpCp.Int.PairPos
                 InpDone ~ : SB_True
                 PosChgDet : DesUtils.ChgDetector (
-                    Inp ~ EdgeCrpCp.PairPos
+                    Inp ~ EdgeCrpCp.Int.PairPos
                 )
                 InpReset ~ PosChgDet.Outp
             )
@@ -2491,7 +2367,7 @@ AvrMdl2 : Elem {
             )
             # "   Selected input"
             PairPosSel : TrInpSel (
-                Inp ~ EdgeCrpCp.PairPos
+                Inp ~ EdgeCrpCp.Int.PairPos
                 Idx ~ PairPosIter.Outp
             )
             PairPosSel_Dbg : State (
@@ -2608,7 +2484,7 @@ AvrMdl2 : Elem {
                     )
                 )
             )
-            EdgeCrpCp.LeftCpAlloc ~ LeftCpAlc
+            EdgeCrpCp.Int.LeftCpAlloc ~ LeftCpAlc
             # "Right connpoint allocation"
             RightCpAlcX : TrAddVar (
                 Inp ~ AlcX
@@ -2617,7 +2493,7 @@ AvrMdl2 : Elem {
             RightCpAlc : TrPair (
                 Second ~ CpAlcY
             )
-            EdgeCrpCp.RightCpAlloc ~ RightCpAlc
+            EdgeCrpCp.Int.RightCpAlloc ~ RightCpAlc
             # "<<< System connpoint representation"
         }
         CpRpPx : Syst {
@@ -2646,16 +2522,16 @@ AvrMdl2 : Elem {
         }
         SystCrpCpa : ContainerMod.DVLayout {
             # ">>> System CRP connpoints area"
-            Start.Prev.AlcX ~ : SI_0
-            Start.Prev.AlcY ~ : SI_0
+            Start.Prev.Int.AlcX ~ : SI_0
+            Start.Prev.Int.AlcY ~ : SI_0
             # "<<< System CRP connpoints area"
         }
         SystCrp : CrpBase {
             # ">>> System compact representation"
             # "Extend widget CP to for positions io"
             Cp <  {
-                ItemPos : ExtdStateOutp
-                ColumnPos : ExtdStateOutp
+                ItemPos : CpStateInp
+                ColumnPos : CpStateInp
             }
             MagAdp <  {
                 CompsUri : SdoCompsUri
@@ -2668,8 +2544,8 @@ AvrMdl2 : Elem {
                 ItemPos : ExtdStateInp
             }
             CpRpCtx  (
-                ColPos ~ Cp.ColumnPos
-                ItemPos ~ Cp.ItemPos
+                ColPos ~ Cp.Int.ColumnPos
+                ItemPos ~ Cp.Int.ItemPos
             )
             CprpIter : DesUtils.InpItr (
                 InpM ~ CpRpCtx.CprpPars
@@ -2776,7 +2652,7 @@ AvrMdl2 : Elem {
                     = "TPL,SS:name,SI:colpos,SI:pmrcolpos,SI:pmrcolpos _INV -2 -1 1000"
                 }
                 name ~ MagAdp.Name
-                colpos ~ Cp.ColumnPos
+                colpos ~ Cp.Int.ColumnPos
                 pmrcolpos ~ InpMostRightPair
                 pmlcolpos ~ OutpMostLeftPair
             )
@@ -2795,15 +2671,13 @@ AvrMdl2 : Elem {
                     FgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 1.0 1.0 1.0 0.0"
                     XPadding < = "SI 1"
                     YPadding < = "SI 1"
-                    Start.Prev.AlcX ~ : SI_0
-                    Start.Prev.AlcY ~ : SI_0
                 }
                 Slot_Inputs : ContainerMod.FHLayoutSlot (
                     Next ~ Start.Prev
                     SCp ~ Inputs.Cp
                 )
-                Start.Prev.AlcX ~ : SI_1
-                Start.Prev.AlcY ~ : SI_1
+                Start.Prev.Int.AlcX ~ : SI_1
+                Start.Prev.Int.AlcY ~ : SI_1
                 Outputs : SystCrpCpa {
                     CntAgent < LogLevel = "Err"
                     BgColor < = "TPL,SF:r,SF:g,SF:b,SF:a 0.0 0.0 0.0 0.0"
@@ -2850,8 +2724,8 @@ AvrMdl2 : Elem {
             # "Vertex CRP displaying connpoints"
             # "Edge CRP connpoint"
             EdgeCrpCp : VertCrpEdgeCp (
-                ColumnPos ~ Cp.ColumnPos
-                Pos ~ Tpl1 : TrTuple (
+                Int.ColumnPos ~ Cp.Int.ColumnPos
+                Int.Pos ~ Tpl1 : TrTuple (
                     Inp ~ : State {
                         = "TPL,SI:col,SI:item -1 -1"
                     }
@@ -2859,8 +2733,8 @@ AvrMdl2 : Elem {
                         col : CpStateInp
                         item : CpStateInp
                     }
-                    col ~ Cp.ColumnPos
-                    item ~ Cp.ItemPos
+                    col ~ Cp.Int.ColumnPos
+                    item ~ Cp.Int.ItemPos
                 )
             )
             # "Right connpoint allocation"
@@ -2879,7 +2753,7 @@ AvrMdl2 : Elem {
                     )
                 )
             )
-            EdgeCrpCp.RightCpAlloc ~ RightCpAlc
+            EdgeCrpCp.Int.RightCpAlloc ~ RightCpAlc
             # "Left connpoint allocation"
             LeftCpAlc : TrPair (
                 # "Negative X allocation indicates that InpRp doesn't provide LeftCpAlc"
@@ -2888,7 +2762,7 @@ AvrMdl2 : Elem {
                 }
                 Second ~ CpaY
             )
-            EdgeCrpCp.LeftCpAlloc ~ LeftCpAlc
+            EdgeCrpCp.Int.LeftCpAlloc ~ LeftCpAlc
         }
         # "<<< System representation"
         SystDrp : VertDrp {
@@ -2900,7 +2774,7 @@ AvrMdl2 : Elem {
                 SdcInsert < LogLevel = "Dbg"
             }
             # "Adjust CRP resolver"
-            CrpResMpg < = "VPDU ( PDU ( URI Syst , URI SystCrp ) , PDU ( URI State , URI VertcCrp ) , PDU ( URI Const , URI VertcCrp ) , PDU ( URI TrBase , URI VertcCrp )  , PDU ( URI ExtdStateOutp , URI VertcCrp )  , PDU ( URI ExtdStateInp , URI VertcCrp ) ,  PDU ( URI Vert , URI VertCrp ) , PDU ( URI Vertu , URI VertCrp ) )"
+            CrpResMpg < = "VPDU ( PDU ( URI Syst , URI SystCrp ) , PDU ( URI State , URI VertcCrp ) , PDU ( URI Const , URI VertcCrp ) , PDU ( URI TrBase , URI VertcCrp )  , PDU ( URI ExtdStateOutp , URI VertcCrp )  , PDU ( URI ExtdStateInp , URI VertcCrp ) ,  PDU ( URI Vert , URI VertCrp ) , PDU ( URI Vertu , URI VertCrp ) , PDU ( URI Node , URI VertCrp ) )"
             CrpResDRes < = "URI SystCrp"
             _ <  {
                 # "Modify EdgeP target"
@@ -2911,9 +2785,9 @@ AvrMdl2 : Elem {
             # "<<< System detailed representation"
         }
     }
-    VrControllerS : Socket2 {
+    VrControllerCp : Socket3Extd {
         About = "Vis representation view CP"
-        NavCtrl : Socket2 {
+        NavCtrl : Socket3 {
             About = "Navigation control"
             CmdUp : CpStateInp
             NodeSelected : CpStateInp
@@ -2923,9 +2797,9 @@ AvrMdl2 : Elem {
             DrpCp : NDrpSc
         }
     }
-    VrControllerSc : Socket2 {
+    VrViewCp : Socket3Extd {
         About = "Vis representation controller CP"
-        NavCtrl : Socket2 {
+        NavCtrl : Socket3 {
             About = "Navigation control"
             CmdUp : CpStateOutp
             NodeSelected : CpStateOutp
@@ -2934,12 +2808,6 @@ AvrMdl2 : Elem {
             DrpCreated : CpStateOutp
             DrpCp : NDrpS
         }
-    }
-    VrControllerCp : VrControllerS {
-        Int : VrControllerSc
-    }
-    VrViewCp : VrControllerSc {
-        Int : VrControllerS
     }
     VrController : Des {
         # " Visual representation controller"

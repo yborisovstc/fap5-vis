@@ -175,18 +175,23 @@ bool AEdgeCrp::GetSegCoord(MNode* aWdgCp, const GUri& aCpUri, int& aData)
     aData = -1;
     auto* ccp = aWdgCp->getNode(aCpUri);
     if (ccp) {
-	MVert* ccpe = ccp->lIf(ccpe); // Coords (socket) elems are extenders
-        MVert* ccpv = ccpe ? ccpe->getExtd() : nullptr;
-	MDVarGet* ccpg = ccpv->lIf(ccpg);
+	MVert* ccpe = ccp->lIf(ccpe);
+	MDVarGet* ccpg = ccpe ? ccpe->lIf(ccpg) : nullptr;
 	if (ccpg) {
 	    const Sdata<int>* data = reinterpret_cast<const Sdata<int>*>(ccpg->VDtGet(data->TypeSig()));
 	    if (data) {
 		res = data->IsValid();
 		if (res) {
 		    aData = data->mData;
-		}
-	    }
-	}
+		} else {
+                    LOGN(EDbg, "GetSegCoord");
+                }
+	    } else {
+                LOGN(EDbg, "GetSegCoord");
+            }
+	} else {
+            LOGN(EDbg, "GetSegCoord");
+        }
     }
     return res;
 }
